@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lembra Aí – Automação no WhatsApp</title>
+<meta name="description" content="Cobranças, lembretes, avisos de promoção e de feriado no WhatsApp, no automático e com mensagens humanas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#10201B; --muted:#3C4E47; --muted2:#4A5C55; --bg:#F6F8F5; --card:#FFFFFF;
+  --line:#DDE4DF; --brand:#0B3B2E; --brand2:#12493A; --lime:#C6F36B; --accent:#2F6B4F;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--brand)}a:hover{color:#06261D}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.btn{display:inline-block;text-decoration:none;border-radius:999px;font-weight:600;font-size:16px;padding:16px 26px}
+.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#06261D}
+.btn-line{border:1.5px solid var(--brand);padding:14.5px 24px}
+.btn-lime{background:var(--lime);color:var(--brand)}
+header{border-bottom:1px solid var(--line)}
+.nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;padding-bottom:18px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--brand);display:flex;align-items:center;justify-content:center}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:24px;font-size:15px}
+nav a{text-decoration:none}
+nav .btn{padding:12px 20px;font-size:15px}
+.hero{display:flex;flex-wrap:wrap;gap:56px;align-items:center;padding-top:72px;padding-bottom:88px}
+.hero-text{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.eyebrow{margin:0;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;letter-spacing:-.02em}
+.lead{margin:0;font-size:19px;line-height:1.55;color:var(--muted);max-width:560px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.phone-col{flex:1 1 360px;min-width:0;display:flex;justify-content:center}
+.phone{width:100%;max-width:380px;background:var(--brand);border-radius:28px;padding:14px}
+.chat{background:#ECE8E0;border-radius:18px;overflow:hidden}
+.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E2DED6}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
+.chat-body{padding:18px 14px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.45}
+.in{align-self:flex-start;max-width:86%;background:#fff;padding:10px 12px;border-radius:4px 14px 14px 14px}
+.out{align-self:flex-end;max-width:70%;background:#D4F7B8;padding:10px 12px;border-radius:14px 4px 14px 14px}
+.band{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.section{padding-top:88px;padding-bottom:88px;display:flex;flex-direction:column;gap:40px}
+h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01em}
+.sub{margin:0;font-size:18px;line-height:1.55;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--bg);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:14px}
+.icon{width:48px;height:48px;border-radius:14px;background:var(--brand);display:flex;align-items:center;justify-content:center}
+.card h3{margin:0;font-size:22px}
+.card p,.step p{margin:0;font-size:16px;line-height:1.55;color:var(--muted)}
+.step{border-top:3px solid var(--brand);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.step .n{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--accent)}
+.step h3{margin:0;font-size:20px;font-weight:600;font-family:Inter,system-ui,sans-serif}
+.dark{background:var(--brand);color:#fff}
+.dark .sub{color:#CFE0D7}
+.plan{background:var(--brand2);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.plan h3{margin:0;font-size:24px}
+.plan .price{margin:0;font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700}
+.plan ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:#E3EEE8}
+.plan .btn{margin-top:auto;align-self:flex-start;padding:14px 22px}
+.plan.featured{background:var(--lime);color:var(--brand)}
+.plan.featured ul{color:var(--brand)}
+.tag{align-self:flex-start;background:var(--brand);color:var(--lime);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
+.contact{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding-top:88px;padding-bottom:88px}
+.contact-text{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px}
+form{flex:1 1 380px;min-width:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:14px;font-weight:600}
+input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #B9C6BF;border-radius:10px}
+textarea{resize:vertical}
+.hint{margin:0;font-size:14px;color:var(--muted2)}
+#enviar{font:inherit;font-size:16px;font-weight:600;border:none;border-radius:999px;padding:16px 24px;background:var(--brand);color:#fff;cursor:pointer}
+#enviar:disabled{background:#C9D3CE;color:var(--muted);cursor:not-allowed}
+footer{border-top:1px solid var(--line)}
+.foot{padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted2)}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap nav">
+<div class="logo">
+<div class="logo-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6"/><path d="M9 14h4"/></svg></div>
+<span>Lembra Aí</span>
+</div>
+<nav aria-label="Principal">
+<a href="#servicos">Serviços</a>
+<a href="#como-funciona">Como funciona</a>
+<a href="#planos">Planos</a>
+<a href="#contato" class="btn btn-dark">Falar com a gente</a>
+</nav>
+</div>
+</header>
+
+<main>
+<section class="wrap hero">
+<div class="hero-text">
+<p class="eyebrow">Automação para pequenas e médias empresas</p>
+<h1>Sua empresa no WhatsApp, funcionando sozinha — e falando como gente.</h1>
+<p class="lead">Cobranças, lembretes de pagamento, avisos de promoção e de feriado enviados no automático, com mensagens que parecem escritas por alguém da sua equipe. Você foca no negócio; a rotina a gente resolve.</p>
+<div class="ctas">
+<a href="#contato" class="btn btn-dark">Quero automatizar minha empresa</a>
+<a href="#como-funciona" class="btn btn-line">Ver como funciona</a>
+</div>
+</div>
+<div class="phone-col">
+<div class="phone" role="img" aria-label="Exemplo de conversa de cobrança no WhatsApp">
+<div class="chat">
+<div class="chat-head">
+<div class="avatar">LF</div>
+<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Loja da Fernanda</span><span style="font-size:12px;color:#5A6A63">mensagem automática</span></div>
+</div>
+<div class="chat-body">
+<div class="in">Oi, Carla! Tudo bem? Passando pra lembrar que a parcela de novembro vence amanhã (R$ 149,90). Quer que eu já te mande o Pix?</div>
+<div class="out">Quero sim, obrigada!</div>
+<div class="in">Prontinho, segue o código Pix copia e cola. Assim que cair, te mando o comprovante por aqui.</div>
+<div class="out">Paguei agora</div>
+<div class="in">Recebido! Muito obrigada, Carla. Boa semana pra você!</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="servicos" class="band">
+<div class="wrap section">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
+<h2>Tudo o que hoje toma o seu tempo, no automático</h2>
+<p class="sub">Você escolhe o que quer automatizar. A gente configura, testa e acompanha com você.</p>
+</div>
+<div class="grid">
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e finanças</h3><p>Lembretes antes do vencimento, aviso no dia e segunda via com Pix ou boleto, direto no WhatsApp do cliente. Menos inadimplência, sem constrangimento.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M9.5 14a3.5 3.5 0 0 0 5 0"/></svg></div><h3>Mensagens mais humanas</h3><p>Nada de texto de robô. As mensagens usam o nome do cliente, o jeito de falar da sua marca e respondem dúvidas comuns na hora.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><path d="M7.5 7.5h.01"/></svg></div><h3>Avisos de promoção</h3><p>Campanhas programadas para a sua lista de clientes, separadas por perfil, para cada um receber a oferta certa na hora certa.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><h3>Feriados e horários</h3><p>Avisos automáticos de funcionamento em feriados, recessos e datas especiais, sem você precisar lembrar de mandar um por um.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 19.1 7 17"/><path d="M17 7l2.1-2.1"/></svg></div><h3>Automações sob medida</h3><p>Confirmação de agendamento, pós-venda, aniversário de cliente, pesquisa de satisfação. Se é repetitivo, dá pra automatizar.</p></div>
+</div>
+</div>
+</section>
+
+<section id="como-funciona" class="wrap section">
+<h2>Como funciona</h2>
+<div class="grid">
+<div class="step"><span class="n">01</span><h3>Conversa de diagnóstico</h3><p>Entendemos a rotina da sua empresa e o que mais toma tempo hoje: cobrança, atendimento, divulgação.</p></div>
+<div class="step"><span class="n">02</span><h3>Montamos as mensagens com você</h3><p>Escrevemos no tom da sua marca e você aprova cada texto antes de qualquer envio.</p></div>
+<div class="step"><span class="n">03</span><h3>Liga e acompanha</h3><p>As automações entram no ar e você recebe um resumo do que foi enviado, pago e respondido.</p></div>
+</div>
+</section>
+
+<section id="planos" class="dark">
+<div class="wrap section">
+<div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
+<h2>Planos</h2>
+<p class="sub">Comece pequeno e cresça conforme sentir o resultado.</p>
+</div>
+<div class="grid">
+<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Lembretes de cobrança</li><li>Avisos de feriado</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan featured"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Campanhas de promoção</li><li>Mensagens personalizadas com o tom da marca</li><li>Relatório mensal</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
+<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Automações específicas do seu negócio</li><li>Integração com seu sistema</li><li>Atendimento dedicado</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+</div>
+</div>
+</section>
+
+<section id="contato" class="wrap contact">
+<div class="contact-text">
+<h2>Vamos conversar sobre a sua empresa?</h2>
+<p class="sub">Conta pra gente o que mais toma o seu tempo hoje. A primeira conversa é sem compromisso.</p>
+</div>
+<form id="form" novalidate>
+<div class="field"><label for="nome">Seu nome</label><input id="nome" type="text" required autocomplete="name"></div>
+<div class="field"><label for="empresa">Empresa</label><input id="empresa" type="text" required autocomplete="organization"></div>
+<div class="field"><label for="whats">WhatsApp</label><input id="whats" type="tel" required autocomplete="tel"></div>
+<div class="field"><label for="msg">O que você quer automatizar?</label><textarea id="msg" rows="3" required></textarea></div>
+<p class="hint" id="hint">Preencha todos os campos para liberar o botão.</p>
+<button type="submit" id="enviar" disabled>Quero uma conversa</button>
+</form>
+</section>
+</main>
+
+<footer>
+<div class="wrap foot">
+<span>Lembra Aí · Automação de atendimento e cobrança no WhatsApp</span>
+<span>[CNPJ] · [CIDADE]</span>
+</div>
+</footer>
+
+<script>
+(function () {
+  // Número que recebe os contatos (com DDI 55 + DDD)
+  var NUMERO_WHATSAPP = '5551981384687';
+
+  var form = document.getElementById('form');
+  var botao = document.getElementById('enviar');
+  var hint = document.getElementById('hint');
+  var campos = ['nome', 'empresa', 'whats', 'msg'].map(function (id) { return document.getElementById(id); });
+
+  function completo() {
+    return campos.every(function (c) { return c.value.trim().length > 0; });
+  }
+  function atualizar() {
+    var ok = completo();
+    botao.disabled = !ok;
+    hint.style.display = ok ? 'none' : 'block';
+  }
+  campos.forEach(function (c) { c.addEventListener('input', atualizar); });
+  atualizar();
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!completo()) return;
+    var texto = [
+      'Olá! Vim pelo site e quero uma conversa.',
+      'Nome: ' + campos[0].value.trim(),
+      'Empresa: ' + campos[1].value.trim(),
+      'WhatsApp: ' + campos[2].value.trim(),
+      'Quero automatizar: ' + campos[3].value.trim()
+    ].join('\n');
+    window.open('https://wa.me/' + NUMERO_WHATSAPP + '?text=' + encodeURIComponent(texto), '_blank');
+  });
+})();
+</script>
+</body>
+</html>
