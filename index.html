@@ -42,7 +42,15 @@ h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;le
 .chat{background:#ECE8E0;border-radius:18px;overflow:hidden}
 .chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E2DED6}
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
-.chat-body{padding:18px 14px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.45}
+.chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:380px;overflow:hidden}
+.chat-body.anim>div{animation:entra .35s ease-out both}
+@keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.typing{display:flex;gap:4px;align-items:center;padding:13px 14px!important}
+.typing span{width:7px;height:7px;border-radius:50%;background:#8A9A93;animation:pula 1s infinite ease-in-out}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes pula{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.chat-body.saindo{transition:opacity .5s;opacity:0}
+.status{font-size:12px;color:#5A6A63}
 .in{align-self:flex-start;max-width:86%;background:#fff;padding:10px 12px;border-radius:4px 14px 14px 14px}
 .out{align-self:flex-end;max-width:70%;background:#D4F7B8;padding:10px 12px;border-radius:14px 4px 14px 14px}
 .band{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -114,9 +122,9 @@ footer{border-top:1px solid var(--line)}
 <div class="chat">
 <div class="chat-head">
 <div class="avatar">LF</div>
-<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Loja da Fernanda</span><span style="font-size:12px;color:#5A6A63">mensagem automática</span></div>
+<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Loja da Fernanda</span><span class="status" id="chat-status">mensagem automática</span></div>
 </div>
-<div class="chat-body">
+<div class="chat-body" id="chat" aria-hidden="true">
 <div class="in">Oi, Carla! Tudo bem? Passando pra lembrar que a parcela de novembro vence amanhã (R$ 149,90). Quer que eu já te mande o Pix?</div>
 <div class="out">Quero sim, obrigada!</div>
 <div class="in">Prontinho, segue o código Pix copia e cola. Assim que cair, te mando o comprovante por aqui.</div>
@@ -222,6 +230,43 @@ footer{border-top:1px solid var(--line)}
     ].join('\n');
     window.open('https://wa.me/' + NUMERO_WHATSAPP + '?text=' + encodeURIComponent(texto), '_blank');
   });
+})();
+</script>
+<script>
+(function () {
+  var chat = document.getElementById('chat');
+  var status = document.getElementById('chat-status');
+  if (!chat) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var msgs = [].map.call(chat.children, function (el) { return { cls: el.className, txt: el.textContent }; });
+  function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function add(cls, html) {
+    var d = document.createElement('div'); d.className = cls; d.innerHTML = html;
+    chat.appendChild(d);
+    while (chat.scrollHeight > chat.clientHeight + 2 && chat.children.length > 1) chat.removeChild(chat.firstChild);
+    return d;
+  }
+  async function rodar() {
+    while (true) {
+      chat.innerHTML = ''; chat.classList.remove('saindo'); chat.classList.add('anim');
+      await espera(700);
+      for (var i = 0; i < msgs.length; i++) {
+        var m = msgs[i];
+        var dig = add(m.cls + ' typing', '<span></span><span></span><span></span>');
+        if (m.cls === 'in') status.textContent = 'digitando...';
+        await espera(m.cls === 'in' ? 1300 : 900);
+        dig.remove();
+        status.textContent = 'online';
+        add(m.cls, '').textContent = m.txt;
+        await espera(1100);
+      }
+      status.textContent = 'mensagem automática';
+      await espera(3500);
+      chat.classList.add('saindo');
+      await espera(600);
+    }
+  }
+  rodar();
 })();
 </script>
 </body>
