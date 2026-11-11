@@ -134,7 +134,6 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .kv{display:grid;grid-template-columns:max-content 1fr;gap:8px 16px;margin:0}
 .kv dt{font-weight:600}
 .kv dd{margin:0;color:var(--muted)}
-.agenda{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .dia-col{display:flex;flex-direction:column;gap:6px}
 .dia-col h4{margin:0 0 4px;font-size:13px;font-weight:600;color:var(--muted2);letter-spacing:.04em}
 .ev{border-radius:8px;padding:8px 9px;font-size:12.5px;line-height:1.3;background:#DCE8F7;color:#173A63}
@@ -147,6 +146,36 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .rolavel{overflow-x:auto}
 .selo{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:#D4F7B8;color:#0B3B2E}
 .selo.r{background:#FDE7C8;color:#6B3A00}
+
+/* agenda (grade de horas) */
+.cal{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;--h:48px}
+.cal-top{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:600;font-size:17px}
+.cal-top .ico{width:30px;height:30px;border-radius:8px;background:#2B78C0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+.cal-top small{margin-left:auto;font-weight:500;font-size:12.5px;color:var(--muted2)}
+.cal-head,.cal-body{display:grid;grid-template-columns:44px repeat(3,minmax(0,1fr))}
+.cal-head{border-bottom:1px solid var(--line)}
+.cal-head div{text-align:center;padding:8px 4px 10px;font-size:12px;letter-spacing:.04em;color:var(--muted2)}
+.cal-head b{display:block;font-size:24px;font-weight:500;letter-spacing:0;color:var(--ink);font-family:'Space Grotesk',sans-serif}
+.cal-body{padding:10px 0 12px}
+.cal-horas div{height:var(--h);font-size:11px;color:var(--muted2);text-align:right;padding-right:8px;transform:translateY(-7px)}
+.cal-col{position:relative;border-left:1px solid var(--line);background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent var(--h))}
+.cal-ev{position:absolute;left:4px;right:4px;border-radius:7px;padding:4px 7px;font-size:12px;line-height:1.25;overflow:hidden;background:#2B78C0;color:#fff;transition:opacity .4s,transform .4s,background .4s}
+.cal-ev b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev small{display:block;font-size:11px;opacity:.9}
+.cal-ev.roxo{background:#5F5DB8}
+.cal-ev.pausa{background:var(--soft);color:var(--muted)}
+.cal-ev.op{background:var(--card);color:var(--ink);border:2px dashed #D9731A;animation:pisca 1.6s ease-in-out infinite}
+.cal-ev.op small{color:var(--muted)}
+.cal-ev.escolhida{animation:none;border-style:solid}
+.cal-ev.apagada{opacity:0;transform:scale(.96)}
+.cal-ev.novo{background:var(--brand);color:#fff;border:2px solid var(--lime);animation:entra .4s ease-out}
+.cal-ev.novo small{color:#E3EEE8}
+@keyframes pisca{0%,100%{box-shadow:0 0 0 0 rgba(217,115,26,.0)}50%{box-shadow:0 0 0 4px rgba(217,115,26,.22)}}
+.legenda{margin:12px 2px 0;font-size:15px;line-height:1.55;color:var(--muted);font-style:italic}
+.sim-row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.sim-row .sim{flex:0 1 420px;margin:0}
+.cal-wrap{flex:1 1 420px;min-width:0}
+.cal-wrap .cal{--h:40px}
 
 /* recepção */
 .duas{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
@@ -162,9 +191,7 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .email .corpo p{margin:0}
 
 /* simulador */
-.sim-wrap{display:flex;flex-wrap:wrap;gap:40px;align-items:center}
-.sim-wrap>.head{flex:1 1 340px}
-.sim{flex:1 1 400px;min-width:0;max-width:440px;margin:0 auto;background:var(--brand);border-radius:28px;padding:14px}
+.sim{min-width:0;width:100%;max-width:420px;background:var(--brand);border-radius:28px;padding:14px}
 .sim .chat-body{height:460px;overflow-y:auto;justify-content:flex-start}
 .sim .chat-body>:first-child{margin-top:auto}
 .opcoes{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px 14px;background:var(--chat);border-top:1px solid var(--line);min-height:70px;align-items:center}
@@ -231,9 +258,78 @@ textarea{resize:vertical}
 footer{border-top:1px solid var(--line)}
 .foot{padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted2)}
 
+/* jornada */
+.jornada{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:0;padding:0;list-style:none;counter-reset:j}
+.jcard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px;transition:transform .25s ease,box-shadow .25s ease}
+.jcard:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(11,59,46,.10)}
+.jcard .quando{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
+.jcard h3{margin:0;font-size:19px;line-height:1.25}
+.jcard p{margin:0;font-size:15px;line-height:1.55;color:var(--muted)}
+.jcard.fim{background:var(--brand);border-color:var(--brand);color:#fff}
+.jcard.fim .quando{color:var(--lime)}
+.jcard.fim p{color:#CFE0D7}
+.jcard.fim .icon{background:var(--lime)}
+.jcard.fim .icon svg{stroke:var(--brand)}
+.card{transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(11,59,46,.10)}
+:root[data-theme="dark"] .jcard.fim{background:#0B2A21;border-color:#2F6B4F}
+:root[data-theme="dark"] .jcard:hover,:root[data-theme="dark"] .card:hover{box-shadow:0 14px 30px rgba(0,0,0,.4)}
+
+/* fluxo */
+.fluxo{display:flex;flex-direction:column;max-width:940px;width:100%;margin:0 auto}
+.frow{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,.9fr);align-items:center}
+.fno{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;transition:opacity .5s ease,border-color .5s ease,box-shadow .5s ease,transform .5s ease}
+.fno .fi{width:40px;height:40px;border-radius:12px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}
+.fno b{display:block;font-size:16px;line-height:1.3}
+.fno small{display:block;font-size:13.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.fno.dec{background:var(--soft);border-style:dashed}
+.fno.dec .fi{background:transparent;border:2px solid var(--brand);transform:rotate(45deg);width:30px;height:30px;border-radius:6px;margin:0 5px}
+.fno.dec .fi span{transform:rotate(-45deg);font-weight:700;color:var(--brand);font-size:15px}
+.fno.alt{background:#FFF4E5;border-color:#F0C48A}
+.fno.alt .fi{background:#B45F06}
+.fno.ok{background:var(--brand);border-color:var(--brand);color:#fff}
+.fno.ok small{color:#CFE0D7}
+.fno.ok .fi{background:var(--lime)}
+.fno.ok .fi svg{stroke:var(--brand)}
+.fdown{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,.9fr);height:40px}
+.fdown span{position:relative;display:flex;align-items:center;justify-content:center}
+.fdown span::before{content:"";position:absolute;top:0;bottom:8px;left:50%;width:2px;background:var(--line);transform:translateX(-50%);transition:background .4s}
+.fdown span::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top:8px solid var(--line);border-bottom:0;transition:border-color .4s}
+.fdown em{position:relative;z-index:1;font-style:normal;font-size:12px;font-weight:700;background:var(--bg);color:var(--accent);padding:1px 6px;border-radius:6px;margin-left:44px}
+.flado{position:relative;height:2px;background:var(--line);margin:0 4px;transition:background .4s}
+.flado::after{content:"";position:absolute;right:-2px;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left:8px solid var(--line);border-right:0;transition:border-color .4s}
+.flado em{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:700;color:#B45F06}
+.frow.on .flado,.fdown.on span::before{background:var(--brand)}
+.frow.on .flado::after{border-left-color:var(--brand)}
+.fdown.on span::after{border-top-color:var(--brand)}
+.js-reveal .fluxo .fno{opacity:.28;transform:scale(.98)}
+.js-reveal .fluxo .on .fno{opacity:1;transform:none;box-shadow:0 10px 24px rgba(11,59,46,.08)}
+.js-reveal .fluxo .frow.on>.fno:first-child:not(.ok):not(.dec){border-color:var(--brand)}
+.fluxo-acoes{display:flex;justify-content:center;margin-top:24px}
+:root[data-theme="dark"] .fno.alt{background:#3A2A14;border-color:#7A5420}
+:root[data-theme="dark"] .fno.alt .fi{background:#F2A65A}
+:root[data-theme="dark"] .fno.alt .fi svg{stroke:#2B1A06}
+:root[data-theme="dark"] .fno.dec .fi{border-color:#C6F36B}
+:root[data-theme="dark"] .fno.dec .fi span{color:#C6F36B}
+:root[data-theme="dark"] .fno.ok{background:#0B2A21;border-color:#2F6B4F}
+:root[data-theme="dark"] .flado em{color:#F2A65A}
+:root[data-theme="dark"] .frow.on .flado,:root[data-theme="dark"] .fdown.on span::before{background:#8FD6A8}
+:root[data-theme="dark"] .frow.on .flado::after{border-left-color:#8FD6A8}
+:root[data-theme="dark"] .fdown.on span::after{border-top-color:#8FD6A8}
+@media (max-width:720px){
+  .frow,.fdown{grid-template-columns:1fr}
+  .frow{gap:8px}
+  .flado{height:auto;background:none!important;margin:0 0 0 22px;padding-left:16px;border-left:2px solid var(--line)}
+  .flado::after{display:none}
+  .flado em{position:static;transform:none;display:block;padding:4px 0}
+  .frow>.fno:last-child:not(:first-child){margin-left:22px}
+  .fdown em{margin-left:40px}
+}
+
 /* aparecer ao rolar */
-.js-reveal .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.js-reveal .reveal{opacity:0;transform:translateY(36px) scale(.98);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .js-reveal .reveal.visivel{opacity:1;transform:none}
+.js-reveal .jcard.reveal.visivel:hover,.js-reveal .card.reveal.visivel:hover{transform:translateY(-4px)}
 
 /* modo escuro: ajustes */
 :root[data-theme="dark"] a{color:var(--ink)}
@@ -259,6 +355,9 @@ footer{border-top:1px solid var(--line)}
 :root[data-theme="dark"] .ev.p{background:#26332F;color:#B4C2BC}
 :root[data-theme="dark"] .ev.op{background:#C6F36B;color:#0B3B2E;outline-color:#C6F36B}
 :root[data-theme="dark"] .mapa svg{fill:#C6F36B}
+:root[data-theme="dark"] .cal-ev.novo{background:#C6F36B;color:#0B3B2E;border-color:#C6F36B}
+:root[data-theme="dark"] .cal-ev.novo small{color:#2F4A3F}
+:root[data-theme="dark"] .cal-ev.op{border-color:#F2A65A}
 :root[data-theme="dark"] .opcao{color:#C6F36B;border-color:#C6F36B;background:transparent}
 :root[data-theme="dark"] .opcao:hover{background:#C6F36B;color:#0B3B2E}
 :root[data-theme="dark"] .calc,:root[data-theme="dark"] .dark{background:#0B2A21}
@@ -279,7 +378,7 @@ footer{border-top:1px solid var(--line)}
 <span>Lembra Aí</span>
 </div>
 <nav aria-label="Principal">
-<a href="#como-funciona">Como funciona</a>
+<a href="#fluxo">Como funciona</a>
 <a href="#teste">Teste agora</a>
 <a href="#planos">Planos</a>
 <a href="#duvidas">Dúvidas</a>
@@ -306,7 +405,7 @@ footer{border-top:1px solid var(--line)}
 </ul>
 <div class="ctas">
 <a href="#teste" class="btn btn-dark">Testar a assistente</a>
-<a href="#como-funciona" class="btn btn-line">Ver como funciona</a>
+<a href="#fluxo" class="btn btn-line">Ver como funciona</a>
 </div>
 </div>
 <div class="phone-col">
@@ -330,7 +429,52 @@ footer{border-top:1px solid var(--line)}
 </div>
 </section>
 
-<section id="como-funciona" class="band">
+<section class="wrap section" id="jornada">
+<div class="head reveal">
+<h2>Uma cliente, do áudio às 2h até a cadeira</h2>
+<p class="sub">Veja o caminho completo, sem ninguém da clínica precisar estar acordado.</p>
+</div>
+<ol class="jornada">
+<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><span class="quando">Ter · 02:14</span><h3>Ana manda um áudio</h3><p>"Queria uma limpeza de pele essa semana, de manhã se der."</p></li>
+<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><span class="quando">Ter · 02:14</span><h3>Recebe 2 horários</h3><p>A assistente olha o Google Agenda e oferece quinta 9h30 ou sexta 10h.</p></li>
+<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><span class="quando">Ter · 02:16</span><h3>Confirma e está marcado</h3><p>Evento na agenda, linha na planilha e a localização da clínica no WhatsApp.</p></li>
+<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><span class="quando">Qua · 10:00</span><h3>Lembrete na véspera</h3><p>"Oi, Ana! Passando para lembrar do seu horário amanhã, às 9h30."</p></li>
+<li class="jcard fim reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><span class="quando">Qui · 09:30</span><h3>Ana chega na clínica</h3><p>E a sua equipe só ficou sabendo pela agenda.</p></li>
+</ol>
+</section>
+
+<section class="band" id="fluxo">
+<div class="wrap section">
+<div class="head reveal">
+<h2>O fluxo completo, passo a passo</h2>
+<p class="sub">Tudo o que a assistente faz, inclusive quando a resposta é "não". As caixas pontilhadas são as perguntas que ela se faz no caminho.</p>
+</div>
+<div class="fluxo" id="fluxo-passos" role="list" aria-label="Fluxo do atendimento">
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><b>A cliente chama no WhatsApp</b><small>Texto ou áudio, a qualquer hora</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>É um áudio?</b><small>A maioria das clientes prefere falar</small></div></div><div class="flado"><em>sim</em></div><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/></svg></div><div><b>Transforma o áudio em texto</b><small>E segue o fluxo normalmente</small></div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg></div><div><b>A IA entende o pedido</b><small>Procedimento, dia e turno, seguindo as regras da clínica</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>Precisa de uma pessoa?</b><small>Saúde, remarcação, reclamação, preço fora da tabela</small></div></div><div class="flado"><em>sim</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg></div><div><b>Avisa a recepção por e-mail</b><small>A cliente fica sabendo que a equipe vai chamar</small></div></div></div>
+<div class="fdown" aria-hidden="true"><span><em>não</em></span><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><div><b>Lê o Google Agenda e oferece 2 horários</b><small>Respeitando a duração do procedimento</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><b>A cliente escolhe e confirma</b><small>Ela repete o resumo e espera o "sim"</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>O horário continua livre?</b><small>Confere de novo logo antes de marcar</small></div></div><div class="flado"><em>não</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div><div><b>Oferece outras 2 opções</b><small>E volta para a escolha da cliente</small></div></div></div>
+<div class="fdown" aria-hidden="true"><span><em>sim</em></span><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><b>Marca, registra e manda a localização</b><small>Evento no Google Agenda, linha na planilha e o pino da clínica</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div><b>Na véspera, às 10h, manda o lembrete</b><small>Se a recepção mudar o horário na agenda, o lembrete acompanha</small></div></div><div></div><div></div></div>
+<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
+<div class="frow"><div class="fno ok"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div><b>A cliente chega no horário</b><small>E a agenda da clínica ficou cheia sozinha</small></div></div><div></div><div></div></div>
+</div>
+<div class="fluxo-acoes"><button type="button" class="btn btn-line" id="fluxo-replay">Ver o fluxo de novo</button></div>
+</div>
+</section>
+
+<section id="como-funciona">
 <div class="wrap section">
 <div class="head reveal">
 <h2>Por dentro: as 6 peças da assistente</h2>
@@ -384,12 +528,9 @@ footer{border-top:1px solid var(--line)}
 <div class="painel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
 <h3>O Google Agenda responde com 2 horários</h3>
 <p>Ela lê o Google Agenda da profissional, o mesmo que a recepção já usa, calcula os horários livres respeitando a duração do procedimento e oferece 2 opções, em dias ou turnos diferentes.</p>
-<div class="vis">
-<div class="agenda" aria-label="Agenda de exemplo: para 60 minutos de manhã, sobram quinta 9h30 e sexta 10h">
-<div class="dia-col"><h4>QUA 11</h4><div class="ev">9h–10h<small>Limpeza de pele | Júlia</small></div><div class="ev">10h–11h<small>Peeling | Beatriz</small></div><div class="ev p">12h–13h<small>Pausa</small></div></div>
-<div class="dia-col"><h4>QUI 12</h4><div class="ev">8h30–9h20<small>Drenagem | Marta</small></div><div class="ev op">9h30 livre<small>opção 1</small></div><div class="ev">11h–11h45<small>Peeling | Lia</small></div></div>
-<div class="dia-col"><h4>SEX 13</h4><div class="ev">9h–9h45<small>Peeling | Lia</small></div><div class="ev op">10h livre<small>opção 2</small></div><div class="ev">11h–12h<small>Limpeza | Rita</small></div></div>
-</div>
+<div>
+<div class="cal" id="cal-exemplo" role="img" aria-label="Agenda de exemplo: quarta, quinta e sexta. Para 60 minutos de manhã, sobram quinta 9h30 e sexta 10h."></div>
+<p class="legenda" style="margin:0">O que a assistente enxerga numa agenda de exemplo. Para 60 minutos de manhã, sobram quinta às 9h30 e sexta às 10h.</p></div>
 </div>
 </div>
 
@@ -464,14 +605,13 @@ footer{border-top:1px solid var(--line)}
 </section>
 
 <section id="teste" class="wrap section">
-<div class="sim-wrap">
 <div class="head reveal">
 <p class="eyebrow">Simulação</p>
-<h2>Teste a assistente agora</h2>
-<p class="sub">Faça de conta que você é uma cliente. Escolha as respostas e veja a assistente marcar um horário, ou passar o caso para a recepção.</p>
-<p class="sub" style="font-size:15px;color:var(--muted2)">É uma demonstração com respostas prontas. A assistente de verdade conversa livremente, por texto ou áudio.</p>
+<h2>Teste a assistente e veja a agenda ao vivo</h2>
+<p class="sub">Faça de conta que você é uma cliente. Responda no WhatsApp e acompanhe, do lado, o que acontece no Google Agenda da clínica.</p>
 </div>
-<div class="sim reveal">
+<div class="sim-row reveal">
+<div class="sim">
 <div class="chat">
 <div class="chat-head">
 <div class="avatar">SC</div>
@@ -481,7 +621,12 @@ footer{border-top:1px solid var(--line)}
 <div class="opcoes" id="sim-opcoes"></div>
 </div>
 </div>
+<div class="cal-wrap">
+<div class="cal" id="sim-cal"></div>
+<p class="legenda" id="sim-legenda" aria-live="polite">Esta é a agenda da profissional. Escolha um procedimento no WhatsApp e veja a assistente procurar os horários livres.</p>
 </div>
+</div>
+<p class="hint" style="font-size:14px">Demonstração com respostas prontas. A assistente de verdade conversa livremente, por texto ou áudio, e usa a agenda real da clínica.</p>
 </section>
 
 <section class="wrap" style="padding-bottom:88px">
@@ -712,6 +857,50 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   })();
 })();
 
+/* agenda em grade de horas */
+var Agenda = (function () {
+  function fmt(h) { var H = Math.floor(h), m = Math.round((h - H) * 60); return H + 'h' + (m ? ('0' + m).slice(-2) : ''); }
+  function criar(box, cfg) {
+    box.innerHTML = '';
+    var top = Bolhas.el('div', 'cal-top');
+    var ico = Bolhas.el('span', 'ico', cfg.icone || '31'); ico.setAttribute('aria-hidden', 'true');
+    top.appendChild(ico); top.appendChild(document.createTextNode('Google Agenda'));
+    if (cfg.quem) top.appendChild(Bolhas.el('small', null, cfg.quem));
+    box.appendChild(top);
+    var head = Bolhas.el('div', 'cal-head'); head.appendChild(Bolhas.el('div'));
+    cfg.dias.forEach(function (d) { var c = Bolhas.el('div', null, d[0]); c.appendChild(Bolhas.el('b', null, d[1])); head.appendChild(c); });
+    box.appendChild(head);
+    var body = Bolhas.el('div', 'cal-body');
+    var horas = Bolhas.el('div', 'cal-horas');
+    for (var h = cfg.de; h < cfg.ate; h++) horas.appendChild(Bolhas.el('div', null, h + 'h'));
+    body.appendChild(horas);
+    var cols = cfg.dias.map(function () {
+      var c = Bolhas.el('div', 'cal-col'); c.style.height = 'calc(var(--h) * ' + (cfg.ate - cfg.de) + ')'; body.appendChild(c); return c;
+    });
+    box.appendChild(body);
+    function evento(col, de, ate, titulo, tipo, sub) {
+      var e = Bolhas.el('div', 'cal-ev' + (tipo ? ' ' + tipo : ''));
+      e.style.top = 'calc(var(--h) * ' + (de - cfg.de) + ' + 1px)';
+      e.style.height = 'calc(var(--h) * ' + (ate - de) + ' - 3px)';
+      e.appendChild(Bolhas.el('b', null, titulo));
+      e.appendChild(Bolhas.el('small', null, sub || (fmt(de) + ' – ' + fmt(ate))));
+      cols[col].appendChild(e);
+      return e;
+    }
+    (cfg.eventos || []).forEach(function (v) { evento.apply(null, v); });
+    return { evento: evento, fmt: fmt };
+  }
+  return { criar: criar, fmt: fmt };
+})();
+Agenda.criar(document.getElementById('cal-exemplo'), {
+  dias: [['QUA', '11'], ['QUI', '12'], ['SEX', '13']], de: 9, ate: 14,
+  eventos: [
+    [0, 9, 11, 'Limpeza de pele | Júlia', ''], [0, 11.5, 13, 'Peeling | Beatriz', 'roxo'],
+    [1, 9, 9.45, 'Pausa', 'pausa', ' '], [1, 9.5, 10.5, '9h30 livre', 'op', 'opção 1'], [1, 11, 13, 'Drenagem | Marta', ''],
+    [2, 9, 10, 'Peeling | Lia', ''], [2, 10, 11, '10h livre', 'op', 'opção 2'], [2, 12, 13.5, 'Limpeza | Rita', 'roxo']
+  ]
+});
+
 /* as 6 peças: abas */
 (function () {
   var tabs = [].slice.call(document.querySelectorAll('#tabs .tab'));
@@ -748,6 +937,24 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
     'Limpeza de pele': 60, 'Peeling químico': 45, 'Drenagem linfática': 50
   };
   var estado = {};
+  var legenda = document.getElementById('sim-legenda');
+  var calBox = document.getElementById('sim-cal');
+  var cal = null, ops = [];
+  var OCUPADO = [
+    [[8, 9.25, 'Drenagem | Marta', ''], [10.75, 11.75, 'Peeling | Lia', 'roxo'], [12, 13, 'Almoço', 'pausa'], [15.25, 16.25, 'Limpeza | Rita', ''], [16.5, 17.5, 'Peeling | Bia', 'roxo']],
+    [[8.5, 9.75, 'Limpeza de pele | Júlia', 'roxo'], [11.25, 12, 'Peeling | Carla', ''], [12, 13, 'Almoço', 'pausa'], [13.5, 14.5, 'Drenagem | Paula', ''], [14.75, 16.25, 'Limpeza | Rita', 'roxo']],
+    [[9, 10, 'Peeling | Lia', ''], [10.5, 11.5, 'Limpeza | Marta', 'roxo'], [12, 13, 'Almoço', 'pausa'], [14, 15, 'Drenagem | Júlia', ''], [16, 17, 'Peeling | Rita', 'roxo']]
+  ];
+  var SIGLA = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
+  function desenharAgenda() {
+    var dias = proximosDias(3);
+    cal = Agenda.criar(calBox, {
+      dias: dias.map(function (d) { return [SIGLA[d.getDay()], String(d.getDate())]; }), de: 8, ate: 18, quem: 'Agenda da profissional'
+    });
+    OCUPADO.forEach(function (lista, c) { lista.forEach(function (v) { cal.evento(c, v[0], v[1], v[2], v[3], v[3] === 'pausa' ? ' ' : null); }); });
+    ops = [];
+  }
+  function diga(txt) { legenda.textContent = txt; }
   function agora() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
   function rolar() { chat.scrollTop = chat.scrollHeight; }
   function add(e) { chat.appendChild(e); rolar(); return e; }
@@ -789,6 +996,8 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function rotuloDia(d) { return DIAS[d.getDay()] + ', ' + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2); }
   async function inicio() {
     chat.innerHTML = ''; estado = {};
+    desenharAgenda();
+    diga('Esta é a agenda da profissional. Escolha um procedimento no WhatsApp e veja a assistente procurar os horários livres.');
     add(Bolhas.el('div', 'dia', 'HOJE'));
     await ela('Oi! Eu sou a assistente da Sua Clínica de Estética. Qual procedimento você quer marcar?');
     opcoes(Object.keys(PROC).map(function (p) {
@@ -806,8 +1015,15 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   }
   async function turno(t) {
     eu(t === 'manhã' ? 'De manhã' : 'À tarde');
+    estado.turno = t;
     var dias = proximosDias(2);
-    var horas = t === 'manhã' ? ['9h30', '10h'] : ['14h', '16h30'];
+    var hs = t === 'manhã' ? [9.5, 10] : [14, 16.5];
+    var horas = hs.map(Agenda.fmt);
+    ops.forEach(function (e) { e.remove(); }); ops = [];
+    var dur = PROC[estado.proc] / 60;
+    diga('A assistente leu a agenda e procurou ' + PROC[estado.proc] + ' minutos livres ' + (t === 'manhã' ? 'de manhã' : 'à tarde') + '. Os 2 horários pontilhados são as opções que ela vai oferecer.');
+    hs.forEach(function (h, i) { ops.push(cal.evento(i, h, h + dur, horas[i] + ' livre', 'op', 'opção ' + (i + 1))); });
+    estado.hs = hs; estado.dur = dur;
     estado.opcoes = [rotuloDia(dias[0]) + ', às ' + horas[0], rotuloDia(dias[1]) + ', às ' + horas[1]];
     estado.vesperas = dias.map(function (d) { var v = new Date(d); v.setDate(v.getDate() - 1); return rotuloDia(v); });
     await ela('Olhei a agenda. Tenho ' + estado.opcoes[0] + ', ou ' + estado.opcoes[1] + '. Qual fica melhor?');
@@ -818,19 +1034,27 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   async function escolherHorario(i) {
     estado.escolha = estado.opcoes[i];
     estado.vesperaFinal = estado.vesperas[i];
+    estado.i = i;
+    ops.forEach(function (e, k) { if (k === i) e.classList.add('escolhida'); else e.classList.add('apagada'); });
+    diga('Ela segura o horário escolhido e pede a confirmação da cliente antes de marcar.');
     eu(estado.escolha.split(',')[0].replace(/^./, function (c) { return c.toUpperCase(); }));
     await ela('Confirmando: ' + estado.proc.toLowerCase() + ' na ' + estado.escolha + ', no nome de Ana Ribeiro. Posso marcar?');
     opcoes([
       { txt: 'Pode sim', fn: confirmar },
-      { txt: 'Quero outro horário', fn: function () { eu('Quero outro horário'); turno('tarde'); } }
+      { txt: 'Quero outro horário', fn: function () { eu('Quero outro horário'); turno(estado.turno === 'manhã' ? 'tarde' : 'manhã'); } }
     ]);
   }
   async function confirmar() {
     eu('Pode sim');
     status.textContent = 'digitando...';
     await espera(calmo ? 100 : 500);
+    diga('Antes de marcar, ela confere de novo se o horário continua livre…');
     nota('Conferiu de novo: horário livre');
-    await espera(calmo ? 100 : 500);
+    await espera(calmo ? 100 : 700);
+    ops.forEach(function (e) { e.remove(); }); ops = [];
+    var h = estado.hs[estado.i];
+    cal.evento(estado.i, h, h + estado.dur, estado.proc + ' | Ana Ribeiro', 'novo');
+    diga('Pronto: o horário entrou no Google Agenda como ocupado, com o nome e o WhatsApp da cliente. A recepção já vê na hora.');
     nota('Evento criado no Google Agenda');
     await ela(null, { cls: 'in', tipo: 'local', txt: 'Sua Clínica de Estética|Rua Exemplo, 100', hora: agora() });
     await ela('Prontinho! Está marcado. A localização está aqui em cima, e um dia antes eu te mando um lembrete.');
@@ -843,6 +1067,7 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
     await ela('Claro, pode me contar.');
     opcoes([{ txt: 'Posso fazer peeling grávida?', fn: async function () {
       eu('Posso fazer peeling grávida?');
+      diga('Dúvida de saúde não vira agendamento: a assistente não responde e passa o caso para a recepção. A agenda fica como estava.');
       await ela('Essa pergunta precisa da nossa profissional, pra te orientar com segurança. Já passei para a recepção: ela te chama pelo WhatsApp no próximo horário de atendimento.');
       nota('E-mail enviado para a recepção', true);
       nota('Linha "Recepção" na planilha', true);
@@ -875,6 +1100,30 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   f.addEventListener('input', calc); t.addEventListener('input', calc); calc();
 })();
 
+/* fluxo acendendo passo a passo */
+(function () {
+  var box = document.getElementById('fluxo-passos');
+  var btn = document.getElementById('fluxo-replay');
+  if (!box) return;
+  var partes = [].slice.call(box.children);
+  var animar = document.documentElement.classList.contains('js-reveal');
+  var timer = null;
+  function tocar() {
+    clearInterval(timer);
+    partes.forEach(function (x) { x.classList.remove('on'); });
+    if (!animar) { partes.forEach(function (x) { x.classList.add('on'); }); return; }
+    var i = 0;
+    timer = setInterval(function () {
+      if (i >= partes.length) { clearInterval(timer); return; }
+      partes[i++].classList.add('on');
+    }, 260);
+  }
+  if (!animar) { tocar(); btn.hidden = true; return; }
+  var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { tocar(); io.disconnect(); } }, { threshold: .2 });
+  io.observe(box);
+  btn.addEventListener('click', tocar);
+})();
+
 /* aparecer ao rolar */
 (function () {
   if (!document.documentElement.classList.contains('js-reveal')) return;
@@ -882,7 +1131,13 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visivel'); io.unobserve(e.target); } });
   }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
-  itens.forEach(function (e, i) { e.style.transitionDelay = (i % 3) * 80 + 'ms'; io.observe(e); });
+  itens.forEach(function (e) {
+    var irmaos = [].filter.call(e.parentNode.children, function (x) { return x.classList.contains('reveal'); });
+    var pos = irmaos.indexOf(e);
+    e.style.transitionDelay = Math.min(pos, 6) * 120 + 'ms';
+    e.addEventListener('transitionend', function f(ev) { if (ev.propertyName === 'opacity') { e.style.transitionDelay = ''; e.removeEventListener('transitionend', f); } });
+    io.observe(e);
+  });
 })();
 </script>
 </body>
