@@ -661,6 +661,7 @@ footer{border-top:1px solid var(--line)}
 <div class="field"><label for="msg">Como vocês agendam hoje?</label><textarea id="msg" rows="3" required placeholder="Ex.: a recepção responde no WhatsApp e marca no Google Agenda"></textarea></div>
 <p class="hint" id="hint">Preencha todos os campos para liberar o botão.</p>
 <button type="submit" id="enviar" disabled>Quero uma conversa</button>
+<p class="hint" id="enviado" role="status" hidden style="color:var(--accent);font-weight:600">Pronto! Abrimos o WhatsApp com a sua mensagem. É só tocar em enviar.</p>
 </form>
 </div>
 </section>
@@ -682,7 +683,7 @@ footer{border-top:1px solid var(--line)}
   var campos = ['nome', 'empresa', 'whats', 'msg'].map(function (id) { return document.getElementById(id); });
   function completo() { return campos.every(function (c) { return c.value.trim().length > 0; }); }
   function atualizar() { var ok = completo(); botao.disabled = !ok; hint.style.display = ok ? 'none' : 'block'; }
-  campos.forEach(function (c) { c.addEventListener('input', atualizar); });
+  campos.forEach(function (c) { c.addEventListener('input', function () { document.getElementById('enviado').hidden = true; atualizar(); }); });
   atualizar();
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -695,6 +696,13 @@ footer{border-top:1px solid var(--line)}
       'Como agendam hoje: ' + campos[3].value.trim()
     ].join('\n');
     window.open('https://wa.me/' + NUMERO_WHATSAPP + '?text=' + encodeURIComponent(texto), '_blank');
+    form.reset();
+    atualizar();
+    var ok = document.getElementById('enviado');
+    ok.hidden = false;
+    hint.style.display = 'none';
+    clearTimeout(form._t);
+    form._t = setTimeout(function () { ok.hidden = true; atualizar(); }, 8000);
   });
 })();
 
