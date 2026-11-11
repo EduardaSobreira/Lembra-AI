@@ -18,6 +18,12 @@
   var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if ('IntersectionObserver' in window && !calmo) document.documentElement.classList.add('js-reveal');
 })();
+/* ao recarregar, sempre abrir no topo (mesmo se o endereço tiver #contato, #planos...) */
+(function () {
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+})();
 </script>
 <style>
 :root{
@@ -396,7 +402,7 @@ footer{border-top:1px solid var(--line)}
 <div class="hero-text">
 <p class="eyebrow">Para clínicas de estética</p>
 <h1>Sua clínica agendando pelo WhatsApp, até de madrugada.</h1>
-<p class="lead">Uma recepcionista virtual que entende texto e áudio, oferece 2 horários livres do seu Google Agenda, confirma, anota na planilha, manda a localização e lembra a cliente um dia antes.</p>
+<p class="lead">Uma recepcionista virtual que conversa com as suas clientes, marca no seu Google Agenda e lembra cada uma na véspera.</p>
 <ul class="pills" aria-label="Destaques">
 <li>Atende 24 horas</li>
 <li>Entende áudio</li>
@@ -429,177 +435,47 @@ footer{border-top:1px solid var(--line)}
 </div>
 </section>
 
-<section class="wrap section" id="jornada">
-<div class="head reveal">
-<h2>Uma cliente, do áudio às 2h até a cadeira</h2>
-<p class="sub">Veja o caminho completo, sem ninguém da clínica precisar estar acordado.</p>
-</div>
-<ol class="jornada">
-<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><span class="quando">Ter · 02:14</span><h3>Ana manda um áudio</h3><p>"Queria uma limpeza de pele essa semana, de manhã se der."</p></li>
-<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><span class="quando">Ter · 02:14</span><h3>Recebe 2 horários</h3><p>A assistente olha o Google Agenda e oferece quinta 9h30 ou sexta 10h.</p></li>
-<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><span class="quando">Ter · 02:16</span><h3>Confirma e está marcado</h3><p>Evento na agenda, linha na planilha e a localização da clínica no WhatsApp.</p></li>
-<li class="jcard reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><span class="quando">Qua · 10:00</span><h3>Lembrete na véspera</h3><p>"Oi, Ana! Passando para lembrar do seu horário amanhã, às 9h30."</p></li>
-<li class="jcard fim reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><span class="quando">Qui · 09:30</span><h3>Ana chega na clínica</h3><p>E a sua equipe só ficou sabendo pela agenda.</p></li>
-</ol>
-</section>
 
 <section class="band" id="fluxo">
 <div class="wrap section">
 <div class="head reveal">
-<h2>O fluxo completo, passo a passo</h2>
-<p class="sub">Tudo o que a assistente faz, inclusive quando a resposta é "não". As caixas pontilhadas são as perguntas que ela se faz no caminho.</p>
+<h2>Como funciona</h2>
+<p class="sub">Do "oi" da cliente até ela chegar na clínica, sem ninguém da equipe precisar responder.</p>
 </div>
 <div class="fluxo" id="fluxo-passos" role="list" aria-label="Fluxo do atendimento">
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><b>A cliente chama no WhatsApp</b><small>Texto ou áudio, a qualquer hora</small></div></div><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><b>A cliente chama no WhatsApp</b><small>Por texto ou áudio, a qualquer hora</small></div></div><div></div><div></div></div>
 <div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>É um áudio?</b><small>A maioria das clientes prefere falar</small></div></div><div class="flado"><em>sim</em></div><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/></svg></div><div><b>Transforma o áudio em texto</b><small>E segue o fluxo normalmente</small></div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg></div><div><b>A IA entende o pedido</b><small>Qual procedimento e para quando</small></div></div><div></div><div></div></div>
 <div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg></div><div><b>A IA entende o pedido</b><small>Procedimento, dia e turno, seguindo as regras da clínica</small></div></div><div></div><div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>Precisa de uma pessoa?</b><small>Saúde, remarcação, reclamação, preço fora da tabela</small></div></div><div class="flado"><em>sim</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg></div><div><b>Avisa a recepção por e-mail</b><small>A cliente fica sabendo que a equipe vai chamar</small></div></div></div>
+<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>Precisa de uma pessoa?</b><small>Saúde, remarcação, reclamação</small></div></div><div class="flado"><em>sim</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg></div><div><b>Avisa a recepção</b><small>Por e-mail, com o resumo do pedido</small></div></div></div>
 <div class="fdown" aria-hidden="true"><span><em>não</em></span><div></div><div></div></div>
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><div><b>Lê o Google Agenda e oferece 2 horários</b><small>Respeitando a duração do procedimento</small></div></div><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><div><b>Oferece 2 horários livres</b><small>Direto do Google Agenda da clínica</small></div></div><div></div><div></div></div>
 <div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><b>A cliente escolhe e confirma</b><small>Ela repete o resumo e espera o "sim"</small></div></div><div></div><div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>O horário continua livre?</b><small>Confere de novo logo antes de marcar</small></div></div><div class="flado"><em>não</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div><div><b>Oferece outras 2 opções</b><small>E volta para a escolha da cliente</small></div></div></div>
+<div class="frow"><div class="fno dec"><div class="fi"><span>?</span></div><div><b>Ainda está livre?</b><small>Confere de novo antes de marcar</small></div></div><div class="flado"><em>não</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div><div><b>Oferece outras 2 opções</b></div></div></div>
 <div class="fdown" aria-hidden="true"><span><em>sim</em></span><div></div><div></div></div>
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><b>Marca, registra e manda a localização</b><small>Evento no Google Agenda, linha na planilha e o pino da clínica</small></div></div><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><b>Marca na agenda e manda a localização</b></div></div><div></div><div></div></div>
 <div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div><b>Na véspera, às 10h, manda o lembrete</b><small>Se a recepção mudar o horário na agenda, o lembrete acompanha</small></div></div><div></div><div></div></div>
+<div class="frow"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div><b>Lembra a cliente na véspera</b></div></div><div></div><div></div></div>
 <div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow"><div class="fno ok"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div><b>A cliente chega no horário</b><small>E a agenda da clínica ficou cheia sozinha</small></div></div><div></div><div></div></div>
+<div class="frow"><div class="fno ok"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div><b>A cliente chega no horário</b></div></div><div></div><div></div></div>
 </div>
 <div class="fluxo-acoes"><button type="button" class="btn btn-line" id="fluxo-replay">Ver o fluxo de novo</button></div>
 </div>
 </section>
 
-<section id="como-funciona">
-<div class="wrap section">
-<div class="head reveal">
-<h2>Por dentro: as 6 peças da assistente</h2>
-<p class="sub">Toque em cada peça para ver o que acontece, do "oi" da cliente até o lembrete da véspera.</p>
-</div>
-<div class="pecas reveal">
-<div class="tabs" role="tablist" aria-label="As 6 peças" id="tabs">
-<button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true"><span class="num">1</span><span><b>WhatsApp recebe</b><span class="d">Mensagem ou áudio, a qualquer hora</span></span></button>
-<button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="num">2</span><span><b>O áudio vira texto</b><span class="d">A cliente pode só falar</span></span></button>
-<button class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><span class="num">3</span><span><b>A IA entende</b><span class="d">Qual procedimento e para quando</span></span></button>
-<button class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false" tabindex="-1"><span class="num">4</span><span><b>A agenda responde</b><span class="d">2 horários livres da profissional</span></span></button>
-<button class="tab" role="tab" id="t5" aria-controls="p5" aria-selected="false" tabindex="-1"><span class="num">5</span><span><b>Confirma e registra</b><span class="d">Planilha preenchida e localização enviada</span></span></button>
-<button class="tab" role="tab" id="t6" aria-controls="p6" aria-selected="false" tabindex="-1"><span class="num">6</span><span><b>Lembrete na véspera</b><span class="d">Sai sozinho, um dia antes</span></span></button>
-</div>
-
-<div class="painel" role="tabpanel" id="p1" aria-labelledby="t1">
-<h3>O WhatsApp recebe, até de madrugada</h3>
-<p>A cliente chama quando quer: de noite, no fim de semana ou no feriado. A assistente responde na hora, no número oficial da clínica, por texto ou áudio.</p>
-<div class="vis">
-<div class="notif"><div class="avatar">AR</div><span><b>Ana</b> · Oi, queria fazer uma limpeza de pele…</span><span class="t">02:14</span></div>
-<div class="notif"><div class="avatar">JP</div><span><b>Júlia</b> · Mensagem de voz (0:08)</span><span class="t">23:40</span></div>
-<div class="notif"><div class="avatar">ML</div><span><b>Marta</b> · Tem horário no sábado de manhã?</span><span class="t">07:02</span></div>
-</div>
-</div>
-
-<div class="painel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
-<h3>O áudio vira texto</h3>
-<p>Muita cliente prefere mandar áudio. A assistente transcreve o áudio antes de responder, então entende tudo, sem pedir para a cliente digitar.</p>
-<div class="vis chatty">
-<div class="out audio-box"><div class="audio"><div class="play"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="#C6F36B"><path d="M7 4l13 8-13 8z"/></svg></div><div class="onda" aria-hidden="true"><i style="height:30%"></i><i style="height:60%"></i><i style="height:85%"></i><i style="height:45%"></i><i style="height:70%"></i><i style="height:95%"></i><i style="height:50%"></i><i style="height:35%"></i><i style="height:75%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:50%"></i></div><span class="dur">0:12</span></div></div>
-<svg class="seta" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
-<div class="in">"Oi, queria fazer uma limpeza de pele essa semana, de manhã se der"</div>
-</div>
-</div>
-
-<div class="painel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
-<h3>A IA entende o pedido</h3>
-<p>Ela entende o jeito que a cliente fala e segue as regras da sua clínica: procedimentos, duração, valores e horário de funcionamento. Se faltar alguma informação, ela pergunta.</p>
-<div class="vis">
-<b>O que a assistente entendeu</b>
-<dl class="kv">
-<dt>Procedimento</dt><dd>Limpeza de pele (60 min)</dd>
-<dt>Quando</dt><dd>Esta semana</dd>
-<dt>Turno</dt><dd>Manhã</dd>
-<dt>Cliente</dt><dd>Ana (nome do perfil)</dd>
-<dt>Próximo passo</dt><dd>Buscar 2 horários livres na agenda</dd>
-</dl>
-</div>
-</div>
-
-<div class="painel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
-<h3>O Google Agenda responde com 2 horários</h3>
-<p>Ela lê o Google Agenda da profissional, o mesmo que a recepção já usa, calcula os horários livres respeitando a duração do procedimento e oferece 2 opções, em dias ou turnos diferentes.</p>
-<div>
-<div class="cal" id="cal-exemplo" role="img" aria-label="Agenda de exemplo: quarta, quinta e sexta. Para 60 minutos de manhã, sobram quinta 9h30 e sexta 10h."></div>
-<p class="legenda" style="margin:0">O que a assistente enxerga numa agenda de exemplo. Para 60 minutos de manhã, sobram quinta às 9h30 e sexta às 10h.</p></div>
-</div>
-</div>
-
-<div class="painel" role="tabpanel" id="p5" aria-labelledby="t5" hidden>
-<h3>Confirma, registra e manda a localização</h3>
-<p>Antes de marcar, ela repete o resumo e espera o "sim". Depois cria o evento no Google Agenda, anota numa planilha e envia o pino da clínica no WhatsApp.</p>
-<div class="vis">
-<b>Planilha "Agendamentos"</b>
-<div class="rolavel">
-<table class="tabela">
-<thead><tr><th>Nome</th><th>Procedimento</th><th>Horário</th><th>Status</th></tr></thead>
-<tbody>
-<tr><td>Ana Ribeiro</td><td>Limpeza de pele</td><td>12/11 09:30</td><td><span class="selo">Confirmado</span></td></tr>
-<tr><td>Júlia Prado</td><td>Peeling químico</td><td>13/11 15:00</td><td><span class="selo">Confirmado</span></td></tr>
-<tr><td>Beatriz Lima</td><td>Dúvida de saúde</td><td>–</td><td><span class="selo r">Recepção</span></td></tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="painel" role="tabpanel" id="p6" aria-labelledby="t6" hidden>
-<h3>O lembrete sai sozinho na véspera</h3>
-<p>Todo dia às 10h, ela avisa quem tem horário no dia seguinte. Se a recepção mudar o horário no Google Agenda, o lembrete acompanha; se apagar, a cliente não recebe nada.</p>
-<div class="vis chatty">
-<div class="dia">QUARTA-FEIRA</div>
-<div class="in">Oi, Ana! Passando para lembrar do seu horário de limpeza de pele amanhã, às 09h30, na Sua Clínica de Estética. Se precisar remarcar, responda esta mensagem que a recepção te ajuda.<span class="hora">10:00</span></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<section class="wrap section">
-<div class="duas">
-<div class="head reveal">
-<h2>Quando precisa de gente, a recepção assume</h2>
-<p class="sub">A assistente não inventa resposta. Nesses casos, ela avisa a cliente que a recepção vai chamar e manda um e-mail com tudo o que a equipe precisa.</p>
-<ul class="lista">
-<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Dúvidas de saúde: gravidez, alergia, remédio, pós-procedimento</li>
-<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Preço, pacote ou desconto fora da tabela</li>
-<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Remarcação ou cancelamento</li>
-<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Reclamação ou pedido para falar com uma pessoa</li>
-</ul>
-</div>
-<div class="email reveal" role="img" aria-label="Exemplo de e-mail que a recepção recebe">
-<div class="top"><b>Recepção: dúvida sobre peeling na gravidez</b><small>Assistente da clínica → recepcao@suaclinica.com.br</small></div>
-<div class="corpo">
-<p><b>Nome:</b> Beatriz Lima</p>
-<p><b>Pedido:</b> quer saber se pode fazer peeling químico estando grávida de 4 meses. Prefere ser atendida de manhã.</p>
-<p><b>WhatsApp:</b> 5519 9xxxx-9012</p>
-<p style="color:var(--muted2)">Ela já foi avisada de que a recepção chama pelo WhatsApp no próximo horário de atendimento.</p>
-</div>
-</div>
-</div>
-</section>
 
 <section class="band">
 <div class="wrap section">
 <div class="head reveal">
-<h2>Os detalhes que fazem diferença</h2>
+<h2>Por que é seguro deixar com ela</h2>
 </div>
 <div class="grid grid-3">
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Nada de horário duplicado</h3><p>Ela confere a agenda de novo logo antes de marcar. Se outra cliente pegou o horário no meio da conversa, ela oferece outras 2 opções.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Intervalo entre clientes</h3><p>Precisa de 15 minutos para arrumar a sala? A gente soma esse tempo na duração de cada procedimento.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><h3>A recepção continua marcando</h3><p>O que a equipe marca à mão no Google Agenda também conta como ocupado. A assistente e a recepção usam a mesma agenda.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div><h3>Não dá orientação de saúde</h3><p>Diagnóstico, remédio, contraindicação ou resultado de procedimento ficam com a profissional. Ela também nunca pede CPF ou cartão.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>WhatsApp oficial da Meta</h3><p>Usamos a API oficial do WhatsApp, a mesma das grandes empresas, sem os riscos de bloqueio das ferramentas não oficiais.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Tudo no nome da clínica</h3><p>Número, agenda, planilha e contas ficam no nome da clínica. Se um dia vocês pararem, nada que é seu vai embora com a gente.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Nada de horário duplicado</h3><p>Ela confere a agenda de novo logo antes de marcar.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Intervalo entre clientes</h3><p>Os minutos para arrumar a sala entram na duração de cada procedimento.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><h3>A recepção continua marcando</h3><p>Assistente e equipe usam a mesma agenda. O que a recepção marca à mão também conta.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div><h3>Não fala de saúde</h3><p>Dúvida de saúde, remarcação ou reclamação vão para a recepção por e-mail, com o resumo pronto.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>WhatsApp oficial</h3><p>Usamos a API oficial da Meta, sem os riscos de bloqueio das ferramentas não oficiais.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Tudo no nome da clínica</h3><p>Número, agenda e planilha são da clínica. Os dados das clientes ficam com vocês.</p></div>
 </div>
 </div>
 </section>
@@ -607,8 +483,8 @@ footer{border-top:1px solid var(--line)}
 <section id="teste" class="wrap section">
 <div class="head reveal">
 <p class="eyebrow">Simulação</p>
-<h2>Teste a assistente e veja a agenda ao vivo</h2>
-<p class="sub">Faça de conta que você é uma cliente. Responda no WhatsApp e acompanhe, do lado, o que acontece no Google Agenda da clínica.</p>
+<h2>Teste agora</h2>
+<p class="sub">Responda como se fosse uma cliente e veja o horário entrar na agenda.</p>
 </div>
 <div class="sim-row reveal">
 <div class="sim">
@@ -626,7 +502,7 @@ footer{border-top:1px solid var(--line)}
 <p class="legenda" id="sim-legenda" aria-live="polite">Esta é a agenda da profissional. Escolha um procedimento no WhatsApp e veja a assistente procurar os horários livres.</p>
 </div>
 </div>
-<p class="hint" style="font-size:14px">Demonstração com respostas prontas. A assistente de verdade conversa livremente, por texto ou áudio, e usa a agenda real da clínica.</p>
+<p class="hint" style="font-size:14px">Demonstração com respostas prontas. A de verdade conversa livremente, por texto ou áudio.</p>
 </section>
 
 <section class="wrap" style="padding-bottom:88px">
@@ -654,25 +530,6 @@ footer{border-top:1px solid var(--line)}
 </div>
 </section>
 
-<section class="band">
-<div class="wrap section">
-<h2 class="reveal">Como a gente coloca no ar</h2>
-<div class="grid">
-<div class="step reveal"><span class="n">01</span><h3>Conhecemos a sua clínica</h3><p>Procedimentos com duração e valor, horário de atendimento, endereço, contato da recepção e as perguntas que mais chegam hoje.</p></div>
-<div class="step reveal"><span class="n">02</span><h3>Configuramos com você</h3><p>Ligamos a assistente ao WhatsApp oficial e ao seu Google Agenda, no tom da sua clínica, e você aprova tudo.</p></div>
-<div class="step reveal"><span class="n">03</span><h3>Testamos e entregamos</h3><p>Só vai ao ar depois de passar em todos os testes abaixo. Depois, a gente acompanha e ajusta junto com você.</p></div>
-</div>
-<div class="head reveal" style="margin-top:8px"><h3 style="margin:0;font-size:22px">Os 6 testes antes de ir ao ar</h3></div>
-<ul class="testes">
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pedido por áudio recebe 2 horários certos</li>
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Marcação completa: agenda, planilha e localização</li>
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Duas clientes no mesmo horário: sem duplicar</li>
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Dúvida de saúde vai para a recepção</li>
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pedido de remarcação vai para a recepção</li>
-<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Assunto fora da clínica: recusa com educação</li>
-</ul>
-</div>
-</section>
 
 <section id="planos" class="dark">
 <div class="wrap section">
@@ -693,12 +550,9 @@ footer{border-top:1px solid var(--line)}
 <div class="faq">
 <details class="reveal"><summary>Funciona com a agenda que a clínica já usa?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Funciona com o Google Agenda. A assistente lê e marca na agenda da profissional, a mesma que a recepção usa. Se a clínica usa outro sistema, fale com a gente sobre o plano sob medida.</p></details>
 <details class="reveal"><summary>A recepção continua usando o WhatsApp de sempre?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Sim. A assistente fica num número só dela, ligado ao WhatsApp oficial, e a recepção continua no WhatsApp de sempre. Quando um caso precisa de uma pessoa, a recepção chama a cliente pelo número dela.</p></details>
-<details class="reveal"><summary>O número pode ser bloqueado?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Usamos a API oficial da Meta, feita para empresas, e seguimos as regras dela: as mensagens automáticas de lembrete são modelos aprovados pela própria Meta. Ferramentas não oficiais é que costumam levar a bloqueios.</p></details>
-<details class="reveal"><summary>A assistente responde dúvidas de saúde?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Não. Perguntas sobre gravidez, alergia, remédio, contraindicação ou cuidados depois do procedimento vão direto para a sua equipe. A assistente cuida só do agendamento e das informações da clínica.</p></details>
-<details class="reveal"><summary>E se duas clientes quiserem o mesmo horário?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Logo antes de marcar, a assistente confere a agenda de novo. Se o horário acabou de ser ocupado, ela pede desculpa e oferece as 2 próximas opções.</p></details>
 <details class="reveal"><summary>Ela remarca ou cancela horários?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Por segurança, não. Quando a cliente pede para remarcar ou cancelar, a assistente avisa a recepção, que resolve direto na agenda. Se a recepção mover o horário, o lembrete da véspera acompanha.</p></details>
+<details class="reveal"><summary>Como é feita a implantação?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>A gente levanta com você os procedimentos, a duração, os valores e o horário de atendimento, liga a assistente ao WhatsApp oficial e ao Google Agenda e testa cada situação antes de ir ao ar: pedido por áudio, marcação, horário disputado, dúvida de saúde e remarcação.</p></details>
 <details class="reveal"><summary>Quanto tempo leva para ficar pronto?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>A configuração em si é rápida. O que mais pesa é a aprovação da Meta: a verificação da empresa e do modelo de lembrete pode levar de alguns dias a algumas semanas. A gente acompanha tudo com você.</p></details>
-<details class="reveal"><summary>De quem são os dados das clientes?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Da clínica. A agenda, a planilha e o número ficam em contas no nome da clínica, e a assistente pede só o necessário para marcar: nome e procedimento.</p></details>
 </div>
 </section>
 
@@ -892,39 +746,6 @@ var Agenda = (function () {
   }
   return { criar: criar, fmt: fmt };
 })();
-Agenda.criar(document.getElementById('cal-exemplo'), {
-  dias: [['QUA', '11'], ['QUI', '12'], ['SEX', '13']], de: 9, ate: 14,
-  eventos: [
-    [0, 9, 11, 'Limpeza de pele | Júlia', ''], [0, 11.5, 13, 'Peeling | Beatriz', 'roxo'],
-    [1, 9, 9.45, 'Pausa', 'pausa', ' '], [1, 9.5, 10.5, '9h30 livre', 'op', 'opção 1'], [1, 11, 13, 'Drenagem | Marta', ''],
-    [2, 9, 10, 'Peeling | Lia', ''], [2, 10, 11, '10h livre', 'op', 'opção 2'], [2, 12, 13.5, 'Limpeza | Rita', 'roxo']
-  ]
-});
-
-/* as 6 peças: abas */
-(function () {
-  var tabs = [].slice.call(document.querySelectorAll('#tabs .tab'));
-  function abrir(t, foco) {
-    tabs.forEach(function (x) {
-      var sel = x === t;
-      x.setAttribute('aria-selected', sel ? 'true' : 'false');
-      x.tabIndex = sel ? 0 : -1;
-      document.getElementById(x.getAttribute('aria-controls')).hidden = !sel;
-    });
-    if (foco) t.focus();
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { abrir(t); });
-    t.addEventListener('keydown', function (e) {
-      var k = e.key, n = null;
-      if (k === 'ArrowDown' || k === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
-      if (k === 'ArrowUp' || k === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
-      if (k === 'Home') n = tabs[0];
-      if (k === 'End') n = tabs[tabs.length - 1];
-      if (n) { e.preventDefault(); abrir(n, true); }
-    });
-  });
-})();
 
 /* simulador */
 (function () {
@@ -1075,6 +896,7 @@ Agenda.criar(document.getElementById('cal-exemplo'), {
     } }]);
   }
   function fim() { opcoes([{ txt: 'Recomeçar a simulação', fn: inicio }]); }
+  desenharAgenda(); // a agenda já aparece antes de a simulação começar
   var iniciou = false;
   function comecar() { if (!iniciou) { iniciou = true; inicio(); } }
   if ('IntersectionObserver' in window) {
