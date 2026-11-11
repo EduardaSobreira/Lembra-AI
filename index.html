@@ -9,21 +9,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('tema'); } catch (e) {}
+  if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <style>
 :root{
-  --ink:#2B1E18; --muted:#5C4A40; --muted2:#6A5649; --bg:#FAF6F1; --card:#FFFFFF;
-  --line:#EADFD4; --brand:#3E2A22; --brand2:#4E372D; --peach:#F2C9B0; --accent:#A9532F;
+  --ink:#10201B; --muted:#3C4E47; --muted2:#4A5C55; --bg:#F6F8F5; --card:#FFFFFF;
+  --line:#DDE4DF; --brand:#0B3B2E; --brand2:#12493A; --lime:#C6F36B; --accent:#2F6B4F;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:var(--brand)}a:hover{color:#2A1C16}
+a{color:var(--brand)}a:hover{color:#06261D}
 h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
 .btn{display:inline-block;text-decoration:none;border-radius:999px;font-weight:600;font-size:16px;padding:16px 26px}
-.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#2A1C16}
+.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#06261D}
 .btn-line{border:1.5px solid var(--brand);padding:14.5px 24px}
-.btn-peach{background:var(--peach);color:var(--brand)}
+.btn-lime{background:var(--lime);color:var(--brand)}
 header{border-bottom:1px solid var(--line)}
 .nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;padding-bottom:18px}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px}
@@ -39,22 +47,22 @@ h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;le
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .phone-col{flex:1 1 360px;min-width:0;display:flex;justify-content:center}
 .phone{width:100%;max-width:380px;background:var(--brand);border-radius:28px;padding:14px}
-.chat{background:#F1E6DC;border-radius:18px;overflow:hidden}
-.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E6D8CC}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--peach);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
+.chat{background:#ECE8E0;border-radius:18px;overflow:hidden}
+.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E2DED6}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
 .chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:420px;overflow:hidden}
 .chat-body.anim>div{animation:entra .35s ease-out both}
 @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .typing{display:flex;gap:4px;align-items:center;padding:13px 14px!important}
-.typing span{width:7px;height:7px;border-radius:50%;background:#A08C80;animation:pula 1s infinite ease-in-out}
+.typing span{width:7px;height:7px;border-radius:50%;background:#8A9A93;animation:pula 1s infinite ease-in-out}
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @keyframes pula{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
 .chat-body.saindo{transition:opacity .5s;opacity:0}
-.status{font-size:12px;color:#6A5649}
-.hora{display:block;text-align:right;font-size:11px;color:#7A6458;margin-top:3px}
-.dia{align-self:center;background:#FFFFFF;color:#6A5649;font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:8px}
+.status{font-size:12px;color:#5A6A63}
+.hora{display:block;text-align:right;font-size:11px;color:#5A6A63;margin-top:3px}
+.dia{align-self:center;background:#FFFFFF;color:#4A5C55;font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:8px}
 .in{align-self:flex-start;max-width:86%;background:#fff;padding:10px 12px;border-radius:4px 14px 14px 14px}
-.out{align-self:flex-end;max-width:70%;background:#F6D9C6;padding:10px 12px;border-radius:14px 4px 14px 14px}
+.out{align-self:flex-end;max-width:70%;background:#D4F7B8;padding:10px 12px;border-radius:14px 4px 14px 14px}
 .band{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .section{padding-top:88px;padding-bottom:88px;display:flex;flex-direction:column;gap:40px}
 h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01em}
@@ -69,27 +77,65 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .step .n{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--accent)}
 .step h3{margin:0;font-size:20px;font-weight:600;font-family:Inter,system-ui,sans-serif}
 .dark{background:var(--brand);color:#fff}
-.dark .sub{color:#E8D9CE}
+.dark .sub{color:#CFE0D7}
 .plan{background:var(--brand2);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px}
 .plan h3{margin:0;font-size:24px}
 .plan .price{margin:0;font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700}
-.plan ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:#F3E8E0}
+.plan ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:#E3EEE8}
 .plan .btn{margin-top:auto;align-self:flex-start;padding:14px 22px}
-.plan.featured{background:var(--peach);color:var(--brand)}
+.plan.featured{background:var(--lime);color:var(--brand)}
 .plan.featured ul{color:var(--brand)}
-.tag{align-self:flex-start;background:var(--brand);color:var(--peach);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
+.tag{align-self:flex-start;background:var(--brand);color:var(--lime);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
 .contact{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding-top:88px;padding-bottom:88px}
 .contact-text{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px}
 form{flex:1 1 380px;min-width:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}
 label{font-size:14px;font-weight:600}
-input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #9C8273;border-radius:10px}
+input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #B9C6BF;border-radius:10px}
 textarea{resize:vertical}
 .hint{margin:0;font-size:14px;color:var(--muted2)}
 #enviar{font:inherit;font-size:16px;font-weight:600;border:none;border-radius:999px;padding:16px 24px;background:var(--brand);color:#fff;cursor:pointer}
-#enviar:disabled{background:#E2D5CB;color:var(--muted);cursor:not-allowed}
+#enviar:disabled{background:#C9D3CE;color:var(--muted);cursor:not-allowed}
 footer{border-top:1px solid var(--line)}
 .foot{padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted2)}
+
+/* botão sol/lua */
+.tema{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.tema:hover{background:var(--line)}
+.tema .sol{display:none}
+:root[data-theme="dark"] .tema .sol{display:block}
+:root[data-theme="dark"] .tema .lua{display:none}
+
+/* modo escuro */
+:root{color-scheme:light}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ink:#E8EFEB; --muted:#B4C2BC; --muted2:#9DAEA7; --bg:#0E1513; --card:#16201D;
+  --line:#2A3833; --accent:#8FD6A8;
+}
+:root[data-theme="dark"] a{color:var(--ink)}
+:root[data-theme="dark"] a:hover{color:#C6F36B}
+:root[data-theme="dark"] .btn-dark,:root[data-theme="dark"] #enviar{background:#C6F36B;color:#0B3B2E}
+:root[data-theme="dark"] .btn-dark:hover{background:#D6FA8F;color:#0B3B2E}
+:root[data-theme="dark"] .btn-line{border-color:var(--ink)}
+:root[data-theme="dark"] .band{background:#131C19}
+:root[data-theme="dark"] .card{background:#1B2622}
+:root[data-theme="dark"] .step{border-top-color:#2F6B4F}
+:root[data-theme="dark"] .phone{background:#1F2C28}
+:root[data-theme="dark"] .chat{background:#0B1411}
+:root[data-theme="dark"] .chat-head{background:#1B2622;border-bottom-color:#26332F}
+:root[data-theme="dark"] .in{background:#1F2C28;color:#E8EFEB}
+:root[data-theme="dark"] .out{background:#1D5A40;color:#F1F7F3}
+:root[data-theme="dark"] .dia{background:#1F2C28;color:#B4C2BC}
+:root[data-theme="dark"] .status,:root[data-theme="dark"] .hora{color:#A9B9B2}
+:root[data-theme="dark"] .out .hora{color:#C9DDD2}
+:root[data-theme="dark"] .plan.featured .btn-dark{background:#0B3B2E;color:#fff}
+:root[data-theme="dark"] .plan .btn-lime{color:#0B3B2E}
+:root[data-theme="dark"] .plan.featured,:root[data-theme="dark"] .plan.featured ul{color:#0B3B2E}
+:root[data-theme="dark"] .dark{background:#0B2A21}
+:root[data-theme="dark"] form{background:var(--card)}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea{background:#0E1513;color:var(--ink);border-color:#4A5C55}
+:root[data-theme="dark"] #enviar:disabled{background:#26332F;color:var(--muted2)}
 </style>
 </head>
 <body>
@@ -97,13 +143,17 @@ footer{border-top:1px solid var(--line)}
 <header>
 <div class="wrap nav">
 <div class="logo">
-<div class="logo-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6"/><path d="M9 14h4"/></svg></div>
+<div class="logo-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6"/><path d="M9 14h4"/></svg></div>
 <span>Lembra Aí</span>
 </div>
 <nav aria-label="Principal">
 <a href="#servicos">Serviços</a>
 <a href="#como-funciona">Como funciona</a>
 <a href="#planos">Planos</a>
+<button type="button" class="tema" id="tema" aria-label="Ativar modo escuro">
+<svg class="lua" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+<svg class="sol" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.9 4.9l1.4 1.4"/><path d="M17.7 17.7l1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.9 19.1l1.4-1.4"/><path d="M17.7 6.3l1.4-1.4"/></svg>
+</button>
 <a href="#contato" class="btn btn-dark">Falar com a gente</a>
 </nav>
 </div>
@@ -147,12 +197,12 @@ footer{border-top:1px solid var(--line)}
 <p class="sub">Ela cuida da parte repetitiva do atendimento. A sua equipe fica com o que precisa de gente.</p>
 </div>
 <div class="grid grid-3">
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><h3>Entende texto e áudio</h3><p>A cliente escreve ou manda áudio, a qualquer hora. A assistente entende o procedimento que ela quer e para quando.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Marca na sua agenda</h3><p>Lê o Google Agenda da profissional, oferece 2 horários livres e confere de novo antes de marcar, para nunca encaixar duas clientes no mesmo horário.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Confirma e manda a localização</h3><p>Repete o resumo para a cliente aprovar, marca o horário, registra numa planilha e envia o pino da clínica no WhatsApp.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Lembrete na véspera</h3><p>Todo dia, sozinha, ela avisa quem tem horário no dia seguinte. Menos faltas e menos horário vazio na agenda.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h3>Sua equipe assume quando precisa</h3><p>Dúvida de saúde, remarcação, reclamação ou preço fora da tabela: ela não inventa resposta e avisa a recepção na hora, com o resumo do pedido.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e avisos</h3><p>Também dá para automatizar lembretes de pagamento, avisos de feriado e campanhas para as suas clientes, com o mesmo jeito humano de falar.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><h3>Entende texto e áudio</h3><p>A cliente escreve ou manda áudio, a qualquer hora. A assistente entende o procedimento que ela quer e para quando.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Marca na sua agenda</h3><p>Lê o Google Agenda da profissional, oferece 2 horários livres e confere de novo antes de marcar, para nunca encaixar duas clientes no mesmo horário.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Confirma e manda a localização</h3><p>Repete o resumo para a cliente aprovar, marca o horário, registra numa planilha e envia o pino da clínica no WhatsApp.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Lembrete na véspera</h3><p>Todo dia, sozinha, ela avisa quem tem horário no dia seguinte. Menos faltas e menos horário vazio na agenda.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h3>Sua equipe assume quando precisa</h3><p>Dúvida de saúde, remarcação, reclamação ou preço fora da tabela: ela não inventa resposta e avisa a recepção na hora, com o resumo do pedido.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e avisos</h3><p>Também dá para automatizar lembretes de pagamento, avisos de feriado e campanhas para as suas clientes, com o mesmo jeito humano de falar.</p></div>
 </div>
 </div>
 </section>
@@ -173,9 +223,9 @@ footer{border-top:1px solid var(--line)}
 <p class="sub">Comece pequeno e cresça conforme sentir o resultado.</p>
 </div>
 <div class="grid">
-<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Agendamento por texto e áudio</li><li>Lembrete na véspera</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-peach">Consultar valor</a></div>
+<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Agendamento por texto e áudio</li><li>Lembrete na véspera</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
 <div class="plan featured"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Planilha de agendamentos e aviso à recepção</li><li>Localização enviada automaticamente</li><li>Avisos de feriado e campanhas</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
-<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Cobrança automática de pacotes</li><li>Integração com o seu sistema</li></ul><a href="#contato" class="btn btn-peach">Consultar valor</a></div>
+<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Cobrança automática de pacotes</li><li>Integração com o seu sistema</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
 </div>
 </div>
 </section>
@@ -294,6 +344,23 @@ footer{border-top:1px solid var(--line)}
     }
   }
   rodar();
+})();
+</script>
+<script>
+(function () {
+  var b = document.getElementById('tema'), root = document.documentElement;
+  function rotulo() {
+    var escuro = root.getAttribute('data-theme') === 'dark';
+    b.setAttribute('aria-label', escuro ? 'Ativar modo claro' : 'Ativar modo escuro');
+    b.setAttribute('title', escuro ? 'Modo claro' : 'Modo escuro');
+  }
+  rotulo();
+  b.addEventListener('click', function () {
+    var novo = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', novo);
+    try { localStorage.setItem('tema', novo); } catch (e) {}
+    rotulo();
+  });
 })();
 </script>
 </body>
