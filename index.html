@@ -242,20 +242,25 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .nota.r{background:#FDE7C8;color:#6B3A00}
 
 /* calculadora */
-.calc{display:flex;flex-wrap:wrap;gap:28px;background:var(--brand);color:#fff;border-radius:28px;padding:40px}
-.calc>*{flex:1 1 320px;min-width:0}
+.calc{display:flex;flex-direction:column;gap:32px;background:var(--brand);color:#fff;border-radius:28px;padding:44px 40px}
+.calc-head{max-width:760px;margin:0 auto;text-align:center;align-items:center}
 .calc h2{color:#fff}
 .calc .sub{color:#CFE0D7}
-.campos{display:flex;flex-direction:column;gap:18px}
-.campo{display:flex;flex-direction:column;gap:8px}
-.campo label{font-size:15px;font-weight:600}
-.campo .linha{display:flex;align-items:center;gap:14px}
-.campo input[type=range]{flex:1;accent-color:#C6F36B;min-height:44px}
-.campo output{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;min-width:90px;text-align:right}
-.res{background:var(--brand2);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:10px}
-.res .valor{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,4.6vw,54px);font-weight:700;color:var(--lime);line-height:1}
-.res p{margin:0;color:#E3EEE8;font-size:16px;line-height:1.55}
-.res .btn{align-self:flex-start;margin-top:8px}
+.conta{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.15fr);align-items:stretch;gap:14px}
+.fator{background:var(--brand2);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:14px;justify-content:space-between}
+.fator label,.fator .rot{font-size:15px;font-weight:600;line-height:1.35;color:#E3EEE8}
+.num{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.num output{font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,3.4vw,40px);font-weight:700;line-height:1;text-align:center;flex:1}
+.passo-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff;font:inherit;font-size:22px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.passo-btn:hover{background:rgba(255,255,255,.12)}
+.fator input[type=range]{width:100%;accent-color:#C6F36B;min-height:32px;margin:0}
+.op{align-self:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:var(--lime);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700}
+.fator.resultado{background:var(--lime);color:var(--brand)}
+.fator.resultado .rot{color:var(--brand)}
+.resultado .valor{font-family:'Space Grotesk',sans-serif;font-size:clamp(38px,4.4vw,54px);font-weight:700;line-height:1}
+.resultado .ano{font-size:16px}
+.calc-cta{display:flex;justify-content:center}
+@media (max-width:900px){.conta{grid-template-columns:1fr}.op{justify-self:center}.calc{padding:32px 20px}}
 
 /* passos */
 .step{border-top:3px solid var(--brand);padding-top:20px;display:flex;flex-direction:column;gap:10px}
@@ -457,6 +462,8 @@ footer{border-top:1px solid var(--line)}
 :root[data-theme="dark"] .opcao{color:#C6F36B;border-color:#C6F36B;background:transparent}
 :root[data-theme="dark"] .opcao:hover{background:#C6F36B;color:#0B3B2E}
 :root[data-theme="dark"] .calc,:root[data-theme="dark"] .dark{background:#0B2A21}
+:root[data-theme="dark"] .fator{background:#12493A}
+:root[data-theme="dark"] .fator.resultado{background:#C6F36B}
 :root[data-theme="dark"] .plan.featured .btn-dark{background:#0B3B2E;color:#fff}
 :root[data-theme="dark"] .btn-lime,:root[data-theme="dark"] .btn-lime:hover,:root[data-theme="dark"] .plan .btn-lime{color:#0B3B2E}
 :root[data-theme="dark"] .plan.featured,:root[data-theme="dark"] .plan.featured ul{color:#0B3B2E}
@@ -645,26 +652,30 @@ footer{border-top:1px solid var(--line)}
 
 <section class="wrap" style="padding-bottom:88px">
 <div class="calc reveal">
-<div class="head">
+<div class="head calc-head">
 <h2 data-t="calcH">Quanto dinheiro a sua clínica perde hoje?</h2>
-<p data-t="calcSub" class="sub">Toda cliente que esquece o horário, ou desiste porque ninguém respondeu a tempo, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto a sua clínica perde sem uma assistente no WhatsApp.</p>
+<p class="sub">Cliente que esquece o horário, ou desiste porque ninguém respondeu, é dinheiro que não entra. Faça a conta:</p>
 </div>
-<div class="campos">
-<div class="campo">
+<div class="conta">
+<div class="fator">
 <label for="faltas">Clientes que faltam ou desistem por mês</label>
-<div class="linha"><input type="range" id="faltas" min="0" max="60" step="1" value="8"><output id="faltas-v" for="faltas">8</output></div>
+<div class="num"><button type="button" class="passo-btn" data-alvo="faltas" data-d="-1" aria-label="Diminuir clientes">−</button><output id="faltas-v" for="faltas">8</output><button type="button" class="passo-btn" data-alvo="faltas" data-d="1" aria-label="Aumentar clientes">+</button></div>
+<input type="range" id="faltas" min="0" max="60" step="1" value="8">
 </div>
-<div class="campo">
-<label data-t="calcLab2" for="ticket">Valor médio de um procedimento</label>
-<div class="linha"><input type="range" id="ticket" min="30" max="2000" step="10" value="150"><output id="ticket-v" for="ticket">R$ 150</output></div>
+<span class="op" aria-hidden="true">×</span>
+<div class="fator">
+<label for="ticket" data-t="calcLab2">Valor médio de um procedimento</label>
+<div class="num"><button type="button" class="passo-btn" data-alvo="ticket" data-d="-10" aria-label="Diminuir valor">−</button><output id="ticket-v" for="ticket">R$ 150</output><button type="button" class="passo-btn" data-alvo="ticket" data-d="10" aria-label="Aumentar valor">+</button></div>
+<input type="range" id="ticket" min="30" max="2000" step="10" value="150">
 </div>
-<div class="res" aria-live="polite">
-<p data-t="calcRes">Sem a assistente, a sua clínica perde por mês</p>
+<span class="op" aria-hidden="true">=</span>
+<div class="fator resultado" aria-live="polite">
+<span class="rot" data-t="calcRes">Sem a assistente, a sua clínica perde por mês</span>
 <div class="valor" id="perda-mes">R$ 1.200</div>
-<p>Ou <b id="perda-ano">R$ 14.400</b> por ano em horários que ficaram vazios.</p>
-<a href="#contato" class="btn btn-lime">Quero parar de perder</a>
+<span class="ano">ou <b id="perda-ano">R$ 14.400</b> por ano</span>
 </div>
 </div>
+<div class="calc-cta"><a href="#contato" class="btn btn-lime">Quero parar de perder</a></div>
 </div>
 </section>
 
@@ -1193,6 +1204,13 @@ var Agenda = (function () {
     mes.textContent = brl(faltas * ticket); ano.textContent = brl(faltas * ticket * 12);
   }
   f.addEventListener('input', calc); t.addEventListener('input', calc);
+  [].forEach.call(document.querySelectorAll('.passo-btn'), function (b) {
+    b.addEventListener('click', function () {
+      var r = document.getElementById(b.getAttribute('data-alvo'));
+      r.value = Math.min(+r.max, Math.max(+r.min, +r.value + (+b.getAttribute('data-d'))));
+      calc();
+    });
+  });
   function padroes() { var c = Ramo.sim(); f.value = c.faltas; t.value = c.ticket; calc(); }
   if (Ramo.atual() !== 'estetica') padroes(); else calc();
   Ramo.ao(padroes);
