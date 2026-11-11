@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lembra Aí – Recepcionista virtual no WhatsApp para clínicas</title>
+<title>Lembra Aí – Agendamento automático pelo WhatsApp</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="Uma assistente que atende pelo WhatsApp, entende texto e áudio, marca horários no Google Agenda da clínica e lembra a cliente um dia antes.">
+<meta name="description" content="Uma assistente que atende pelo WhatsApp, entende texto e áudio, marca horários e reuniões no Google Agenda e lembra o cliente um dia antes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -72,6 +72,22 @@ h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;le
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
 .pills li{font-size:14px;font-weight:500;color:var(--muted);background:var(--soft);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+
+/* pergunta: qual é o seu negócio */
+.ramo{display:flex;flex-direction:column;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;box-shadow:0 10px 26px rgba(11,59,46,.06)}
+.ramo-t{font-weight:700;font-size:16px}
+.ramo-lista{display:flex;flex-wrap:wrap;gap:8px}
+.ramo-op{font:inherit;font-size:14.5px;font-weight:600;color:var(--ink);background:var(--soft);border:1.5px solid var(--line);border-radius:999px;padding:10px 16px;min-height:44px;cursor:pointer;transition:background .2s,border-color .2s}
+.ramo-op:hover{border-color:var(--brand)}
+.ramo-op[aria-checked="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+:root[data-theme="dark"] .ramo-op[aria-checked="true"]{background:#C6F36B;border-color:#C6F36B;color:#0B3B2E}
+.troca{animation:troca .45s ease}
+@keyframes troca{from{opacity:.25}to{opacity:1}}
+.meet{display:flex;gap:10px;align-items:center;min-width:220px}
+.meet .cam{width:38px;height:38px;border-radius:10px;background:#1A73E8;display:flex;align-items:center;justify-content:center;flex:none}
+.meet strong{display:block;font-size:13.5px}
+.meet small{display:block;font-size:12.5px;color:#1A5DB8;text-decoration:underline}
+:root[data-theme="dark"] .meet small{color:#9CC3FF}
 
 /* celular / conversa */
 .phone-col{flex:1 1 360px;min-width:0;display:flex;justify-content:center}
@@ -455,13 +471,14 @@ footer{border-top:1px solid var(--line)}
 <main>
 <section class="wrap hero">
 <div class="hero-text">
-<p class="eyebrow">Para clínicas de estética</p>
-<h1>Sua clínica agendando pelo WhatsApp, até de madrugada.</h1>
-<p class="lead">Uma recepcionista virtual que conversa com as suas clientes, marca no seu Google Agenda e lembra cada uma na véspera.</p>
+<div class="ramo"><span class="ramo-t" id="ramo-t">Qual é o seu negócio?</span><div class="ramo-lista" role="radiogroup" aria-labelledby="ramo-t"><button type="button" class="ramo-op" role="radio" data-ramo="estetica" aria-checked="true">Clínica de estética</button><button type="button" class="ramo-op" role="radio" data-ramo="advocacia" aria-checked="false" tabindex="-1">Escritório de advocacia</button><button type="button" class="ramo-op" role="radio" data-ramo="salao" aria-checked="false" tabindex="-1">Salão e barbearia</button><button type="button" class="ramo-op" role="radio" data-ramo="outros" aria-checked="false" tabindex="-1">Outro negócio</button></div></div>
+<p class="eyebrow" data-t="eyebrow">Para clínicas de estética</p>
+<h1 data-t="h1">Sua clínica agendando pelo WhatsApp, até de madrugada.</h1>
+<p data-t="lead" class="lead">Uma recepcionista virtual que conversa com as suas clientes, marca no seu Google Agenda e lembra cada uma na véspera.</p>
 <ul class="pills" aria-label="Destaques">
 <li>Atende 24 horas</li>
 <li>Entende áudio</li>
-<li>Usa a agenda do Google</li>
+<li data-t="pill3">Usa a agenda do Google</li>
 <li>WhatsApp oficial</li>
 </ul>
 <div class="ctas">
@@ -470,11 +487,11 @@ footer{border-top:1px solid var(--line)}
 </div>
 </div>
 <div class="phone-col">
-<div class="phone" role="img" aria-label="Exemplo: às 2h da manhã, uma cliente pede por áudio uma limpeza de pele e a assistente marca o horário">
+<div class="phone" role="img" data-ta="chatAria" aria-label="Exemplo: às 2h da manhã, uma cliente pede por áudio uma limpeza de pele e a assistente marca o horário">
 <div class="chat">
 <div class="chat-head">
-<div class="avatar">SC</div>
-<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="chat-status">assistente virtual</span></div>
+<div data-t="chatAv" class="avatar">SC</div>
+<div style="display:flex;flex-direction:column"><span data-t="chatNome" style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="chat-status">assistente virtual</span></div>
 </div>
 <div class="chat-body" id="chat" aria-hidden="true">
 <div class="out" data-hora="02:14" data-tipo="audio" data-dur="0:12">Oi, queria fazer uma limpeza de pele essa semana, de manhã se der</div>
@@ -495,7 +512,7 @@ footer{border-top:1px solid var(--line)}
 <div class="wrap section">
 <div class="head reveal">
 <h2>Como funciona</h2>
-<p class="sub">Do "oi" da cliente até ela sentar na cadeira, sem ninguém da sua equipe precisar responder.</p>
+<p data-t="comoSub" class="sub">Do "oi" da cliente até ela sentar na cadeira, sem ninguém da sua equipe precisar responder.</p>
 </div>
 <ol class="etapas" aria-label="Como funciona, etapa por etapa">
 <li class="etapa reveal"><span class="seta dir" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 1</span><h3>A cliente manda mensagem</h3><p>Escrita ou por áudio, a qualquer hora, até de madrugada.</p></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="Ana, de madrugada, manda um áudio pelo celular pedindo um horário"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
@@ -507,7 +524,7 @@ footer{border-top:1px solid var(--line)}
 <rect x="92" y="52" width="82" height="34" rx="12" fill="#D4F7B8"/><path d="M106 86 l-4 10 l14 -10z" fill="#D4F7B8"/>
 <g fill="#0B3B2E" transform="translate(-6 0)"><rect x="114" y="65" width="4" height="8" rx="2"/><rect x="122" y="60" width="4" height="18" rx="2"/><rect x="130" y="63" width="4" height="12" rx="2"/><rect x="138" y="57" width="4" height="24" rx="2"/><rect x="146" y="62" width="4" height="14" rx="2"/><rect x="154" y="65" width="4" height="8" rx="2"/><rect x="162" y="61" width="4" height="16" rx="2"/></g>
 <svg x="136" y="56" width="144" height="144" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 704 704" fill="none" shape-rendering="auto"><mask id="ov3uw8ry"><rect width="704" height="704" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#ov3uw8ry)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M705.3 1074a2351.1 2351.1 0 0 1-15.6-101c-1-7.7-2.5-16.4 2.7-22 7.3-8 14-14.8 14.8-26.2.8-10.7-2.8-22.4-5-32.8a809.4 809.4 0 0 0-17.3-64.7c-6.6-21.7-13.9-43.2-21.3-64.6-6.9-20-13.5-40.3-22.5-59.5-17-36.5-46-63.5-81.6-81.6-9-4.5-27-20.5-36.3-24-8.5-3.4-8.5 6.3-16.9 2.6-6.7-2.9-13-6.7-16.7-13.2-4-7-14.3-16.9-15.9-25-3.3-17.4.3-32.2-12-45.3a90 90 0 0 0-41.1-23.8c-33.7-9.3-78.5-2.8-98.8 28.5-9.7 14.9-13 33-26.2 45.1-11.4 10.7-8.8 18-23.6 23.4-.9.3-23.6-4.5-24.4-4.2-16.2-3.5-31.7 6.2-46.5 11.8a325.4 325.4 0 0 0-63 32.3 399.2 399.2 0 0 0-102.3 98.5 482.5 482.5 0 0 0-76.4 161c-1.7 6.4-3.5 13-1.5 19.4 1.7 5.3 5.4 9.2 9.8 12.4 6 4.3 18 7 17.7 15.7-.1 6.6-2.4 13.5-3.5 20-1.3 7.7-2.3 15.5-3.4 23.2-4.8 35.4-8.6 71-10.3 106.6a920 920 0 0 0-.5 106c.1 2.3.8 4.5 2 6.2-1 .4-1.2 2.4.1 2.7l2.7.5a12 12 0 0 0 7 2.4l5.5.2c19.3 4 38.6 7.9 58.1 10.8 23.8 3.5 47.6 6.3 71.5 8.7 49.2 4.8 98 3.2 147.1.6a1877 1877 0 0 1 147.4-2c49.2 1.4 98.4 3.5 147.6 4.4 55 1 110-.5 164.8-5 7.5-.5 12.2-6.5 10.7-14-8.9-44.7-19-89.1-27-134Z" fill="#d08b5b"/><path d="m201 597.5 1.2-.4c14.5-5.7 29.6-14.8 45.4-11.4.5-.2 10.8 1.9 17.9 3.2l-6.7 7L247 598c40.7 67.1 88.8 100.7 144.3 100.7 55.5 0 97.7-33.6 126.4-100.7l4-1c.4 0 1 .2 1.5.4 9.3 3.6 27.4 19.6 36.3 24.1 35.6 18 64.5 45 81.6 81.6 8.7 18.6 15.2 38 21.8 57.5l.7 2c7.4 21.4 14.7 43 21.3 64.6 6.3 20.4 12 41 16.6 61.8l.7 2.9c2.2 10.4 5.8 22 5 32.8a29 29 0 0 1-3 10.7l-80.4 29 38.4 261.3c-35.1 1.5-70.3 2-105.5 1.3-49.2-.9-98.4-3-147.6-4.3-47.7-1.2-95.3-.7-143 1.7l-12 .6a946.3 946.3 0 0 1-139.5-1l-3.1-.3v-38.3l16.3-212.9-83-15.6-81.3-39.5a21.7 21.7 0 0 1-5.6-8.8c-1.9-6-.5-12 1-18l.5-1.3a492.8 492.8 0 0 1 76.4-161A399.3 399.3 0 0 1 138 629.7c19.8-13 40.9-23.9 63-32.3Z" fill="#3E8E66"/><path d="M232.2 584.6c5.1-.3 10.3.6 15.4 1 .4.1.6.8 0 .9-9 1.9-18 4.5-26.9 7.1l-3.8 1.2c-10 3-19.8 6-29.6 10-19.4 7.9-37.8 18.5-54.8 30.8C67.2 682.8 20 754.3-9.9 828.3a526 526 0 0 0-24.3 77c-.4 1.6-2 5.4-1 7 .7 1.3 3.6 2.1 5 2.9l4.5 2.3 25.2 12.9 2.3 1.1c38 18.6 78.4 34.4 121 35.5l.4-3.7a342 342 0 0 1 9.9-60c.3-1 1.6-.6 1.7.3 3 23.1 2 46.4 1 69.7-1.8 41-4.3 82.2-6.5 123.3-1.2 20.6-2.6 41-3.9 61.7-1.3 20.5-1.7 41.6-4.7 62-.6 4.6-6 7-10 6.6-4.4-.5-7.9-4.5-8-9 0-11.9 1.5-24 2.4-35.8l2.5-33.8c3.1-41.1 6.8-82.2 10.2-123.3a4771 4771 0 0 1 3.8-43.7C76.4 979.8 34.2 963-6.1 943.5c-.6 13.2-2 26.5-3.4 39.6-3.8 36.8-7.1 73.6-9.6 110.5a2254.2 2254.2 0 0 0-4.2 92.7l-.2 7c0 4.4-.5 8.5-4.3 11.7-3.7 3.3-8.9 3.5-12.6 0-5-4.6-4.2-10.9-4-17.1a1675.6 1675.6 0 0 1 1.8-47.2 1321 1321 0 0 1 10.5-109.5l2-14c3.5-26 7.5-52.7 15.5-77.9-3.1-1.5-6.2-3-9.3-4.7-5.5-2.7-11.2-5.4-16.6-8.4-4.2-2.5-7.9-5.8-9-10.8-1.4-5.5.6-11.5 2-16.9v-.4a502 502 0 0 1 26.6-80 523.2 523.2 0 0 1 67.8-117 353.8 353.8 0 0 1 88.7-83.3 239 239 0 0 1 53.8-25.7 142.6 142.6 0 0 1 42.8-7.5Zm90.1-66c6-6.5 18.1.2 15.2 8.8a108.2 108.2 0 0 1-34.7 52A79.4 79.4 0 0 1 247 598l1.7 2.4a321.1 321.1 0 0 0 46.1 52.6c36 31.2 84.8 48 132 36 37.1-9.4 69.8-38.8 79.4-76.2-1.3.6-3 .9-4.8.5-7.7-1.7-15.3-9.8-20.3-15.6-5.3-6.3-9.5-13-12.6-20.7-5.6-14-7.4-32.1.3-45.7 1-1.7 3-.7 3.3 1l.3 2.5c1.5 12.7 3.3 25 9.3 36.6a76 76 0 0 0 18.2 23.1c2.6 2 5.8 3.6 8.1 6l.5.4c.6-5 4.1-7.3 7.6-7.2 3.3.2 7.3 1.6 8.8 2.3l.1.1a341 341 0 0 1 65.1 42 259 259 0 0 1 88.4 129c7.5 25.3 11.8 51.4 16.3 77.4l2.8 16c4.2 23.9 8.9 48.4 18.4 70.7 2.5 5.7.6 11.1-5.5 13.4A1493 1493 0 0 1 688 953c3.7 16 6 32.5 8.7 48.5 6 34.1 13.2 68 19.4 102 3.2 17.5 6.1 35 9.3 52.3l4.7 25.2 2.4 13.6.1.7c.5 2.4 1 4.9.4 7.3-.8 2.7-2.9 4.6-4.8 6.6-1.6 1.6-3.8 1.6-5.7.7l-.7-.3c-3.4-1.6-6-3.2-7.3-7-.7-2.5-1-5.2-1.5-7.7a3535.6 3535.6 0 0 1-7.8-43.6l-1.6-9.1c-5.2-31.4-10.2-62.9-12.8-94.5-1-14-2.3-28.1-3.5-42.2l-.9-10.5c-1.1-13.3-2.5-27-2.7-40.5l-4.5 1.6L657 964c-5.5 2-12.5 6-18.4 5.2-2.9-.3-5-1.2-6.8-2.9 2 28.8 4.8 57.4 8.5 86a1965.7 1965.7 0 0 0 22 135c.6 3.2 1.4 6.4 1.9 9.6.5 3.7-.5 5.9-2.5 9-1.7 2.4-5 3.7-7.8 2-3.6-2.3-5.5-4.3-6.5-8.4-1-3.7-1.6-7.6-2.3-11.4a1654.2 1654.2 0 0 1-11.4-65.2c-7.8-52-12.7-104.4-15.2-156.8a1388 1388 0 0 1-1.4-77.8c0-13.3.5-26.6 1.4-39.9 1-13.4 3-26.5 4.8-39.8 0-.5.7-.5.7 0 .8 14.9 2.1 29.8 2.8 44.7.6 14.3.9 28.5 1.4 42.8.6 18.7 1.5 37.5 2.7 56.2a9.6 9.6 0 0 1 8.5-3.1c4.7-1 9.7-3.4 14.1-5l16.8-5.5 26.4-8.7a679 679 0 0 1-18-80.8l-2-12.3c-4-24.2-8.5-48.5-15.8-72a229.8 229.8 0 0 0-34.8-68.2 370.2 370.2 0 0 0-52.7-55.3C557 627 539.7 614 523 600c.1.9.2 2 0 3-3.5 25.9-17 50-35.8 67.9-37.7 36-93.6 43.4-142 26.5-46.7-16.3-88-55-102.6-102.8-.3-.8.8-1 1.3-.5l2.4 3.3c0-.4.2-.9.7-1a129 129 0 0 0 46.6-29.2 100.2 100.2 0 0 0 21.3-33.3l.4-1c1.7-5 3.2-10.2 7-14.2Z" fill="#000"/></g><g transform="matrix(.99789 0 0 1 156 62)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M432 270c-3.9-62.1-24-132.7-83.5-163.2-131-52.6-303.1 79.8-312.2 215-3.2 46.3 22.5 96.9 69.4 109.7 10.5 13.9 26.3 22.3 41.9 29.6 185.6 96.3 305.5 18 284.3-191Z" fill="#d08b5b"/><path d="M474.2 231.4c-6.6-18.3-13.5-36.3-20.8-54.3-7-17.4-13.5-35.3-22.3-52C378.4 26 282.7 26 233 38.9c-25.6-11-73.7-8-100.4 2-43.3 16.2-96 79.8-114 108.3-39.9 63-64.7 147-38.3 219.9 3.5 9.5 7.9 18.3 12.8 26.8-3 4.2-6.7 8.3-10.7 12.2-11.8 11.7-23.7 23-34 36.3a180.4 180.4 0 0 0-24.8 42.5c-11.8 29-12.4 62 3.3 89.7 13.6 24 37.7 42 64.9 43.8l4.1.5c3.6 5.9 8 11.4 13 16.1C24.4 651.5 61 659 82 659.5L85 662c12.8 10 26.2 20.1 40.8 27.3 10 4.9 23 8.9 33.3 5.4 4.7 3.1 12.4 2.5 17 0A45.2 45.2 0 0 0 194 675c9.2-18.9 7-39.6 4.6-59.7l-7.6-67a276 276 0 0 0-9.4-51.8c-2.8-8.8-6.3-17.1-11-25a4 4 0 0 0 0-2c-1.6-4.9-4.7-7.4-8.5-10.8l-1.4-1.3a45 45 0 0 0-6-5.8l-2.4-2.5c-6.7-7-13-14.4-18.7-22.4a293 293 0 0 1-15.2-24c-4.8-8.2-8-17.4-12.7-25.7-.4-.7-1.5-.9-2-.3-1.5 1.6-2.5 3.3-2.3 5l-.7.2c-.3-2.7-2.8-5-6.2-4.4-5 1-9.2 1.3-13.6-.4a1112.5 1112.5 0 0 0 5.7-43.8 41.2 41.2 0 0 1 16.7 8.7c2.7 2.5 4.6 5.8 8 7.6 3.7 2 8.4-1.3 7.2-5.6-2.2-8.8-15-13.8-23-15.4-2.8-.6-5.6-.8-8.3-.8a657.6 657.6 0 0 0 2.2-26.9 45.4 45.4 0 0 1 19.2-1.5l6.3 5a1256 1256 0 0 1 21.2 17.8c3.8 3.3 8.5 0 7.9-4.6-5.3-38 18-68.1 45.2-91.5 30.1-25.9 84.9-28.9 120.7-73.7 16.5 3.3 53.3 13.3 68.5 37.5 21.3 34 18.5 64.4 20.1 102.9 1.7 38.5 5.8 78.7-3 116.7-8 35-29.9 65-63.8 78.7l-2.5 1a102.6 102.6 0 0 1-55.1 5 144 144 0 0 1-54.5-24.7c-1-.7-2.4.7-1.6 1.7 22.3 29.6 66.3 39.5 101.2 31.7l4.8-1.2a91.7 91.7 0 0 0 30.7 102.4c12.6 9.8 28 17.8 36.8 31.7 8 12.7 5.5 27-8 34.3-3.5 1.9-4.8 7.9-1.4 10.5l4 3c7.5 5.8 28.5 16.6 31.9 17 30 3.6 50.3-18.5 63.3-44.6 15.2-30.6 11.2-67.9-5.5-97-13.5-23.4-40-46.4-29.5-76a85.5 85.5 0 0 1 19-27.8c8.5-9.2 17.6-17.9 25.8-27.5a98 98 0 0 0 19.3-31.9c6-17.4 3-36.3-1.4-53.8-9.5-37.5-21.7-74.4-34.8-110.7Z" fill="#000"/></g></g><g transform="translate(315 248)"><path fill-rule="evenodd" clip-rule="evenodd" d="M146.6 241a40.7 40.7 0 0 1-17.1-13.2c-1.5-2-2-4.2-1.6-6.2a8.9 8.9 0 0 1 9.6-7.2c1.9.3 3.7 1.3 5.2 3.5l.3.4a27 27 0 0 0 10 8.3c3.6 1.8 7.8 2.6 12.1 2.1 8.3-1 14-5.4 20-11.4l2.2-2.3c.5-.8 1.1-1.2 1.9-1.5a4 4 0 0 1 4.6 1.6c.4.7.7 1.5.6 2.5a25.7 25.7 0 0 1-8.5 16.2c-5.1 4.9-12 8.2-18.4 9.4-7.1 1.3-14.4.4-21-2.3Zm24.2-96.6c7.6 4.6 19 15.3 11 26.6-9.6 10-23.4-1.4-30.2-6.6-6.3-4-13.3 6.3-7.5 11 49 36.3 69-29.8 30.5-36.4-4.2-.8-5.8 4-3.8 5.4ZM83 102c.8-10.3 16.6-12.7 18.1-2.4a42 42 0 0 1-4.3 25.9c-4 7.9-14 4.2-14.7-3-1-9.7.3-14 .9-20.5Zm120-4.5c2.2-3 5.4-4.9 9.2-3.8 11.9 3.5 8.4 20.4 4.2 28.6-2.3 4.4-9.6 5.6-12.9 1.6-5.4-6.4-8-19.1-1.1-25.5l.6-1ZM96.6 56.8l1.9-.3c5.8-1 13-2 17.1 2.7 2.2 2.5 3 7 0 9.4-5.1 4.2-10.8 2.6-17 3-5.1.2-10 1-14.9 2.5C73 77 64.2 82.8 55 88.9c-1.2.8-2.4-.7-1.9-1.8a59.3 59.3 0 0 1 26-24.1 64 64 0 0 1 17.5-6.2Zm95.6-4.6 1.4.3c15.7 3.2 36 9.8 43.4 25.1.3 2.2 0 2.7-.3 3-.2.3-.4.7-1.4 1A36 36 0 0 1 226 78l-2.8-1.4a77.7 77.7 0 0 0-10.1-4.3c-7.5-2.4-15.1-4.1-23-5a9.4 9.4 0 0 1-4.5-1.8 7 7 0 0 1-2.6-4 7 7 0 0 1 .8-5.8 7.4 7.4 0 0 1 3.6-3.1c1.5-.6 3.2-.8 4.9-.4Z" fill="#000"/></g><g transform="translate(279 400)"></g><g transform="translate(179 343)"></g><g transform="translate(203 303)"></g></g></svg></svg></div></li>
-<li class="etapa reveal"><span class="seta baixo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 2</span><h3>A assistente responde na hora</h3><p>Entende o que ela quer, com a simpatia de uma recepcionista.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b>E se for dúvida de saúde?</b> Ela não responde: avisa a sua equipe na hora.</span></div></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="O celular da clínica responde na hora: Oi, Ana! Tenho quinta às 9h30"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
+<li class="etapa reveal"><span class="seta baixo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 2</span><h3>A assistente responde na hora</h3><p data-t="e2p">Entende o que ela quer, com a simpatia de uma recepcionista.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b data-t="e2q">E se for dúvida de saúde?</b> <span data-t="e2a">Ela não responde: avisa a sua equipe na hora.</span></span></div></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="O celular da clínica responde na hora: Oi, Ana! Tenho quinta às 9h30"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
 <g transform="rotate(-6 70 100)"><rect x="26" y="22" width="92" height="160" rx="16" fill="#0B3B2E"/>
 <rect x="33" y="34" width="78" height="136" rx="9" fill="#ECE8E0"/>
 <rect x="33" y="34" width="78" height="22" rx="9" fill="#FFFFFF"/><circle cx="45" cy="45" r="6" fill="#C6F36B"/>
@@ -518,14 +535,14 @@ footer{border-top:1px solid var(--line)}
 <rect x="118" y="22" width="120" height="34" rx="12" fill="#FFFFFF"/><path d="M132 56 l-4 10 l14 -10z" fill="#FFFFFF"/><text x="130" y="44.0" font-family="Inter,system-ui,sans-serif" font-size="13" font-weight="600" fill="#10201B">Oi, Ana!</text>
 <path d="M250 17.2 L252.04 21.96 L256.8 24 L252.04 26.04 L250 30.8 L247.96 26.04 L243.2 24 L247.96 21.96Z" fill="#C6F36B"/><path d="M262 42 L263.2 44.8 L266 46 L263.2 47.2 L262 50 L260.8 47.2 L258 46 L260.8 44.8Z" fill="#3E8E66"/>
 <svg x="136" y="56" width="144" height="144" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 704 704" fill="none" shape-rendering="auto"><mask id="nrgnr39a"><rect width="704" height="704" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#nrgnr39a)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M705.3 1074a2351.1 2351.1 0 0 1-15.6-101c-1-7.7-2.5-16.4 2.7-22 7.3-8 14-14.8 14.8-26.2.8-10.7-2.8-22.4-5-32.8a809.4 809.4 0 0 0-17.3-64.7c-6.6-21.7-13.9-43.2-21.3-64.6-6.9-20-13.5-40.3-22.5-59.5-17-36.5-46-63.5-81.6-81.6-9-4.5-27-20.5-36.3-24-8.5-3.4-8.5 6.3-16.9 2.6-6.7-2.9-13-6.7-16.7-13.2-4-7-14.3-16.9-15.9-25-3.3-17.4.3-32.2-12-45.3a90 90 0 0 0-41.1-23.8c-33.7-9.3-78.5-2.8-98.8 28.5-9.7 14.9-13 33-26.2 45.1-11.4 10.7-8.8 18-23.6 23.4-.9.3-23.6-4.5-24.4-4.2-16.2-3.5-31.7 6.2-46.5 11.8a325.4 325.4 0 0 0-63 32.3 399.2 399.2 0 0 0-102.3 98.5 482.5 482.5 0 0 0-76.4 161c-1.7 6.4-3.5 13-1.5 19.4 1.7 5.3 5.4 9.2 9.8 12.4 6 4.3 18 7 17.7 15.7-.1 6.6-2.4 13.5-3.5 20-1.3 7.7-2.3 15.5-3.4 23.2-4.8 35.4-8.6 71-10.3 106.6a920 920 0 0 0-.5 106c.1 2.3.8 4.5 2 6.2-1 .4-1.2 2.4.1 2.7l2.7.5a12 12 0 0 0 7 2.4l5.5.2c19.3 4 38.6 7.9 58.1 10.8 23.8 3.5 47.6 6.3 71.5 8.7 49.2 4.8 98 3.2 147.1.6a1877 1877 0 0 1 147.4-2c49.2 1.4 98.4 3.5 147.6 4.4 55 1 110-.5 164.8-5 7.5-.5 12.2-6.5 10.7-14-8.9-44.7-19-89.1-27-134Z" fill="#d08b5b"/><path d="m201 597.5 1.2-.4c14.5-5.7 29.6-14.8 45.4-11.4.5-.2 10.8 1.9 17.9 3.2l-6.7 7L247 598c40.7 67.1 88.8 100.7 144.3 100.7 55.5 0 97.7-33.6 126.4-100.7l4-1c.4 0 1 .2 1.5.4 9.3 3.6 27.4 19.6 36.3 24.1 35.6 18 64.5 45 81.6 81.6 8.7 18.6 15.2 38 21.8 57.5l.7 2c7.4 21.4 14.7 43 21.3 64.6 6.3 20.4 12 41 16.6 61.8l.7 2.9c2.2 10.4 5.8 22 5 32.8a29 29 0 0 1-3 10.7l-80.4 29 38.4 261.3c-35.1 1.5-70.3 2-105.5 1.3-49.2-.9-98.4-3-147.6-4.3-47.7-1.2-95.3-.7-143 1.7l-12 .6a946.3 946.3 0 0 1-139.5-1l-3.1-.3v-38.3l16.3-212.9-83-15.6-81.3-39.5a21.7 21.7 0 0 1-5.6-8.8c-1.9-6-.5-12 1-18l.5-1.3a492.8 492.8 0 0 1 76.4-161A399.3 399.3 0 0 1 138 629.7c19.8-13 40.9-23.9 63-32.3Z" fill="#3E8E66"/><path d="M232.2 584.6c5.1-.3 10.3.6 15.4 1 .4.1.6.8 0 .9-9 1.9-18 4.5-26.9 7.1l-3.8 1.2c-10 3-19.8 6-29.6 10-19.4 7.9-37.8 18.5-54.8 30.8C67.2 682.8 20 754.3-9.9 828.3a526 526 0 0 0-24.3 77c-.4 1.6-2 5.4-1 7 .7 1.3 3.6 2.1 5 2.9l4.5 2.3 25.2 12.9 2.3 1.1c38 18.6 78.4 34.4 121 35.5l.4-3.7a342 342 0 0 1 9.9-60c.3-1 1.6-.6 1.7.3 3 23.1 2 46.4 1 69.7-1.8 41-4.3 82.2-6.5 123.3-1.2 20.6-2.6 41-3.9 61.7-1.3 20.5-1.7 41.6-4.7 62-.6 4.6-6 7-10 6.6-4.4-.5-7.9-4.5-8-9 0-11.9 1.5-24 2.4-35.8l2.5-33.8c3.1-41.1 6.8-82.2 10.2-123.3a4771 4771 0 0 1 3.8-43.7C76.4 979.8 34.2 963-6.1 943.5c-.6 13.2-2 26.5-3.4 39.6-3.8 36.8-7.1 73.6-9.6 110.5a2254.2 2254.2 0 0 0-4.2 92.7l-.2 7c0 4.4-.5 8.5-4.3 11.7-3.7 3.3-8.9 3.5-12.6 0-5-4.6-4.2-10.9-4-17.1a1675.6 1675.6 0 0 1 1.8-47.2 1321 1321 0 0 1 10.5-109.5l2-14c3.5-26 7.5-52.7 15.5-77.9-3.1-1.5-6.2-3-9.3-4.7-5.5-2.7-11.2-5.4-16.6-8.4-4.2-2.5-7.9-5.8-9-10.8-1.4-5.5.6-11.5 2-16.9v-.4a502 502 0 0 1 26.6-80 523.2 523.2 0 0 1 67.8-117 353.8 353.8 0 0 1 88.7-83.3 239 239 0 0 1 53.8-25.7 142.6 142.6 0 0 1 42.8-7.5Zm90.1-66c6-6.5 18.1.2 15.2 8.8a108.2 108.2 0 0 1-34.7 52A79.4 79.4 0 0 1 247 598l1.7 2.4a321.1 321.1 0 0 0 46.1 52.6c36 31.2 84.8 48 132 36 37.1-9.4 69.8-38.8 79.4-76.2-1.3.6-3 .9-4.8.5-7.7-1.7-15.3-9.8-20.3-15.6-5.3-6.3-9.5-13-12.6-20.7-5.6-14-7.4-32.1.3-45.7 1-1.7 3-.7 3.3 1l.3 2.5c1.5 12.7 3.3 25 9.3 36.6a76 76 0 0 0 18.2 23.1c2.6 2 5.8 3.6 8.1 6l.5.4c.6-5 4.1-7.3 7.6-7.2 3.3.2 7.3 1.6 8.8 2.3l.1.1a341 341 0 0 1 65.1 42 259 259 0 0 1 88.4 129c7.5 25.3 11.8 51.4 16.3 77.4l2.8 16c4.2 23.9 8.9 48.4 18.4 70.7 2.5 5.7.6 11.1-5.5 13.4A1493 1493 0 0 1 688 953c3.7 16 6 32.5 8.7 48.5 6 34.1 13.2 68 19.4 102 3.2 17.5 6.1 35 9.3 52.3l4.7 25.2 2.4 13.6.1.7c.5 2.4 1 4.9.4 7.3-.8 2.7-2.9 4.6-4.8 6.6-1.6 1.6-3.8 1.6-5.7.7l-.7-.3c-3.4-1.6-6-3.2-7.3-7-.7-2.5-1-5.2-1.5-7.7a3535.6 3535.6 0 0 1-7.8-43.6l-1.6-9.1c-5.2-31.4-10.2-62.9-12.8-94.5-1-14-2.3-28.1-3.5-42.2l-.9-10.5c-1.1-13.3-2.5-27-2.7-40.5l-4.5 1.6L657 964c-5.5 2-12.5 6-18.4 5.2-2.9-.3-5-1.2-6.8-2.9 2 28.8 4.8 57.4 8.5 86a1965.7 1965.7 0 0 0 22 135c.6 3.2 1.4 6.4 1.9 9.6.5 3.7-.5 5.9-2.5 9-1.7 2.4-5 3.7-7.8 2-3.6-2.3-5.5-4.3-6.5-8.4-1-3.7-1.6-7.6-2.3-11.4a1654.2 1654.2 0 0 1-11.4-65.2c-7.8-52-12.7-104.4-15.2-156.8a1388 1388 0 0 1-1.4-77.8c0-13.3.5-26.6 1.4-39.9 1-13.4 3-26.5 4.8-39.8 0-.5.7-.5.7 0 .8 14.9 2.1 29.8 2.8 44.7.6 14.3.9 28.5 1.4 42.8.6 18.7 1.5 37.5 2.7 56.2a9.6 9.6 0 0 1 8.5-3.1c4.7-1 9.7-3.4 14.1-5l16.8-5.5 26.4-8.7a679 679 0 0 1-18-80.8l-2-12.3c-4-24.2-8.5-48.5-15.8-72a229.8 229.8 0 0 0-34.8-68.2 370.2 370.2 0 0 0-52.7-55.3C557 627 539.7 614 523 600c.1.9.2 2 0 3-3.5 25.9-17 50-35.8 67.9-37.7 36-93.6 43.4-142 26.5-46.7-16.3-88-55-102.6-102.8-.3-.8.8-1 1.3-.5l2.4 3.3c0-.4.2-.9.7-1a129 129 0 0 0 46.6-29.2 100.2 100.2 0 0 0 21.3-33.3l.4-1c1.7-5 3.2-10.2 7-14.2Z" fill="#000"/></g><g transform="matrix(.99789 0 0 1 156 62)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M432 270c-3.9-62.1-24-132.7-83.5-163.2-131-52.6-303.1 79.8-312.2 215-3.2 46.3 22.5 96.9 69.4 109.7 10.5 13.9 26.3 22.3 41.9 29.6 185.6 96.3 305.5 18 284.3-191Z" fill="#d08b5b"/><path d="M474.2 231.4c-6.6-18.3-13.5-36.3-20.8-54.3-7-17.4-13.5-35.3-22.3-52C378.4 26 282.7 26 233 38.9c-25.6-11-73.7-8-100.4 2-43.3 16.2-96 79.8-114 108.3-39.9 63-64.7 147-38.3 219.9 3.5 9.5 7.9 18.3 12.8 26.8-3 4.2-6.7 8.3-10.7 12.2-11.8 11.7-23.7 23-34 36.3a180.4 180.4 0 0 0-24.8 42.5c-11.8 29-12.4 62 3.3 89.7 13.6 24 37.7 42 64.9 43.8l4.1.5c3.6 5.9 8 11.4 13 16.1C24.4 651.5 61 659 82 659.5L85 662c12.8 10 26.2 20.1 40.8 27.3 10 4.9 23 8.9 33.3 5.4 4.7 3.1 12.4 2.5 17 0A45.2 45.2 0 0 0 194 675c9.2-18.9 7-39.6 4.6-59.7l-7.6-67a276 276 0 0 0-9.4-51.8c-2.8-8.8-6.3-17.1-11-25a4 4 0 0 0 0-2c-1.6-4.9-4.7-7.4-8.5-10.8l-1.4-1.3a45 45 0 0 0-6-5.8l-2.4-2.5c-6.7-7-13-14.4-18.7-22.4a293 293 0 0 1-15.2-24c-4.8-8.2-8-17.4-12.7-25.7-.4-.7-1.5-.9-2-.3-1.5 1.6-2.5 3.3-2.3 5l-.7.2c-.3-2.7-2.8-5-6.2-4.4-5 1-9.2 1.3-13.6-.4a1112.5 1112.5 0 0 0 5.7-43.8 41.2 41.2 0 0 1 16.7 8.7c2.7 2.5 4.6 5.8 8 7.6 3.7 2 8.4-1.3 7.2-5.6-2.2-8.8-15-13.8-23-15.4-2.8-.6-5.6-.8-8.3-.8a657.6 657.6 0 0 0 2.2-26.9 45.4 45.4 0 0 1 19.2-1.5l6.3 5a1256 1256 0 0 1 21.2 17.8c3.8 3.3 8.5 0 7.9-4.6-5.3-38 18-68.1 45.2-91.5 30.1-25.9 84.9-28.9 120.7-73.7 16.5 3.3 53.3 13.3 68.5 37.5 21.3 34 18.5 64.4 20.1 102.9 1.7 38.5 5.8 78.7-3 116.7-8 35-29.9 65-63.8 78.7l-2.5 1a102.6 102.6 0 0 1-55.1 5 144 144 0 0 1-54.5-24.7c-1-.7-2.4.7-1.6 1.7 22.3 29.6 66.3 39.5 101.2 31.7l4.8-1.2a91.7 91.7 0 0 0 30.7 102.4c12.6 9.8 28 17.8 36.8 31.7 8 12.7 5.5 27-8 34.3-3.5 1.9-4.8 7.9-1.4 10.5l4 3c7.5 5.8 28.5 16.6 31.9 17 30 3.6 50.3-18.5 63.3-44.6 15.2-30.6 11.2-67.9-5.5-97-13.5-23.4-40-46.4-29.5-76a85.5 85.5 0 0 1 19-27.8c8.5-9.2 17.6-17.9 25.8-27.5a98 98 0 0 0 19.3-31.9c6-17.4 3-36.3-1.4-53.8-9.5-37.5-21.7-74.4-34.8-110.7Z" fill="#000"/></g></g><g transform="translate(315 248)"><path fill-rule="evenodd" clip-rule="evenodd" d="M171 240.2a40.7 40.7 0 0 1-22.7 0c-6.9-2-13.8-6.3-18.9-12.1a27.4 27.4 0 0 1-7.2-18.2c0-.8.3-1.4.7-2a3.3 3.3 0 0 1 3.9-.8 174.4 174.4 0 0 0 3.7 4.3c6.1 7.7 12.1 13.4 21.4 15.4 5 1.2 10.1.7 14.8-1 5-1.8 9.4-5 13-9.1a7 7 0 0 1 5.2-2.6c2 0 4.1 1 5.7 2.4a8.8 8.8 0 0 1 2.6 5.8c0 1.9-.5 3.8-2.2 5.6a44.3 44.3 0 0 1-20 12.3Zm-.2-95.8c7.6 4.6 19 15.3 11 26.6-9.6 10-23.4-1.4-30.2-6.6-6.3-4-13.3 6.3-7.5 11 49 36.3 69-29.8 30.5-36.4-4.2-.8-5.8 4-3.8 5.4Zm-70.6-20.2a8.4 8.4 0 0 0-8.5-.7 27.5 27.5 0 0 0-9.8 9.8c-2 3.4-3.5 7.4-3.2 11.5 0 1-.3 1.6-.9 2.2-.4.4-1 .7-1.8.8-.6 0-1.3 0-2-.2-1-.4-1.6-1-1.8-1.6a23.8 23.8 0 0 1 1.2-17.6c3.2-7.6 9-14 12.8-16a21.4 21.4 0 0 1 20.7-.1c5.5 3 9 8 12.4 13l2.2 3.2c1.6 2 1.7 4.1 1.1 5.9-.6 2-2.3 3.6-4.3 4.5-2 .8-4.2 1-6.1 0-1.7-.6-3.2-2-4.1-4.3a23.1 23.1 0 0 0-8-10.4Zm123.2 8.6c-1.6.9-3 1.1-4.8.6-1-.3-2-1-2.8-1.7a5.6 5.6 0 0 1-1.5-2.8c-.6-2.7-2-5.2-4.1-6.8a8.2 8.2 0 0 0-6.5-1.7c-2.7.4-5.3 2.2-7 4.2-.6.7-1 1.4-1.5 2.2-.9 1.4-1.7 2.8-3 3.8-.4.4-1 .7-1.7.7l-.8-.1c-2.7-2.7-3.2-4.8-3.1-6.8 0-2 1-4.2 2.2-6.2 3.2-4.7 9.2-8.5 13.2-9.4 5.6-1.2 11 .2 15.5 3.3a22 22 0 0 1 9 13.7c.2 1.4 0 2.8-.4 4a5.6 5.6 0 0 1-2.7 3Zm-111-58.5c-3.3 3.2-7.3 3.7-11.2 4.1a53 53 0 0 0-37 20.4 74.6 74.6 0 0 0-3.2 4 28 28 0 0 1-1.5 2.7c-.5.9-.8 1.1-1 1.3l-1.3.2a2 2 0 0 1-1-.5c-1.7-1.5-2.2-3.8-2.2-6.3 0-3.9 1.5-8 2.8-10.7 3-6 7.2-12.3 12.2-16.8 5.7-5.1 12-9 19.2-11.7a39 39 0 0 1 14.6-3c3.5.2 6.8 1.2 9.6 3.8A8.4 8.4 0 0 1 115 68c0 2.3-.8 4.6-2.5 6.3Zm117.8 29.6c-.2.4-.5.6-.8.7a2 2 0 0 1-2-.3c-.4-.2-.6-.6-.7-1-2.2-9.7-6.4-16.9-15.6-21.5a66 66 0 0 0-14.6-5l-4.4-.7c-4.8-.7-9.5-1.5-12.6-5.3a10.2 10.2 0 0 1-2.2-8c.4-2.5 1.9-4.9 4.6-6.3 6.7-3.5 15 0 21.9 2.9l1.4.6A51 51 0 0 1 223 71.8c4 4.2 7.7 10.4 9.1 16.8 1.3 5.3 1 10.8-1.8 15.3Z" fill="#000"/></g><g transform="translate(279 400)"></g><g transform="translate(179 343)"></g><g transform="translate(203 303)"></g></g></svg></svg></div></li>
-<li class="etapa reveal larga"><span class="seta baixo esq" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 3</span><h3>Oferece 2 horários livres</h3><p>Ela olha a agenda da clínica e sugere as melhores opções para a cliente escolher.</p></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="Dois horários livres aparecem como opções: quinta às 9h30 ou sexta às 10h"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
+<li class="etapa reveal larga"><span class="seta baixo esq" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 3</span><h3>Oferece 2 horários livres</h3><p data-t="e3p">Ela olha a agenda da clínica e sugere as melhores opções para a cliente escolher.</p></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="Dois horários livres aparecem como opções: quinta às 9h30 ou sexta às 10h"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
 <rect x="16" y="34" width="118" height="48" rx="12" fill="#FFFFFF" stroke="#D9731A" stroke-width="2" stroke-dasharray="6 5"/><rect x="26" y="44" width="28" height="28" rx="8" fill="#E8F3EC"/><rect x="32" y="49" width="16" height="3" rx="1.5" fill="#3E8E66"/><text x="62" y="55" font-family="Inter,sans-serif" font-size="9.5" font-weight="600" fill="#4A5C55">Opção 1 · QUI</text><text x="62" y="72" font-family="Space Grotesk,Inter,sans-serif" font-size="16" font-weight="700" fill="#10201B">9h30</text>
 <rect x="16" y="114" width="118" height="48" rx="12" fill="#FFFFFF" stroke="#D9731A" stroke-width="2" stroke-dasharray="6 5"/><rect x="26" y="124" width="28" height="28" rx="8" fill="#E8F3EC"/><rect x="32" y="129" width="16" height="3" rx="1.5" fill="#3E8E66"/><text x="62" y="135" font-family="Inter,sans-serif" font-size="9.5" font-weight="600" fill="#4A5C55">Opção 2 · SEX</text><text x="62" y="152" font-family="Space Grotesk,Inter,sans-serif" font-size="16" font-weight="700" fill="#10201B">10h</text>
 <path d="M134 58 h10 v34" stroke="#D9731A" stroke-width="2" stroke-dasharray="5 5" fill="none"/>
 <path d="M134 138 h10 v-30" stroke="#D9731A" stroke-width="2" stroke-dasharray="5 5" fill="none"/>
 <circle cx="236" cy="34" r="17" fill="#FFFFFF"/><text x="236" y="41" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="20" font-weight="700" fill="#3E8E66">?</text>
 <svg x="136" y="56" width="144" height="144" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 704 704" fill="none" shape-rendering="auto"><mask id="ov3uw8ry"><rect width="704" height="704" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#ov3uw8ry)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M705.3 1074a2351.1 2351.1 0 0 1-15.6-101c-1-7.7-2.5-16.4 2.7-22 7.3-8 14-14.8 14.8-26.2.8-10.7-2.8-22.4-5-32.8a809.4 809.4 0 0 0-17.3-64.7c-6.6-21.7-13.9-43.2-21.3-64.6-6.9-20-13.5-40.3-22.5-59.5-17-36.5-46-63.5-81.6-81.6-9-4.5-27-20.5-36.3-24-8.5-3.4-8.5 6.3-16.9 2.6-6.7-2.9-13-6.7-16.7-13.2-4-7-14.3-16.9-15.9-25-3.3-17.4.3-32.2-12-45.3a90 90 0 0 0-41.1-23.8c-33.7-9.3-78.5-2.8-98.8 28.5-9.7 14.9-13 33-26.2 45.1-11.4 10.7-8.8 18-23.6 23.4-.9.3-23.6-4.5-24.4-4.2-16.2-3.5-31.7 6.2-46.5 11.8a325.4 325.4 0 0 0-63 32.3 399.2 399.2 0 0 0-102.3 98.5 482.5 482.5 0 0 0-76.4 161c-1.7 6.4-3.5 13-1.5 19.4 1.7 5.3 5.4 9.2 9.8 12.4 6 4.3 18 7 17.7 15.7-.1 6.6-2.4 13.5-3.5 20-1.3 7.7-2.3 15.5-3.4 23.2-4.8 35.4-8.6 71-10.3 106.6a920 920 0 0 0-.5 106c.1 2.3.8 4.5 2 6.2-1 .4-1.2 2.4.1 2.7l2.7.5a12 12 0 0 0 7 2.4l5.5.2c19.3 4 38.6 7.9 58.1 10.8 23.8 3.5 47.6 6.3 71.5 8.7 49.2 4.8 98 3.2 147.1.6a1877 1877 0 0 1 147.4-2c49.2 1.4 98.4 3.5 147.6 4.4 55 1 110-.5 164.8-5 7.5-.5 12.2-6.5 10.7-14-8.9-44.7-19-89.1-27-134Z" fill="#d08b5b"/><path d="m201 597.5 1.2-.4c14.5-5.7 29.6-14.8 45.4-11.4.5-.2 10.8 1.9 17.9 3.2l-6.7 7L247 598c40.7 67.1 88.8 100.7 144.3 100.7 55.5 0 97.7-33.6 126.4-100.7l4-1c.4 0 1 .2 1.5.4 9.3 3.6 27.4 19.6 36.3 24.1 35.6 18 64.5 45 81.6 81.6 8.7 18.6 15.2 38 21.8 57.5l.7 2c7.4 21.4 14.7 43 21.3 64.6 6.3 20.4 12 41 16.6 61.8l.7 2.9c2.2 10.4 5.8 22 5 32.8a29 29 0 0 1-3 10.7l-80.4 29 38.4 261.3c-35.1 1.5-70.3 2-105.5 1.3-49.2-.9-98.4-3-147.6-4.3-47.7-1.2-95.3-.7-143 1.7l-12 .6a946.3 946.3 0 0 1-139.5-1l-3.1-.3v-38.3l16.3-212.9-83-15.6-81.3-39.5a21.7 21.7 0 0 1-5.6-8.8c-1.9-6-.5-12 1-18l.5-1.3a492.8 492.8 0 0 1 76.4-161A399.3 399.3 0 0 1 138 629.7c19.8-13 40.9-23.9 63-32.3Z" fill="#3E8E66"/><path d="M232.2 584.6c5.1-.3 10.3.6 15.4 1 .4.1.6.8 0 .9-9 1.9-18 4.5-26.9 7.1l-3.8 1.2c-10 3-19.8 6-29.6 10-19.4 7.9-37.8 18.5-54.8 30.8C67.2 682.8 20 754.3-9.9 828.3a526 526 0 0 0-24.3 77c-.4 1.6-2 5.4-1 7 .7 1.3 3.6 2.1 5 2.9l4.5 2.3 25.2 12.9 2.3 1.1c38 18.6 78.4 34.4 121 35.5l.4-3.7a342 342 0 0 1 9.9-60c.3-1 1.6-.6 1.7.3 3 23.1 2 46.4 1 69.7-1.8 41-4.3 82.2-6.5 123.3-1.2 20.6-2.6 41-3.9 61.7-1.3 20.5-1.7 41.6-4.7 62-.6 4.6-6 7-10 6.6-4.4-.5-7.9-4.5-8-9 0-11.9 1.5-24 2.4-35.8l2.5-33.8c3.1-41.1 6.8-82.2 10.2-123.3a4771 4771 0 0 1 3.8-43.7C76.4 979.8 34.2 963-6.1 943.5c-.6 13.2-2 26.5-3.4 39.6-3.8 36.8-7.1 73.6-9.6 110.5a2254.2 2254.2 0 0 0-4.2 92.7l-.2 7c0 4.4-.5 8.5-4.3 11.7-3.7 3.3-8.9 3.5-12.6 0-5-4.6-4.2-10.9-4-17.1a1675.6 1675.6 0 0 1 1.8-47.2 1321 1321 0 0 1 10.5-109.5l2-14c3.5-26 7.5-52.7 15.5-77.9-3.1-1.5-6.2-3-9.3-4.7-5.5-2.7-11.2-5.4-16.6-8.4-4.2-2.5-7.9-5.8-9-10.8-1.4-5.5.6-11.5 2-16.9v-.4a502 502 0 0 1 26.6-80 523.2 523.2 0 0 1 67.8-117 353.8 353.8 0 0 1 88.7-83.3 239 239 0 0 1 53.8-25.7 142.6 142.6 0 0 1 42.8-7.5Zm90.1-66c6-6.5 18.1.2 15.2 8.8a108.2 108.2 0 0 1-34.7 52A79.4 79.4 0 0 1 247 598l1.7 2.4a321.1 321.1 0 0 0 46.1 52.6c36 31.2 84.8 48 132 36 37.1-9.4 69.8-38.8 79.4-76.2-1.3.6-3 .9-4.8.5-7.7-1.7-15.3-9.8-20.3-15.6-5.3-6.3-9.5-13-12.6-20.7-5.6-14-7.4-32.1.3-45.7 1-1.7 3-.7 3.3 1l.3 2.5c1.5 12.7 3.3 25 9.3 36.6a76 76 0 0 0 18.2 23.1c2.6 2 5.8 3.6 8.1 6l.5.4c.6-5 4.1-7.3 7.6-7.2 3.3.2 7.3 1.6 8.8 2.3l.1.1a341 341 0 0 1 65.1 42 259 259 0 0 1 88.4 129c7.5 25.3 11.8 51.4 16.3 77.4l2.8 16c4.2 23.9 8.9 48.4 18.4 70.7 2.5 5.7.6 11.1-5.5 13.4A1493 1493 0 0 1 688 953c3.7 16 6 32.5 8.7 48.5 6 34.1 13.2 68 19.4 102 3.2 17.5 6.1 35 9.3 52.3l4.7 25.2 2.4 13.6.1.7c.5 2.4 1 4.9.4 7.3-.8 2.7-2.9 4.6-4.8 6.6-1.6 1.6-3.8 1.6-5.7.7l-.7-.3c-3.4-1.6-6-3.2-7.3-7-.7-2.5-1-5.2-1.5-7.7a3535.6 3535.6 0 0 1-7.8-43.6l-1.6-9.1c-5.2-31.4-10.2-62.9-12.8-94.5-1-14-2.3-28.1-3.5-42.2l-.9-10.5c-1.1-13.3-2.5-27-2.7-40.5l-4.5 1.6L657 964c-5.5 2-12.5 6-18.4 5.2-2.9-.3-5-1.2-6.8-2.9 2 28.8 4.8 57.4 8.5 86a1965.7 1965.7 0 0 0 22 135c.6 3.2 1.4 6.4 1.9 9.6.5 3.7-.5 5.9-2.5 9-1.7 2.4-5 3.7-7.8 2-3.6-2.3-5.5-4.3-6.5-8.4-1-3.7-1.6-7.6-2.3-11.4a1654.2 1654.2 0 0 1-11.4-65.2c-7.8-52-12.7-104.4-15.2-156.8a1388 1388 0 0 1-1.4-77.8c0-13.3.5-26.6 1.4-39.9 1-13.4 3-26.5 4.8-39.8 0-.5.7-.5.7 0 .8 14.9 2.1 29.8 2.8 44.7.6 14.3.9 28.5 1.4 42.8.6 18.7 1.5 37.5 2.7 56.2a9.6 9.6 0 0 1 8.5-3.1c4.7-1 9.7-3.4 14.1-5l16.8-5.5 26.4-8.7a679 679 0 0 1-18-80.8l-2-12.3c-4-24.2-8.5-48.5-15.8-72a229.8 229.8 0 0 0-34.8-68.2 370.2 370.2 0 0 0-52.7-55.3C557 627 539.7 614 523 600c.1.9.2 2 0 3-3.5 25.9-17 50-35.8 67.9-37.7 36-93.6 43.4-142 26.5-46.7-16.3-88-55-102.6-102.8-.3-.8.8-1 1.3-.5l2.4 3.3c0-.4.2-.9.7-1a129 129 0 0 0 46.6-29.2 100.2 100.2 0 0 0 21.3-33.3l.4-1c1.7-5 3.2-10.2 7-14.2Z" fill="#000"/></g><g transform="matrix(.99789 0 0 1 156 62)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M432 270c-3.9-62.1-24-132.7-83.5-163.2-131-52.6-303.1 79.8-312.2 215-3.2 46.3 22.5 96.9 69.4 109.7 10.5 13.9 26.3 22.3 41.9 29.6 185.6 96.3 305.5 18 284.3-191Z" fill="#d08b5b"/><path d="M474.2 231.4c-6.6-18.3-13.5-36.3-20.8-54.3-7-17.4-13.5-35.3-22.3-52C378.4 26 282.7 26 233 38.9c-25.6-11-73.7-8-100.4 2-43.3 16.2-96 79.8-114 108.3-39.9 63-64.7 147-38.3 219.9 3.5 9.5 7.9 18.3 12.8 26.8-3 4.2-6.7 8.3-10.7 12.2-11.8 11.7-23.7 23-34 36.3a180.4 180.4 0 0 0-24.8 42.5c-11.8 29-12.4 62 3.3 89.7 13.6 24 37.7 42 64.9 43.8l4.1.5c3.6 5.9 8 11.4 13 16.1C24.4 651.5 61 659 82 659.5L85 662c12.8 10 26.2 20.1 40.8 27.3 10 4.9 23 8.9 33.3 5.4 4.7 3.1 12.4 2.5 17 0A45.2 45.2 0 0 0 194 675c9.2-18.9 7-39.6 4.6-59.7l-7.6-67a276 276 0 0 0-9.4-51.8c-2.8-8.8-6.3-17.1-11-25a4 4 0 0 0 0-2c-1.6-4.9-4.7-7.4-8.5-10.8l-1.4-1.3a45 45 0 0 0-6-5.8l-2.4-2.5c-6.7-7-13-14.4-18.7-22.4a293 293 0 0 1-15.2-24c-4.8-8.2-8-17.4-12.7-25.7-.4-.7-1.5-.9-2-.3-1.5 1.6-2.5 3.3-2.3 5l-.7.2c-.3-2.7-2.8-5-6.2-4.4-5 1-9.2 1.3-13.6-.4a1112.5 1112.5 0 0 0 5.7-43.8 41.2 41.2 0 0 1 16.7 8.7c2.7 2.5 4.6 5.8 8 7.6 3.7 2 8.4-1.3 7.2-5.6-2.2-8.8-15-13.8-23-15.4-2.8-.6-5.6-.8-8.3-.8a657.6 657.6 0 0 0 2.2-26.9 45.4 45.4 0 0 1 19.2-1.5l6.3 5a1256 1256 0 0 1 21.2 17.8c3.8 3.3 8.5 0 7.9-4.6-5.3-38 18-68.1 45.2-91.5 30.1-25.9 84.9-28.9 120.7-73.7 16.5 3.3 53.3 13.3 68.5 37.5 21.3 34 18.5 64.4 20.1 102.9 1.7 38.5 5.8 78.7-3 116.7-8 35-29.9 65-63.8 78.7l-2.5 1a102.6 102.6 0 0 1-55.1 5 144 144 0 0 1-54.5-24.7c-1-.7-2.4.7-1.6 1.7 22.3 29.6 66.3 39.5 101.2 31.7l4.8-1.2a91.7 91.7 0 0 0 30.7 102.4c12.6 9.8 28 17.8 36.8 31.7 8 12.7 5.5 27-8 34.3-3.5 1.9-4.8 7.9-1.4 10.5l4 3c7.5 5.8 28.5 16.6 31.9 17 30 3.6 50.3-18.5 63.3-44.6 15.2-30.6 11.2-67.9-5.5-97-13.5-23.4-40-46.4-29.5-76a85.5 85.5 0 0 1 19-27.8c8.5-9.2 17.6-17.9 25.8-27.5a98 98 0 0 0 19.3-31.9c6-17.4 3-36.3-1.4-53.8-9.5-37.5-21.7-74.4-34.8-110.7Z" fill="#000"/></g></g><g transform="translate(315 248)"><path fill-rule="evenodd" clip-rule="evenodd" d="M146.6 241a40.7 40.7 0 0 1-17.1-13.2c-1.5-2-2-4.2-1.6-6.2a8.9 8.9 0 0 1 9.6-7.2c1.9.3 3.7 1.3 5.2 3.5l.3.4a27 27 0 0 0 10 8.3c3.6 1.8 7.8 2.6 12.1 2.1 8.3-1 14-5.4 20-11.4l2.2-2.3c.5-.8 1.1-1.2 1.9-1.5a4 4 0 0 1 4.6 1.6c.4.7.7 1.5.6 2.5a25.7 25.7 0 0 1-8.5 16.2c-5.1 4.9-12 8.2-18.4 9.4-7.1 1.3-14.4.4-21-2.3Zm24.2-96.6c7.6 4.6 19 15.3 11 26.6-9.6 10-23.4-1.4-30.2-6.6-6.3-4-13.3 6.3-7.5 11 49 36.3 69-29.8 30.5-36.4-4.2-.8-5.8 4-3.8 5.4ZM83 102c.8-10.3 16.6-12.7 18.1-2.4a42 42 0 0 1-4.3 25.9c-4 7.9-14 4.2-14.7-3-1-9.7.3-14 .9-20.5Zm120-4.5c2.2-3 5.4-4.9 9.2-3.8 11.9 3.5 8.4 20.4 4.2 28.6-2.3 4.4-9.6 5.6-12.9 1.6-5.4-6.4-8-19.1-1.1-25.5l.6-1ZM96.6 56.8l1.9-.3c5.8-1 13-2 17.1 2.7 2.2 2.5 3 7 0 9.4-5.1 4.2-10.8 2.6-17 3-5.1.2-10 1-14.9 2.5C73 77 64.2 82.8 55 88.9c-1.2.8-2.4-.7-1.9-1.8a59.3 59.3 0 0 1 26-24.1 64 64 0 0 1 17.5-6.2Zm95.6-4.6 1.4.3c15.7 3.2 36 9.8 43.4 25.1.3 2.2 0 2.7-.3 3-.2.3-.4.7-1.4 1A36 36 0 0 1 226 78l-2.8-1.4a77.7 77.7 0 0 0-10.1-4.3c-7.5-2.4-15.1-4.1-23-5a9.4 9.4 0 0 1-4.5-1.8 7 7 0 0 1-2.6-4 7 7 0 0 1 .8-5.8 7.4 7.4 0 0 1 3.6-3.1c1.5-.6 3.2-.8 4.9-.4Z" fill="#000"/></g><g transform="translate(279 400)"></g><g transform="translate(179 343)"></g><g transform="translate(203 303)"></g></g></svg></svg></div></li>
-<li class="etapa reveal"><span class="seta dir" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 4</span><h3>A cliente escolhe e pronto</h3><p>O horário já aparece na sua agenda, com o nome dela, e ela recebe a localização.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b>E se o horário acabou de ser ocupado?</b> Ela oferece outro, sem marcar duas clientes juntas.</span></div></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="A agenda da clínica com o horário da Ana marcado e o pino da localização"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
+<li class="etapa reveal"><span class="seta dir" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span><div class="etapa-txt"><span class="et">Etapa 4</span><h3>A cliente escolhe e pronto</h3><p data-t="e4p">O horário já aparece na sua agenda, com o nome dela, e ela recebe a localização.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b>E se o horário acabou de ser ocupado?</b> Ela oferece outro, sem marcar duas clientes juntas.</span></div></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="A agenda da clínica com o horário da Ana marcado e o pino da localização"><rect x="0" y="0" width="280" height="200" rx="22" fill="#E8F3EC"/>
 <rect x="16" y="30" width="134" height="140" rx="16" fill="#FFFFFF"/>
 <rect x="16" y="30" width="134" height="34" rx="16" fill="#0B3B2E"/><rect x="16" y="50" width="134" height="14" fill="#0B3B2E"/>
 <rect x="44" y="22" width="6" height="18" rx="3" fill="#2F6B4F"/><rect x="116" y="22" width="6" height="18" rx="3" fill="#2F6B4F"/>
@@ -542,10 +559,10 @@ footer{border-top:1px solid var(--line)}
 <text x="64" y="102" font-family="Space Grotesk,Inter,sans-serif" font-size="14" font-weight="700" fill="#10201B">Amanhã, 9h30</text>
 <g transform="translate(66 150)"><circle r="20" fill="#C6F36B"/><path d="M-8 4 h16 l-3 -4 v-6 a5 5 0 0 0 -10 0 v6z M-3 7 a3 3 0 0 0 6 0" fill="none" stroke="#0B3B2E" stroke-width="2.4" stroke-linejoin="round"/></g>
 <svg x="136" y="56" width="144" height="144" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 704 704" fill="none" shape-rendering="auto"><mask id="ov3uw8ry"><rect width="704" height="704" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#ov3uw8ry)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M705.3 1074a2351.1 2351.1 0 0 1-15.6-101c-1-7.7-2.5-16.4 2.7-22 7.3-8 14-14.8 14.8-26.2.8-10.7-2.8-22.4-5-32.8a809.4 809.4 0 0 0-17.3-64.7c-6.6-21.7-13.9-43.2-21.3-64.6-6.9-20-13.5-40.3-22.5-59.5-17-36.5-46-63.5-81.6-81.6-9-4.5-27-20.5-36.3-24-8.5-3.4-8.5 6.3-16.9 2.6-6.7-2.9-13-6.7-16.7-13.2-4-7-14.3-16.9-15.9-25-3.3-17.4.3-32.2-12-45.3a90 90 0 0 0-41.1-23.8c-33.7-9.3-78.5-2.8-98.8 28.5-9.7 14.9-13 33-26.2 45.1-11.4 10.7-8.8 18-23.6 23.4-.9.3-23.6-4.5-24.4-4.2-16.2-3.5-31.7 6.2-46.5 11.8a325.4 325.4 0 0 0-63 32.3 399.2 399.2 0 0 0-102.3 98.5 482.5 482.5 0 0 0-76.4 161c-1.7 6.4-3.5 13-1.5 19.4 1.7 5.3 5.4 9.2 9.8 12.4 6 4.3 18 7 17.7 15.7-.1 6.6-2.4 13.5-3.5 20-1.3 7.7-2.3 15.5-3.4 23.2-4.8 35.4-8.6 71-10.3 106.6a920 920 0 0 0-.5 106c.1 2.3.8 4.5 2 6.2-1 .4-1.2 2.4.1 2.7l2.7.5a12 12 0 0 0 7 2.4l5.5.2c19.3 4 38.6 7.9 58.1 10.8 23.8 3.5 47.6 6.3 71.5 8.7 49.2 4.8 98 3.2 147.1.6a1877 1877 0 0 1 147.4-2c49.2 1.4 98.4 3.5 147.6 4.4 55 1 110-.5 164.8-5 7.5-.5 12.2-6.5 10.7-14-8.9-44.7-19-89.1-27-134Z" fill="#d08b5b"/><path d="m201 597.5 1.2-.4c14.5-5.7 29.6-14.8 45.4-11.4.5-.2 10.8 1.9 17.9 3.2l-6.7 7L247 598c40.7 67.1 88.8 100.7 144.3 100.7 55.5 0 97.7-33.6 126.4-100.7l4-1c.4 0 1 .2 1.5.4 9.3 3.6 27.4 19.6 36.3 24.1 35.6 18 64.5 45 81.6 81.6 8.7 18.6 15.2 38 21.8 57.5l.7 2c7.4 21.4 14.7 43 21.3 64.6 6.3 20.4 12 41 16.6 61.8l.7 2.9c2.2 10.4 5.8 22 5 32.8a29 29 0 0 1-3 10.7l-80.4 29 38.4 261.3c-35.1 1.5-70.3 2-105.5 1.3-49.2-.9-98.4-3-147.6-4.3-47.7-1.2-95.3-.7-143 1.7l-12 .6a946.3 946.3 0 0 1-139.5-1l-3.1-.3v-38.3l16.3-212.9-83-15.6-81.3-39.5a21.7 21.7 0 0 1-5.6-8.8c-1.9-6-.5-12 1-18l.5-1.3a492.8 492.8 0 0 1 76.4-161A399.3 399.3 0 0 1 138 629.7c19.8-13 40.9-23.9 63-32.3Z" fill="#3E8E66"/><path d="M232.2 584.6c5.1-.3 10.3.6 15.4 1 .4.1.6.8 0 .9-9 1.9-18 4.5-26.9 7.1l-3.8 1.2c-10 3-19.8 6-29.6 10-19.4 7.9-37.8 18.5-54.8 30.8C67.2 682.8 20 754.3-9.9 828.3a526 526 0 0 0-24.3 77c-.4 1.6-2 5.4-1 7 .7 1.3 3.6 2.1 5 2.9l4.5 2.3 25.2 12.9 2.3 1.1c38 18.6 78.4 34.4 121 35.5l.4-3.7a342 342 0 0 1 9.9-60c.3-1 1.6-.6 1.7.3 3 23.1 2 46.4 1 69.7-1.8 41-4.3 82.2-6.5 123.3-1.2 20.6-2.6 41-3.9 61.7-1.3 20.5-1.7 41.6-4.7 62-.6 4.6-6 7-10 6.6-4.4-.5-7.9-4.5-8-9 0-11.9 1.5-24 2.4-35.8l2.5-33.8c3.1-41.1 6.8-82.2 10.2-123.3a4771 4771 0 0 1 3.8-43.7C76.4 979.8 34.2 963-6.1 943.5c-.6 13.2-2 26.5-3.4 39.6-3.8 36.8-7.1 73.6-9.6 110.5a2254.2 2254.2 0 0 0-4.2 92.7l-.2 7c0 4.4-.5 8.5-4.3 11.7-3.7 3.3-8.9 3.5-12.6 0-5-4.6-4.2-10.9-4-17.1a1675.6 1675.6 0 0 1 1.8-47.2 1321 1321 0 0 1 10.5-109.5l2-14c3.5-26 7.5-52.7 15.5-77.9-3.1-1.5-6.2-3-9.3-4.7-5.5-2.7-11.2-5.4-16.6-8.4-4.2-2.5-7.9-5.8-9-10.8-1.4-5.5.6-11.5 2-16.9v-.4a502 502 0 0 1 26.6-80 523.2 523.2 0 0 1 67.8-117 353.8 353.8 0 0 1 88.7-83.3 239 239 0 0 1 53.8-25.7 142.6 142.6 0 0 1 42.8-7.5Zm90.1-66c6-6.5 18.1.2 15.2 8.8a108.2 108.2 0 0 1-34.7 52A79.4 79.4 0 0 1 247 598l1.7 2.4a321.1 321.1 0 0 0 46.1 52.6c36 31.2 84.8 48 132 36 37.1-9.4 69.8-38.8 79.4-76.2-1.3.6-3 .9-4.8.5-7.7-1.7-15.3-9.8-20.3-15.6-5.3-6.3-9.5-13-12.6-20.7-5.6-14-7.4-32.1.3-45.7 1-1.7 3-.7 3.3 1l.3 2.5c1.5 12.7 3.3 25 9.3 36.6a76 76 0 0 0 18.2 23.1c2.6 2 5.8 3.6 8.1 6l.5.4c.6-5 4.1-7.3 7.6-7.2 3.3.2 7.3 1.6 8.8 2.3l.1.1a341 341 0 0 1 65.1 42 259 259 0 0 1 88.4 129c7.5 25.3 11.8 51.4 16.3 77.4l2.8 16c4.2 23.9 8.9 48.4 18.4 70.7 2.5 5.7.6 11.1-5.5 13.4A1493 1493 0 0 1 688 953c3.7 16 6 32.5 8.7 48.5 6 34.1 13.2 68 19.4 102 3.2 17.5 6.1 35 9.3 52.3l4.7 25.2 2.4 13.6.1.7c.5 2.4 1 4.9.4 7.3-.8 2.7-2.9 4.6-4.8 6.6-1.6 1.6-3.8 1.6-5.7.7l-.7-.3c-3.4-1.6-6-3.2-7.3-7-.7-2.5-1-5.2-1.5-7.7a3535.6 3535.6 0 0 1-7.8-43.6l-1.6-9.1c-5.2-31.4-10.2-62.9-12.8-94.5-1-14-2.3-28.1-3.5-42.2l-.9-10.5c-1.1-13.3-2.5-27-2.7-40.5l-4.5 1.6L657 964c-5.5 2-12.5 6-18.4 5.2-2.9-.3-5-1.2-6.8-2.9 2 28.8 4.8 57.4 8.5 86a1965.7 1965.7 0 0 0 22 135c.6 3.2 1.4 6.4 1.9 9.6.5 3.7-.5 5.9-2.5 9-1.7 2.4-5 3.7-7.8 2-3.6-2.3-5.5-4.3-6.5-8.4-1-3.7-1.6-7.6-2.3-11.4a1654.2 1654.2 0 0 1-11.4-65.2c-7.8-52-12.7-104.4-15.2-156.8a1388 1388 0 0 1-1.4-77.8c0-13.3.5-26.6 1.4-39.9 1-13.4 3-26.5 4.8-39.8 0-.5.7-.5.7 0 .8 14.9 2.1 29.8 2.8 44.7.6 14.3.9 28.5 1.4 42.8.6 18.7 1.5 37.5 2.7 56.2a9.6 9.6 0 0 1 8.5-3.1c4.7-1 9.7-3.4 14.1-5l16.8-5.5 26.4-8.7a679 679 0 0 1-18-80.8l-2-12.3c-4-24.2-8.5-48.5-15.8-72a229.8 229.8 0 0 0-34.8-68.2 370.2 370.2 0 0 0-52.7-55.3C557 627 539.7 614 523 600c.1.9.2 2 0 3-3.5 25.9-17 50-35.8 67.9-37.7 36-93.6 43.4-142 26.5-46.7-16.3-88-55-102.6-102.8-.3-.8.8-1 1.3-.5l2.4 3.3c0-.4.2-.9.7-1a129 129 0 0 0 46.6-29.2 100.2 100.2 0 0 0 21.3-33.3l.4-1c1.7-5 3.2-10.2 7-14.2Z" fill="#000"/></g><g transform="matrix(.99789 0 0 1 156 62)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M432 270c-3.9-62.1-24-132.7-83.5-163.2-131-52.6-303.1 79.8-312.2 215-3.2 46.3 22.5 96.9 69.4 109.7 10.5 13.9 26.3 22.3 41.9 29.6 185.6 96.3 305.5 18 284.3-191Z" fill="#d08b5b"/><path d="M474.2 231.4c-6.6-18.3-13.5-36.3-20.8-54.3-7-17.4-13.5-35.3-22.3-52C378.4 26 282.7 26 233 38.9c-25.6-11-73.7-8-100.4 2-43.3 16.2-96 79.8-114 108.3-39.9 63-64.7 147-38.3 219.9 3.5 9.5 7.9 18.3 12.8 26.8-3 4.2-6.7 8.3-10.7 12.2-11.8 11.7-23.7 23-34 36.3a180.4 180.4 0 0 0-24.8 42.5c-11.8 29-12.4 62 3.3 89.7 13.6 24 37.7 42 64.9 43.8l4.1.5c3.6 5.9 8 11.4 13 16.1C24.4 651.5 61 659 82 659.5L85 662c12.8 10 26.2 20.1 40.8 27.3 10 4.9 23 8.9 33.3 5.4 4.7 3.1 12.4 2.5 17 0A45.2 45.2 0 0 0 194 675c9.2-18.9 7-39.6 4.6-59.7l-7.6-67a276 276 0 0 0-9.4-51.8c-2.8-8.8-6.3-17.1-11-25a4 4 0 0 0 0-2c-1.6-4.9-4.7-7.4-8.5-10.8l-1.4-1.3a45 45 0 0 0-6-5.8l-2.4-2.5c-6.7-7-13-14.4-18.7-22.4a293 293 0 0 1-15.2-24c-4.8-8.2-8-17.4-12.7-25.7-.4-.7-1.5-.9-2-.3-1.5 1.6-2.5 3.3-2.3 5l-.7.2c-.3-2.7-2.8-5-6.2-4.4-5 1-9.2 1.3-13.6-.4a1112.5 1112.5 0 0 0 5.7-43.8 41.2 41.2 0 0 1 16.7 8.7c2.7 2.5 4.6 5.8 8 7.6 3.7 2 8.4-1.3 7.2-5.6-2.2-8.8-15-13.8-23-15.4-2.8-.6-5.6-.8-8.3-.8a657.6 657.6 0 0 0 2.2-26.9 45.4 45.4 0 0 1 19.2-1.5l6.3 5a1256 1256 0 0 1 21.2 17.8c3.8 3.3 8.5 0 7.9-4.6-5.3-38 18-68.1 45.2-91.5 30.1-25.9 84.9-28.9 120.7-73.7 16.5 3.3 53.3 13.3 68.5 37.5 21.3 34 18.5 64.4 20.1 102.9 1.7 38.5 5.8 78.7-3 116.7-8 35-29.9 65-63.8 78.7l-2.5 1a102.6 102.6 0 0 1-55.1 5 144 144 0 0 1-54.5-24.7c-1-.7-2.4.7-1.6 1.7 22.3 29.6 66.3 39.5 101.2 31.7l4.8-1.2a91.7 91.7 0 0 0 30.7 102.4c12.6 9.8 28 17.8 36.8 31.7 8 12.7 5.5 27-8 34.3-3.5 1.9-4.8 7.9-1.4 10.5l4 3c7.5 5.8 28.5 16.6 31.9 17 30 3.6 50.3-18.5 63.3-44.6 15.2-30.6 11.2-67.9-5.5-97-13.5-23.4-40-46.4-29.5-76a85.5 85.5 0 0 1 19-27.8c8.5-9.2 17.6-17.9 25.8-27.5a98 98 0 0 0 19.3-31.9c6-17.4 3-36.3-1.4-53.8-9.5-37.5-21.7-74.4-34.8-110.7Z" fill="#000"/></g></g><g transform="translate(315 248)"><path fill-rule="evenodd" clip-rule="evenodd" d="M146.6 241a40.7 40.7 0 0 1-17.1-13.2c-1.5-2-2-4.2-1.6-6.2a8.9 8.9 0 0 1 9.6-7.2c1.9.3 3.7 1.3 5.2 3.5l.3.4a27 27 0 0 0 10 8.3c3.6 1.8 7.8 2.6 12.1 2.1 8.3-1 14-5.4 20-11.4l2.2-2.3c.5-.8 1.1-1.2 1.9-1.5a4 4 0 0 1 4.6 1.6c.4.7.7 1.5.6 2.5a25.7 25.7 0 0 1-8.5 16.2c-5.1 4.9-12 8.2-18.4 9.4-7.1 1.3-14.4.4-21-2.3Zm24.2-96.6c7.6 4.6 19 15.3 11 26.6-9.6 10-23.4-1.4-30.2-6.6-6.3-4-13.3 6.3-7.5 11 49 36.3 69-29.8 30.5-36.4-4.2-.8-5.8 4-3.8 5.4ZM83 102c.8-10.3 16.6-12.7 18.1-2.4a42 42 0 0 1-4.3 25.9c-4 7.9-14 4.2-14.7-3-1-9.7.3-14 .9-20.5Zm120-4.5c2.2-3 5.4-4.9 9.2-3.8 11.9 3.5 8.4 20.4 4.2 28.6-2.3 4.4-9.6 5.6-12.9 1.6-5.4-6.4-8-19.1-1.1-25.5l.6-1ZM96.6 56.8l1.9-.3c5.8-1 13-2 17.1 2.7 2.2 2.5 3 7 0 9.4-5.1 4.2-10.8 2.6-17 3-5.1.2-10 1-14.9 2.5C73 77 64.2 82.8 55 88.9c-1.2.8-2.4-.7-1.9-1.8a59.3 59.3 0 0 1 26-24.1 64 64 0 0 1 17.5-6.2Zm95.6-4.6 1.4.3c15.7 3.2 36 9.8 43.4 25.1.3 2.2 0 2.7-.3 3-.2.3-.4.7-1.4 1A36 36 0 0 1 226 78l-2.8-1.4a77.7 77.7 0 0 0-10.1-4.3c-7.5-2.4-15.1-4.1-23-5a9.4 9.4 0 0 1-4.5-1.8 7 7 0 0 1-2.6-4 7 7 0 0 1 .8-5.8 7.4 7.4 0 0 1 3.6-3.1c1.5-.6 3.2-.8 4.9-.4Z" fill="#000"/></g><g transform="translate(279 400)"></g><g transform="translate(179 343)"></g><g transform="translate(203 303)"></g></g></svg></svg></div></li>
-<li class="etapa reveal larga fim"><div class="etapa-txt"><span class="et">Etapa 6</span><h3>A cliente chega no horário</h3><p>E a sua equipe nem precisou pegar no celular.</p></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" aria-label="A Ana chega na clínica no horário e acena, feliz"><rect x="0" y="0" width="280" height="200" rx="22" fill="#1B5743"/>
+<li class="etapa reveal larga fim"><div class="etapa-txt"><span class="et">Etapa 6</span><h3 data-t="e6t">A cliente chega no horário</h3><p data-t="e6p">E a sua equipe nem precisou pegar no celular.</p></div><div class="etapa-art"><svg class="ilus" viewBox="0 0 280 200" role="img" data-ta="e6aria" aria-label="A Ana chega na clínica no horário, feliz"><rect x="0" y="0" width="280" height="200" rx="22" fill="#1B5743"/>
 <rect x="20" y="40" width="112" height="160" rx="8" fill="#12493A"/>
 <rect x="20" y="40" width="112" height="28" rx="8" fill="#C6F36B"/>
-<text x="76" y="59" text-anchor="middle" font-family="Space Grotesk,Inter,sans-serif" font-size="13" font-weight="700" fill="#0B3B2E">CLÍNICA</text>
+<text x="76" y="59" text-anchor="middle" font-family="Space Grotesk,Inter,sans-serif" font-size="13" font-weight="700" fill="#0B3B2E" data-t="porta">CLÍNICA</text>
 <rect x="44" y="86" width="64" height="114" rx="6" fill="#0E2E25"/><circle cx="96" cy="146" r="3.5" fill="#C6F36B"/>
 <path d="M240 26 c-5 -9 -19 -6 -19 4 c0 9 19 19 19 19 s19 -10 19 -19 c0 -10 -14 -13 -19 -4z" fill="#C6F36B"/>
 <path d="M212 61.2 L213.44 64.56 L216.8 66 L213.44 67.44 L212 70.8 L210.56 67.44 L207.2 66 L210.56 64.56Z" fill="#FFFFFF"/><path d="M262 70 L263.2 72.8 L266 74 L263.2 75.2 L262 78 L260.8 75.2 L258 74 L260.8 72.8Z" fill="#FFFFFF"/>
@@ -562,11 +579,11 @@ footer{border-top:1px solid var(--line)}
 </div>
 <div class="grid grid-3">
 <div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Nunca marca duas clientes juntas</h3><p>Ela olha a agenda de novo antes de confirmar.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Respeita o tempo de cada procedimento</h3><p>E o intervalo para arrumar a sala entre uma cliente e outra.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3 data-t="c2h">Respeita o tempo de cada procedimento</h3><p data-t="c2p">E o intervalo para arrumar a sala entre uma cliente e outra.</p></div>
 <div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><h3>Sua equipe continua marcando</h3><p>Tudo cai na mesma agenda, quem marcou não importa.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div><h3>Dúvida de saúde vai para vocês</h3><p>Ela não dá orientação. Avisa a sua equipe na hora, com o resumo da conversa.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div><h3 data-t="c4h">Dúvida de saúde vai para vocês</h3><p data-t="c4p">Ela não dá orientação. Avisa a sua equipe na hora, com o resumo da conversa.</p></div>
 <div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Número oficial do WhatsApp</h3><p>Usamos o caminho autorizado pela Meta, a dona do WhatsApp, e não programas piratas que podem bloquear o número.</p></div>
-<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Tudo continua sendo seu</h3><p>O número, a agenda e a lista de clientes são da clínica.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Tudo continua sendo seu</h3><p data-t="c6p">O número, a agenda e a lista de clientes são da clínica.</p></div>
 </div>
 </div>
 </section>
@@ -581,8 +598,8 @@ footer{border-top:1px solid var(--line)}
 <div class="sim">
 <div class="chat">
 <div class="chat-head">
-<div class="avatar">SC</div>
-<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="sim-status">online</span></div>
+<div data-t="chatAv" class="avatar">SC</div>
+<div style="display:flex;flex-direction:column"><span data-t="chatNome" style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="sim-status">online</span></div>
 </div>
 <div class="chat-body" id="sim-chat" aria-live="polite"></div>
 <div class="opcoes" id="sim-opcoes"></div>
@@ -599,8 +616,8 @@ footer{border-top:1px solid var(--line)}
 <section class="wrap" style="padding-bottom:88px">
 <div class="calc reveal">
 <div class="head">
-<h2>Quanto dinheiro a sua clínica perde hoje?</h2>
-<p class="sub">Toda cliente que esquece o horário, ou desiste porque ninguém respondeu a tempo, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto a sua clínica perde sem uma assistente no WhatsApp.</p>
+<h2 data-t="calcH">Quanto dinheiro a sua clínica perde hoje?</h2>
+<p data-t="calcSub" class="sub">Toda cliente que esquece o horário, ou desiste porque ninguém respondeu a tempo, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto a sua clínica perde sem uma assistente no WhatsApp.</p>
 </div>
 <div class="campos">
 <div class="campo">
@@ -608,11 +625,11 @@ footer{border-top:1px solid var(--line)}
 <div class="linha"><input type="range" id="faltas" min="0" max="60" step="1" value="8"><output id="faltas-v" for="faltas">8</output></div>
 </div>
 <div class="campo">
-<label for="ticket">Valor médio de um procedimento</label>
-<div class="linha"><input type="range" id="ticket" min="50" max="1000" step="10" value="150"><output id="ticket-v" for="ticket">R$ 150</output></div>
+<label data-t="calcLab2" for="ticket">Valor médio de um procedimento</label>
+<div class="linha"><input type="range" id="ticket" min="30" max="2000" step="10" value="150"><output id="ticket-v" for="ticket">R$ 150</output></div>
 </div>
 <div class="res" aria-live="polite">
-<p>Sem a assistente, a sua clínica perde por mês</p>
+<p data-t="calcRes">Sem a assistente, a sua clínica perde por mês</p>
 <div class="valor" id="perda-mes">R$ 1.200</div>
 <p>Ou <b id="perda-ano">R$ 14.400</b> por ano em horários que ficaram vazios.</p>
 <a href="#contato" class="btn btn-lime">Quero parar de perder</a>
@@ -630,8 +647,8 @@ footer{border-top:1px solid var(--line)}
 </div>
 <div class="grid">
 <div class="plan reveal"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Atende 24 horas, por mensagem e áudio</li><li>Marca direto na sua agenda</li><li>Lembrete na véspera</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
-<div class="plan featured reveal"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Lista com todos os agendamentos</li><li>Manda a localização da clínica</li><li>Avisa a sua equipe quando precisar</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
-<div class="plan reveal"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Funciona com outro sistema de agenda</li><li>Atendimento do jeito da sua clínica</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan featured reveal"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Lista com todos os agendamentos</li><li data-t="plan2b">Manda a localização da clínica</li><li>Avisa a sua equipe quando precisar</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
+<div class="plan reveal"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li data-t="plan3a">Mais de uma profissional ou unidade</li><li>Funciona com outro sistema de agenda</li><li data-t="plan3c">Atendimento do jeito da sua clínica</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
 </div>
 </div>
 </section>
@@ -639,11 +656,12 @@ footer{border-top:1px solid var(--line)}
 <section id="duvidas" class="wrap section">
 <h2 class="reveal">Dúvidas frequentes</h2>
 <div class="faq">
-<details class="reveal"><summary>Funciona com a agenda que a clínica já usa?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Funciona com a agenda do Google, a mesma que muitas clínicas já usam no celular e no computador. Se a sua clínica usa outro sistema, fale com a gente.</p></details>
+<details class="reveal"><summary><span data-t="faq1q">Funciona com a agenda que a clínica já usa?</span><svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Funciona com a agenda do Google, que muita gente já usa no celular e no computador. Se vocês usam outro sistema, fale com a gente.</p></details>
 <details class="reveal"><summary>A recepção continua usando o WhatsApp de sempre?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Sim. A assistente tem um número só dela, e a sua equipe continua no WhatsApp de sempre. Quando precisar de uma pessoa, a equipe chama a cliente normalmente.</p></details>
-<details class="reveal"><summary>O número da clínica pode ser bloqueado?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Usamos o WhatsApp oficial para empresas, autorizado pela Meta, a dona do WhatsApp. O que costuma bloquear números são programas piratas e mensagens em massa para quem não pediu, e a gente não faz nenhum dos dois. A assistente só conversa com quem chamou a clínica, e os lembretes usam mensagens aprovadas pela própria Meta.</p></details>
+<details class="reveal"><summary><span data-t="faq3q">O número da clínica pode ser bloqueado?</span><svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Usamos o WhatsApp oficial para empresas, autorizado pela Meta, a dona do WhatsApp. O que costuma bloquear números são programas piratas e mensagens em massa para quem não pediu, e a gente não faz nenhum dos dois. A assistente só conversa com quem chamou vocês, e os lembretes usam mensagens aprovadas pela própria Meta.</p></details>
+<details class="reveal"><summary>Dá para marcar reunião online, pelo Google Meet?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Dá. Na hora de marcar, a assistente pode criar o link do Google Meet junto com o horário e mandar para o cliente no WhatsApp. O link também fica salvo no evento da sua agenda.</p></details>
 <details class="reveal"><summary>Ela remarca ou cancela horários?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Por segurança, não. Quando a cliente pede, a assistente avisa a sua equipe, que muda na agenda. O lembrete da véspera já segue o horário novo.</p></details>
-<details class="reveal"><summary>Como é para começar? Preciso entender de tecnologia?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Não precisa. A gente conversa com você sobre os procedimentos, preços e horários da clínica, cuida de toda a parte técnica e testa junto com você antes de ligar.</p></details>
+<details class="reveal"><summary>Como é para começar? Preciso entender de tecnologia?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Não precisa. A gente conversa com você sobre os serviços, preços e horários, cuida de toda a parte técnica e testa junto com você antes de ligar.</p></details>
 <details class="reveal"><summary>Quanto tempo leva para ficar pronto?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>A montagem é rápida. O que mais demora é a aprovação do WhatsApp, que pode levar de alguns dias a algumas semanas. A gente cuida disso com você.</p></details>
 </div>
 </section>
@@ -651,12 +669,12 @@ footer{border-top:1px solid var(--line)}
 <section id="contato" class="band">
 <div class="wrap contact">
 <div class="contact-text reveal">
-<h2>Quer ver a assistente na sua clínica?</h2>
+<h2 data-t="contatoH">Quer ver a assistente na sua clínica?</h2>
 <p class="sub">Conta pra gente como vocês agendam hoje. A primeira conversa é sem compromisso.</p>
 </div>
 <form id="form" novalidate class="reveal">
 <div class="field"><label for="nome">Seu nome</label><input id="nome" type="text" required autocomplete="name"></div>
-<div class="field"><label for="empresa">Clínica</label><input id="empresa" type="text" required autocomplete="organization"></div>
+<div class="field"><label data-t="labEmpresa" for="empresa">Clínica</label><input id="empresa" type="text" required autocomplete="organization"></div>
 <div class="field"><label for="whats">WhatsApp</label><input id="whats" type="tel" required autocomplete="tel"></div>
 <div class="field"><label for="msg">Como vocês agendam hoje?</label><textarea id="msg" rows="3" required placeholder="Ex.: a recepção responde no WhatsApp e marca no Google Agenda"></textarea></div>
 <p class="hint" id="hint">Preencha todos os campos para liberar o botão.</p>
@@ -669,7 +687,7 @@ footer{border-top:1px solid var(--line)}
 
 <footer>
 <div class="wrap foot">
-<span>Lembra Aí · Recepcionista virtual no WhatsApp para clínicas</span>
+<span>Lembra Aí · Agendamento automático pelo WhatsApp</span>
 </div>
 </footer>
 
@@ -691,7 +709,8 @@ footer{border-top:1px solid var(--line)}
     var texto = [
       'Olá! Vim pelo site e quero uma conversa.',
       'Nome: ' + campos[0].value.trim(),
-      'Clínica: ' + campos[1].value.trim(),
+      'Ramo: ' + Ramo.nome(),
+      document.querySelector('label[for="empresa"]').textContent + ': ' + campos[1].value.trim(),
       'WhatsApp: ' + campos[2].value.trim(),
       'Como agendam hoje: ' + campos[3].value.trim()
     ].join('\n');
@@ -752,6 +771,12 @@ var Bolhas = (function () {
     var d = el('div', m.cls);
     if (m.tipo === 'audio') { d.appendChild(audio(m.dur, m.txt)); }
     else if (m.tipo === 'local') { d.classList.add('local'); var p = m.txt.split('|'); d.appendChild(local(p[0], p[1] || '')); }
+    else if (m.tipo === 'meet') {
+      var q = m.txt.split('|'), box = el('div', 'meet'), cam = el('div', 'cam');
+      cam.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-4v12l-6-4z"/></svg>';
+      var tx = el('div'); tx.appendChild(el('strong', null, q[0])); tx.appendChild(el('small', null, q[1] || ''));
+      box.appendChild(cam); box.appendChild(tx); d.appendChild(box);
+    }
     else { d.appendChild(document.createTextNode(m.txt)); }
     if (m.hora) d.appendChild(el('span', 'hora', m.hora));
     return d;
@@ -760,6 +785,65 @@ var Bolhas = (function () {
   return { el: el, bolha: bolha, digitando: digitando };
 })();
 var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* qual é o seu negócio: troca o conteúdo da página */
+var Ramo = (function () {
+  var T = {"advocacia": {"eyebrow": "Para escritórios de advocacia", "h1": "Seu escritório marcando consultas pelo WhatsApp, até de madrugada.", "lead": "Uma secretária virtual que responde na hora, entende o assunto, marca a consulta no seu Google Agenda, presencial ou pelo Google Meet, e lembra a cliente na véspera.", "pill3": "Google Agenda e Meet", "chatAria": "Exemplo: às 2h da manhã, uma cliente pede por áudio uma consulta e a assistente marca uma reunião pelo Google Meet", "chatAv": "SE", "chatNome": "Seu Escritório de Advocacia", "comoSub": "Do primeiro \"oi\" até a consulta, sem ninguém do escritório precisar parar para responder.", "e2p": "Entende o assunto, com a educação de uma boa secretária.", "e2q": "E se for uma pergunta sobre o caso?", "e2a": "Ela não dá parecer: avisa o advogado na hora.", "e3p": "Ela olha a agenda do advogado e oferece 2 horários, presencial ou pelo Google Meet.", "e4p": "A consulta já aparece na sua agenda, e ela recebe o endereço ou o link do Google Meet.", "e6t": "A cliente chega na consulta", "e6p": "Ou entra na reunião online. E ninguém do escritório precisou pegar no celular.", "porta": "ESCRITÓRIO", "e6aria": "A Ana chega no escritório no horário, feliz", "c2h": "Respeita a duração de cada consulta", "c2p": "E o intervalo que o advogado precisa entre uma e outra.", "c4h": "Pergunta sobre o caso vai para o advogado", "c4p": "Ela não dá parecer nem promete resultado. Avisa o escritório na hora, com o resumo da conversa.", "c6p": "O número, a agenda e a lista de clientes são do escritório.", "calcH": "Quanto dinheiro o seu escritório perde hoje?", "calcSub": "Todo cliente que desiste porque ninguém respondeu a tempo, ou que esquece a consulta, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto o seu escritório perde sem uma assistente no WhatsApp.", "calcLab2": "Valor médio de uma consulta ou contrato", "calcRes": "Sem a assistente, o seu escritório perde por mês", "plan2b": "Manda o endereço ou o link do Google Meet", "plan3a": "Mais de um advogado ou unidade", "plan3c": "Atendimento do jeito do seu escritório", "faq1q": "Funciona com a agenda que o escritório já usa?", "faq3q": "O número do escritório pode ser bloqueado?", "contatoH": "Quer ver a assistente no seu escritório?", "labEmpresa": "Escritório"}, "salao": {"eyebrow": "Para salões e barbearias", "h1": "Seu salão agendando pelo WhatsApp, até de madrugada.", "lead": "Uma recepcionista virtual que conversa com os seus clientes, marca no seu Google Agenda e lembra cada um na véspera.", "chatAria": "Exemplo: às 2h da manhã, uma cliente pede por áudio um corte e a assistente marca o horário", "chatAv": "SS", "chatNome": "Seu Salão", "comoSub": "Do \"oi\" da cliente até ela sentar na cadeira, sem ninguém largar a tesoura para responder.", "e2p": "Entende o serviço que ela quer, com a simpatia de uma recepcionista.", "e2q": "E se for um pedido especial?", "e2a": "Alergia a produto ou algo fora do comum: ela avisa a sua equipe.", "e3p": "Ela olha a agenda de cada profissional e sugere 2 horários livres.", "e6p": "E a equipe nem precisou largar a tesoura.", "porta": "SALÃO", "e6aria": "A Ana chega no salão no horário, feliz", "c2h": "Respeita o tempo de cada serviço", "c2p": "Corte, escova, barba ou manicure: cada um com a sua duração.", "c4h": "Pedido especial vai para vocês", "c4p": "Alergia, reclamação ou algo fora do comum: ela avisa a equipe na hora, com o resumo da conversa.", "c6p": "O número, a agenda e a lista de clientes são do salão.", "calcH": "Quanto dinheiro o seu salão perde hoje?", "calcSub": "Todo cliente que esquece o horário, ou desiste porque ninguém respondeu a tempo, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto o seu salão perde sem uma assistente no WhatsApp.", "calcLab2": "Valor médio de um serviço", "calcRes": "Sem a assistente, o seu salão perde por mês", "plan2b": "Manda a localização do salão", "plan3a": "Mais de um profissional ou unidade", "plan3c": "Atendimento do jeito do seu salão", "faq1q": "Funciona com a agenda que o salão já usa?", "faq3q": "O número do salão pode ser bloqueado?", "contatoH": "Quer ver a assistente no seu salão?", "labEmpresa": "Salão"}, "outros": {"eyebrow": "Para quem atende com hora marcada", "h1": "Seu negócio agendando pelo WhatsApp, até de madrugada.", "lead": "Uma assistente virtual que responde na hora, marca atendimentos e reuniões no seu Google Agenda, presencial ou pelo Google Meet, e lembra o cliente na véspera.", "pill3": "Google Agenda e Meet", "chatAria": "Exemplo: às 2h da manhã, uma cliente pede por áudio uma reunião e a assistente marca pelo Google Meet", "chatAv": "SE", "chatNome": "Sua Empresa", "comoSub": "Do primeiro \"oi\" até o atendimento, sem você precisar parar para responder.", "e2p": "Entende o que ela precisa, com a educação de uma boa secretária.", "e2q": "E se for algo que só vocês sabem?", "e2a": "Ela não inventa resposta: avisa a sua equipe na hora.", "e3p": "Ela olha a sua agenda e oferece 2 horários, presencial ou pelo Google Meet.", "e4p": "O horário já aparece na sua agenda, e ela recebe o endereço ou o link do Google Meet.", "e6t": "A cliente chega na hora", "e6p": "Ou entra na reunião online. E você nem precisou pegar no celular.", "porta": "EMPRESA", "e6aria": "A Ana chega na empresa no horário, feliz", "c2h": "Respeita a duração de cada atendimento", "c2p": "E o intervalo que você precisa entre um e outro.", "c4h": "O que é técnico fica com vocês", "c4p": "Ela não inventa resposta. Avisa a sua equipe na hora, com o resumo da conversa.", "c6p": "O número, a agenda e a lista de clientes são da sua empresa.", "calcH": "Quanto dinheiro o seu negócio perde hoje?", "calcSub": "Todo cliente que desiste porque ninguém respondeu a tempo, ou que esquece o horário, é dinheiro que deixa de entrar. Arraste as bolinhas e veja quanto o seu negócio perde sem uma assistente no WhatsApp.", "calcLab2": "Valor médio de um atendimento", "calcRes": "Sem a assistente, o seu negócio perde por mês", "plan2b": "Manda o endereço ou o link do Google Meet", "plan3a": "Mais de uma pessoa atendendo", "plan3c": "Atendimento do jeito do seu negócio", "faq1q": "Funciona com a agenda que vocês já usam?", "faq3q": "O número pode ser bloqueado?", "contatoH": "Quer ver a assistente no seu negócio?", "labEmpresa": "Empresa"}};
+  var CHAT = {"advocacia": [["out", "Oi, fui demitida e não recebi a rescisão. Queria conversar com um advogado essa semana", "02:14", "audio", "0:14"], ["in", "Oi, Carla! Posso marcar uma consulta trabalhista. Tenho quinta, 12/11, às 10h, ou sexta, 13/11, às 15h. Prefere presencial ou pelo Google Meet?", "02:14"], ["out", "Quinta às 10h, online", "02:15"], ["in", "Confirmando: consulta trabalhista na quinta, 12/11, às 10h, pelo Google Meet, no nome de Carla Souza. Posso marcar?", "02:15"], ["out", "Pode sim", "02:16"], ["in", "Reunião online · Google Meet|meet.google.com/abc-defg-hij", "02:16", "meet"], ["in", "Prontinho! O link da reunião está aqui em cima. Um dia antes eu te mando um lembrete.", "02:16"]], "salao": [["out", "Oi, queria fazer corte e escova na quinta, de tarde se der", "02:14", "audio", "0:09"], ["in", "Oi, Júlia! Para corte e escova (1h) tenho quinta, 12/11, às 14h, ou às 16h30. Qual fica melhor?", "02:14"], ["out", "14h", "02:15"], ["in", "Confirmando: corte e escova na quinta, 12/11, às 14h, no nome de Júlia Lima. Posso marcar?", "02:15"], ["out", "Pode sim", "02:16"], ["in", "Seu Salão|Rua Exemplo, 100", "02:16", "local"], ["in", "Prontinho! A localização está aqui em cima. Um dia antes a gente te manda um lembrete.", "02:16"]], "outros": [["out", "Oi, queria marcar uma reunião pra entender como funciona o serviço de vocês", "02:14", "audio", "0:11"], ["in", "Oi, Marina! Tenho quinta, 12/11, às 10h, ou sexta, 13/11, às 15h. Prefere presencial ou pelo Google Meet?", "02:14"], ["out", "Sexta às 15h, online", "02:15"], ["in", "Confirmando: reunião na sexta, 13/11, às 15h, pelo Google Meet, no nome de Marina Lopes. Posso marcar?", "02:15"], ["out", "Pode sim", "02:16"], ["in", "Reunião online · Google Meet|meet.google.com/abc-defg-hij", "02:16", "meet"], ["in", "Prontinho! O link está aqui em cima. Um dia antes eu te mando um lembrete.", "02:16"]]};
+  var SIM = {"estetica": {"proc": {"Limpeza de pele": 60, "Peeling químico": 45, "Drenagem linfática": 50}, "ola": "Oi! Eu sou a assistente da Sua Clínica de Estética. Qual procedimento você quer marcar?", "esc": "Escolha um procedimento no celular ao lado.", "lugar": "da clínica", "quem": "Agenda da profissional", "cliente": "Ana Ribeiro", "local": "Sua Clínica de Estética|Rua Exemplo, 100", "meet": false, "esp": {"botao": "Tenho uma dúvida de saúde", "pergunta": "Posso fazer peeling grávida?", "resposta": "Essa pergunta a nossa profissional responde melhor, com segurança. Já avisei a equipe, e ela te chama aqui no WhatsApp assim que a clínica abrir.", "legenda": "Dúvida de saúde quem responde é a sua equipe. A assistente só avisa vocês."}, "nomes": ["Drenagem | Marta", "Peeling | Lia", "Limpeza | Rita", "Peeling | Bia", "Limpeza de pele | Júlia", "Peeling | Carla", "Drenagem | Paula", "Limpeza | Rita", "Peeling | Lia", "Limpeza | Marta", "Drenagem | Júlia", "Peeling | Rita"], "faltas": 8, "ticket": 150}, "advocacia": {"proc": {"Consulta trabalhista": 60, "Consulta de família": 60, "Direito do consumidor": 45}, "ola": "Oi! Eu sou a assistente do escritório. Sobre qual assunto você quer conversar com o advogado?", "esc": "Escolha um assunto no celular ao lado.", "lugar": "do escritório", "quem": "Agenda do advogado", "cliente": "Carla Souza", "local": "Seu Escritório de Advocacia|Rua Exemplo, 100", "meet": true, "esp": {"botao": "Tenho uma pergunta sobre o meu caso", "pergunta": "Tenho direito a indenização?", "resposta": "Essa resposta depende de analisar o seu caso com cuidado, então quem responde é o advogado. Já avisei o escritório, e eles te chamam aqui no WhatsApp.", "legenda": "Pergunta sobre o caso quem responde é o advogado. A assistente só avisa o escritório."}, "nomes": ["Consulta | Roberto", "Audiência", "Consulta | Fernanda", "Reunião | Família Lima", "Consulta | Paulo", "Reunião online | Jorge", "Consulta | Marta", "Audiência", "Consulta | Bia", "Reunião | Silva Ltda", "Consulta | Rita", "Reunião online | Ana"], "faltas": 6, "ticket": 600}, "salao": {"proc": {"Corte e escova": 60, "Barba": 30, "Manicure": 45}, "ola": "Oi! Eu sou a assistente do salão. Qual serviço você quer marcar?", "esc": "Escolha um serviço no celular ao lado.", "lugar": "do salão", "quem": "Agenda do salão", "cliente": "Júlia Lima", "local": "Seu Salão|Rua Exemplo, 100", "meet": false, "esp": {"botao": "Tenho um pedido especial", "pergunta": "Tenho alergia a tintura, tem problema?", "resposta": "Obrigada por avisar! Isso a nossa equipe precisa ver com cuidado. Já avisei o salão, e eles te chamam aqui no WhatsApp.", "legenda": "Pedido especial quem resolve é a sua equipe. A assistente só avisa vocês."}, "nomes": ["Corte | Pedro", "Escova | Lia", "Coloração | Rita", "Barba | João", "Corte | Júlia", "Manicure | Carla", "Escova | Paula", "Coloração | Bia", "Corte | Lucas", "Manicure | Marta", "Barba | Rafa", "Escova | Rita"], "faltas": 12, "ticket": 80}, "outros": {"proc": {"Reunião de apresentação": 30, "Orçamento": 45, "Atendimento": 60}, "ola": "Oi! Eu sou a assistente da empresa. O que você quer marcar?", "esc": "Escolha uma opção no celular ao lado.", "lugar": "da empresa", "quem": "Sua agenda", "cliente": "Marina Lopes", "local": "Sua Empresa|Rua Exemplo, 100", "meet": true, "esp": {"botao": "Tenho uma dúvida específica", "pergunta": "Quanto custa no meu caso?", "resposta": "Isso depende do seu caso, então a nossa equipe vai te responder direitinho. Já avisei, e eles te chamam aqui no WhatsApp.", "legenda": "Dúvida específica quem responde é a sua equipe. A assistente só avisa vocês."}, "nomes": ["Reunião | Ana", "Atendimento | Leo", "Orçamento | Rita", "Reunião online | Bia", "Atendimento | Júlia", "Reunião | Carla", "Orçamento | Paulo", "Atendimento | Rita", "Reunião online | Lia", "Atendimento | Marta", "Orçamento | João", "Reunião | Rafa"], "faltas": 8, "ticket": 200}};
+  var NOMES = {"estetica": "Clínica de estética", "advocacia": "Escritório de advocacia", "salao": "Salão e barbearia", "outros": "Outro negócio"};
+  var padrao = {}, padraoAria = {}, ouvintes = [], atual = 'estetica';
+  [].forEach.call(document.querySelectorAll('[data-t]'), function (e) { var k = e.getAttribute('data-t'); if (!(k in padrao)) padrao[k] = e.textContent; });
+  [].forEach.call(document.querySelectorAll('[data-ta]'), function (e) { padraoAria[e.getAttribute('data-ta')] = e.getAttribute('aria-label'); });
+  function texto(k) { var t = T[atual]; return (t && t[k] != null) ? t[k] : padrao[k]; }
+  function aplicar(animar) {
+    [].forEach.call(document.querySelectorAll('[data-t]'), function (e) {
+      var v = texto(e.getAttribute('data-t'));
+      if (v != null && e.textContent !== v) { e.textContent = v; if (animar && !calmo) { e.classList.remove('troca'); void e.offsetWidth; e.classList.add('troca'); } }
+    });
+    [].forEach.call(document.querySelectorAll('[data-ta]'), function (e) {
+      var k = e.getAttribute('data-ta'), t = T[atual];
+      e.setAttribute('aria-label', (t && t[k]) || padraoAria[k]);
+    });
+    [].forEach.call(document.querySelectorAll('.ramo-op'), function (b) {
+      var sel = b.getAttribute('data-ramo') === atual;
+      b.setAttribute('aria-checked', sel ? 'true' : 'false'); b.tabIndex = sel ? 0 : -1;
+    });
+  }
+  function escolher(r, animar) {
+    if (!NOMES[r]) r = 'estetica';
+    atual = r;
+    try { localStorage.setItem('ramo', r); } catch (e) {}
+    try {
+      var u = new URL(location.href);
+      if (r === 'estetica') u.searchParams.delete('negocio'); else u.searchParams.set('negocio', r);
+      history.replaceState(null, '', u.pathname + u.search);
+    } catch (e) {}
+    aplicar(animar);
+    ouvintes.forEach(function (f) { try { f(r); } catch (e) {} });
+  }
+  var inicial = null;
+  try { inicial = new URL(location.href).searchParams.get('negocio'); } catch (e) {}
+  if (!inicial) { try { inicial = localStorage.getItem('ramo'); } catch (e) {} }
+  if (inicial && NOMES[inicial]) { atual = inicial; aplicar(false); }
+  var botoes = [].slice.call(document.querySelectorAll('.ramo-op'));
+  botoes.forEach(function (b, i) {
+    b.addEventListener('click', function () { escolher(b.getAttribute('data-ramo'), true); });
+    b.addEventListener('keydown', function (e) {
+      var n = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = botoes[(i + 1) % botoes.length];
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = botoes[(i - 1 + botoes.length) % botoes.length];
+      if (n) { e.preventDefault(); escolher(n.getAttribute('data-ramo'), true); n.focus(); }
+    });
+  });
+  return {
+    atual: function () { return atual; },
+    nome: function () { return NOMES[atual]; },
+    chat: function () { return CHAT[atual] ? CHAT[atual].map(function (m) { return { cls: m[0], txt: m[1], hora: m[2], tipo: m[3] || '', dur: m[4] || '' }; }) : null; },
+    sim: function () { return SIM[atual] || SIM.estetica; },
+    ao: function (f) { ouvintes.push(f); }
+  };
+})();
 function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
 /* conversa do topo, em loop */
@@ -767,10 +851,12 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   var chat = document.getElementById('chat');
   var status = document.getElementById('chat-status');
   if (!chat) return;
-  var msgs = [].map.call(chat.children, function (e) {
+  var padraoMsgs = [].map.call(chat.children, function (e) {
     return { cls: e.className, txt: e.textContent.trim(), hora: e.getAttribute('data-hora') || '',
              tipo: e.getAttribute('data-tipo') || '', dur: e.getAttribute('data-dur') || '' };
   });
+  function mensagens() { return Ramo.chat() || padraoMsgs; }
+  var geracao = 0;
   function estourou() {
     var h = 36 - 10;
     for (var i = 0; i < chat.children.length; i++) h += chat.children[i].offsetHeight + 10;
@@ -782,33 +868,36 @@ function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
     return e;
   }
   function selo() { return Bolhas.el('div', 'dia', 'HOJE'); }
-  if (calmo) {
-    chat.innerHTML = ''; add(selo());
-    msgs.forEach(function (m) { add(Bolhas.bolha(m)); });
-    return;
-  }
-  (async function rodar() {
-    while (true) {
+  function parado() { chat.innerHTML = ''; add(selo()); mensagens().forEach(function (m) { add(Bolhas.bolha(m)); }); }
+  if (calmo) { parado(); Ramo.ao(parado); return; }
+  Ramo.ao(function () { geracao++; rodar(geracao); });
+  rodar(geracao);
+  async function rodar(minha) {
+    while (minha === geracao) {
+      var msgs = mensagens();
       chat.innerHTML = ''; chat.classList.remove('saindo'); chat.classList.add('anim');
       add(selo());
       await espera(700);
       for (var i = 0; i < msgs.length; i++) {
+        if (minha !== geracao) return;
         var m = msgs[i];
         var dig = add(Bolhas.digitando(m.cls));
         if (m.cls === 'in') status.textContent = 'digitando...';
         else if (m.tipo === 'audio') status.textContent = 'online';
         await espera(m.cls === 'in' ? 1300 : (m.tipo === 'audio' ? 1500 : 900));
         dig.remove();
+        if (minha !== geracao) return;
         status.textContent = 'online';
         add(Bolhas.bolha(m));
-        await espera(m.tipo === 'local' ? 600 : 1100);
+        await espera(m.tipo === 'local' || m.tipo === 'meet' ? 600 : 1100);
       }
       status.textContent = 'assistente virtual';
       await espera(3500);
+      if (minha !== geracao) return;
       chat.classList.add('saindo');
       await espera(600);
     }
-  })();
+  }
 })();
 
 /* agenda em grade de horas */
@@ -854,9 +943,7 @@ var Agenda = (function () {
   var status = document.getElementById('sim-status');
   if (!chat) return;
   var DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
-  var PROC = {
-    'Limpeza de pele': 60, 'Peeling químico': 45, 'Drenagem linfática': 50
-  };
+  var C = Ramo.sim(), PROC = C.proc;
   var estado = {};
   var legenda = document.getElementById('sim-legenda');
   var calBox = document.getElementById('sim-cal');
@@ -870,9 +957,13 @@ var Agenda = (function () {
   function desenharAgenda() {
     var dias = proximosDias(3);
     cal = Agenda.criar(calBox, {
-      dias: dias.map(function (d) { return [SIGLA[d.getDay()], String(d.getDate())]; }), de: 8, ate: 18, quem: 'Agenda da profissional'
+      dias: dias.map(function (d) { return [SIGLA[d.getDay()], String(d.getDate())]; }), de: 8, ate: 18, quem: C.quem
     });
-    OCUPADO.forEach(function (lista, c) { lista.forEach(function (v) { cal.evento(c, v[0], v[1], v[2], v[3], v[3] === 'pausa' ? ' ' : null); }); });
+    var k = 0;
+    OCUPADO.forEach(function (lista, c) { lista.forEach(function (v) {
+      var titulo = v[3] === 'pausa' ? v[2] : (C.nomes[k++] || v[2]);
+      cal.evento(c, v[0], v[1], titulo, v[3], v[3] === 'pausa' ? ' ' : null);
+    }); });
     ops = [];
   }
   function diga(txt) { legenda.textContent = txt; }
@@ -918,14 +1009,17 @@ var Agenda = (function () {
   async function inicio() {
     chat.innerHTML = ''; estado = {};
     desenharAgenda();
-    diga('Esta é a agenda da clínica. Escolha um procedimento no celular ao lado.');
+    diga('Esta é a agenda ' + C.lugar + '. ' + C.esc);
     add(Bolhas.el('div', 'dia', 'HOJE'));
-    await ela('Oi! Eu sou a assistente da Sua Clínica de Estética. Qual procedimento você quer marcar?');
+    var minha = ++rodada;
+    await ela(C.ola);
+    if (minha !== rodada) return;
     opcoes(Object.keys(PROC).map(function (p) {
       return { txt: p, fn: function () { chat.dataset.interagiu = '1'; escolherProc(p); } };
-    }).concat([{ txt: 'Tenho uma dúvida de saúde', fn: function () { chat.dataset.interagiu = '1'; saude(); } }]));
+    }).concat([{ txt: C.esp.botao, fn: function () { chat.dataset.interagiu = '1'; saude(); } }]));
   }
   async function escolherProc(p) {
+    estado.online = false;
     estado.proc = p;
     eu(p);
     await ela('Ótimo! ' + p + ' dura ' + PROC[p] + ' minutos. Você prefere de manhã ou à tarde?');
@@ -959,7 +1053,18 @@ var Agenda = (function () {
     ops.forEach(function (e, k) { if (k === i) e.classList.add('escolhida'); else e.classList.add('apagada'); });
     diga('Ela espera a cliente confirmar antes de marcar.');
     eu(estado.escolha.split(',')[0].replace(/^./, function (c) { return c.toUpperCase(); }));
-    await ela('Confirmando: ' + estado.proc.toLowerCase() + ' na ' + estado.escolha + ', no nome de Ana Ribeiro. Posso marcar?');
+    if (C.meet) {
+      await ela('Prefere presencial ou online, pelo Google Meet?');
+      opcoes([
+        { txt: 'Presencial', fn: function () { estado.online = false; eu('Presencial'); perguntarConfirma(); } },
+        { txt: 'Online, pelo Meet', fn: function () { estado.online = true; eu('Online, pelo Meet'); perguntarConfirma(); } }
+      ]);
+      return;
+    }
+    perguntarConfirma();
+  }
+  async function perguntarConfirma() {
+    await ela('Confirmando: ' + estado.proc.toLowerCase() + ' na ' + estado.escolha + (estado.online ? ', pelo Google Meet' : '') + ', no nome de ' + C.cliente + '. Posso marcar?');
     opcoes([
       { txt: 'Pode sim', fn: confirmar },
       { txt: 'Quero outro horário', fn: function () { eu('Quero outro horário'); turno(estado.turno === 'manhã' ? 'tarde' : 'manhã'); } }
@@ -974,29 +1079,40 @@ var Agenda = (function () {
     await espera(calmo ? 100 : 700);
     ops.forEach(function (e) { e.remove(); }); ops = [];
     var h = estado.hs[estado.i];
-    cal.evento(estado.i, h, h + estado.dur, estado.proc + ' | Ana Ribeiro', 'novo');
-    diga('Pronto! O horário já está na agenda, com o nome da cliente. A sua equipe vê na hora.');
+    cal.evento(estado.i, h, h + estado.dur, estado.proc + ' | ' + C.cliente + (estado.online ? ' (online)' : ''), 'novo');
+    diga('Pronto! O horário já está na agenda, com o nome da cliente' + (estado.online ? ' e o link da reunião' : '') + '. A sua equipe vê na hora.');
     nota('Marcado na agenda');
-    await ela(null, { cls: 'in', tipo: 'local', txt: 'Sua Clínica de Estética|Rua Exemplo, 100', hora: agora() });
-    await ela('Prontinho! Está marcado. A localização está aqui em cima, e um dia antes eu te mando um lembrete.');
+    if (estado.online) {
+      nota('Link do Google Meet criado');
+      await ela(null, { cls: 'in', tipo: 'meet', txt: 'Reunião online · Google Meet|meet.google.com/abc-defg-hij', hora: agora() });
+      await ela('Prontinho! Está marcado. O link da reunião está aqui em cima, e um dia antes eu te mando um lembrete.');
+    } else {
+      await ela(null, { cls: 'in', tipo: 'local', txt: C.local, hora: agora() });
+      await ela('Prontinho! Está marcado. A localização está aqui em cima, e um dia antes eu te mando um lembrete.');
+    }
     nota('Anotado na lista de clientes');
     nota('Lembrete marcado para ' + estado.vesperaFinal);
     fim();
   }
   async function saude() {
-    eu('Tenho uma dúvida de saúde');
+    eu(C.esp.botao);
     await ela('Claro, pode me contar.');
-    opcoes([{ txt: 'Posso fazer peeling grávida?', fn: async function () {
-      eu('Posso fazer peeling grávida?');
-      diga('Dúvida de saúde quem responde é a sua equipe. A assistente só avisa vocês.');
-      await ela('Essa pergunta a nossa profissional responde melhor, com segurança. Já avisei a equipe, e ela te chama aqui no WhatsApp assim que a clínica abrir.');
+    opcoes([{ txt: C.esp.pergunta, fn: async function () {
+      eu(C.esp.pergunta);
+      diga(C.esp.legenda);
+      await ela(C.esp.resposta);
       nota('Sua equipe foi avisada', true);
       fim();
     } }]);
   }
   function fim() { opcoes([{ txt: 'Recomeçar a simulação', fn: inicio }]); }
+  var rodada = 0;
   desenharAgenda(); // a agenda já aparece antes de a simulação começar
   var iniciou = false;
+  Ramo.ao(function () {
+    C = Ramo.sim(); PROC = C.proc;
+    if (iniciou) { rodada++; opc.innerHTML = ''; inicio(); } else { desenharAgenda(); diga('Esta é a agenda ' + C.lugar + '. ' + C.esc); }
+  });
   function comecar() { if (!iniciou) { iniciou = true; inicio(); } }
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { comecar(); io.disconnect(); } }, { threshold: .3 });
@@ -1018,7 +1134,10 @@ var Agenda = (function () {
     fv.textContent = faltas; tv.textContent = brl(ticket);
     mes.textContent = brl(faltas * ticket); ano.textContent = brl(faltas * ticket * 12);
   }
-  f.addEventListener('input', calc); t.addEventListener('input', calc); calc();
+  f.addEventListener('input', calc); t.addEventListener('input', calc);
+  function padroes() { var c = Ramo.sim(); f.value = c.faltas; t.value = c.ticket; calc(); }
+  if (Ramo.atual() !== 'estetica') padroes(); else calc();
+  Ramo.ao(padroes);
 })();
 
 /* fluxo acendendo passo a passo */
