@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lembra Aí – Recepcionista virtual no WhatsApp para clínicas</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta name="description" content="Um agente que atende pelo WhatsApp, entende texto e áudio, marca horários na agenda da clínica e lembra a cliente um dia antes.">
+<meta name="description" content="Uma assistente que atende pelo WhatsApp, entende texto e áudio, marca horários no Google Agenda da clínica e lembra a cliente um dia antes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -15,12 +15,21 @@
   try { t = localStorage.getItem('tema'); } catch (e) {}
   if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', t);
+  var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if ('IntersectionObserver' in window && !calmo) document.documentElement.classList.add('js-reveal');
 })();
 </script>
 <style>
 :root{
-  --ink:#10201B; --muted:#3C4E47; --muted2:#4A5C55; --bg:#F6F8F5; --card:#FFFFFF;
+  --ink:#10201B; --muted:#3C4E47; --muted2:#4A5C55; --bg:#F6F8F5; --card:#FFFFFF; --soft:#EEF2EF;
   --line:#DDE4DF; --brand:#0B3B2E; --brand2:#12493A; --lime:#C6F36B; --accent:#2F6B4F;
+  --chat:#ECE8E0; --bin:#FFFFFF; --bout:#D4F7B8;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --ink:#E8EFEB; --muted:#B4C2BC; --muted2:#9DAEA7; --bg:#0E1513; --card:#16201D; --soft:#1B2622;
+  --line:#2A3833; --accent:#8FD6A8; --chat:#0B1411; --bin:#1F2C28; --bout:#1D5A40;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -28,29 +37,43 @@ body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background
 a{color:var(--brand)}a:hover{color:#06261D}
 h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
-.btn{display:inline-block;text-decoration:none;border-radius:999px;font-weight:600;font-size:16px;padding:16px 26px}
+.btn{display:inline-block;text-decoration:none;border-radius:999px;font-weight:600;font-size:16px;padding:16px 26px;border:none;font-family:inherit;cursor:pointer}
 .btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#06261D}
-.btn-line{border:1.5px solid var(--brand);padding:14.5px 24px}
+.btn-line{border:1.5px solid var(--brand);padding:14.5px 24px;background:transparent;color:var(--brand)}
 .btn-lime{background:var(--lime);color:var(--brand)}
+.btn-lime:hover{background:#D6FA8F;color:var(--brand)}
+
+/* topo */
 header{border-bottom:1px solid var(--line)}
 .nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;padding-bottom:18px}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px}
 .logo-mark{width:36px;height:36px;border-radius:10px;background:var(--brand);display:flex;align-items:center;justify-content:center}
-nav{display:flex;flex-wrap:wrap;align-items:center;gap:24px;font-size:15px}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:20px;font-size:15px}
 nav a{text-decoration:none}
 nav .btn{padding:12px 20px;font-size:15px}
+.tema{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.tema:hover{background:var(--soft)}
+.tema .sol{display:none}
+:root[data-theme="dark"] .tema .sol{display:block}
+:root[data-theme="dark"] .tema .lua{display:none}
+
+/* hero */
 .hero{display:flex;flex-wrap:wrap;gap:56px;align-items:center;padding-top:72px;padding-bottom:88px}
 .hero-text{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px}
 .eyebrow{margin:0;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;letter-spacing:-.02em}
 .lead{margin:0;font-size:19px;line-height:1.55;color:var(--muted);max-width:560px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.pills li{font-size:14px;font-weight:500;color:var(--muted);background:var(--soft);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+
+/* celular / conversa */
 .phone-col{flex:1 1 360px;min-width:0;display:flex;justify-content:center}
 .phone{width:100%;max-width:380px;background:var(--brand);border-radius:28px;padding:14px}
-.chat{background:#ECE8E0;border-radius:18px;overflow:hidden}
-.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E2DED6}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
-.chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:420px;overflow:hidden}
+.chat{background:var(--chat);border-radius:18px;overflow:hidden}
+.chat-head{background:var(--card);padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand);flex:none}
+.chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:440px;overflow:hidden}
 .chat-body.anim>div{animation:entra .35s ease-out both}
 @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .typing{display:flex;gap:4px;align-items:center;padding:13px 14px!important}
@@ -58,24 +81,122 @@ h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;le
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @keyframes pula{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
 .chat-body.saindo{transition:opacity .5s;opacity:0}
-.status{font-size:12px;color:#5A6A63}
-.hora{display:block;text-align:right;font-size:11px;color:#5A6A63;margin-top:3px}
-.dia{align-self:center;background:#FFFFFF;color:#4A5C55;font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:8px}
-.in{align-self:flex-start;max-width:86%;background:#fff;padding:10px 12px;border-radius:4px 14px 14px 14px}
-.out{align-self:flex-end;max-width:70%;background:#D4F7B8;padding:10px 12px;border-radius:14px 4px 14px 14px}
-.band{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.status{font-size:12px;color:var(--muted2)}
+.hora{display:block;text-align:right;font-size:11px;color:var(--muted2);margin-top:3px}
+.dia{align-self:center;background:var(--bin);color:var(--muted2);font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:8px}
+.in{align-self:flex-start;max-width:86%;background:var(--bin);padding:10px 12px;border-radius:4px 14px 14px 14px}
+.out{align-self:flex-end;max-width:76%;background:var(--bout);padding:10px 12px;border-radius:14px 4px 14px 14px}
+.audio{display:flex;align-items:center;gap:10px;min-width:200px}
+.play{width:30px;height:30px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}
+.onda{display:flex;align-items:center;gap:2px;height:24px;flex:1}
+.onda i{display:block;width:3px;border-radius:2px;background:currentColor;opacity:.55}
+.dur{font-size:12px;color:var(--muted2)}
+.transc{display:block;font-size:12.5px;font-style:italic;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,.08)}
+.local{padding:6px!important;max-width:240px}
+.mapa{height:96px;border-radius:10px;background:linear-gradient(135deg,#CFE3D7 25%,#DDEBE2 25%,#DDEBE2 50%,#CFE3D7 50%,#CFE3D7 75%,#DDEBE2 75%);background-size:28px 28px;display:flex;align-items:center;justify-content:center}
+.local strong{display:block;font-size:13.5px;padding:8px 6px 0}
+.local small{display:block;font-size:12.5px;color:var(--muted2);padding:0 6px 2px}
+
+/* seções */
+.band{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .section{padding-top:88px;padding-bottom:88px;display:flex;flex-direction:column;gap:40px}
+.head{display:flex;flex-direction:column;gap:12px;max-width:700px}
 h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01em}
 .sub{margin:0;font-size:18px;line-height:1.55;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .card{background:var(--bg);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:14px}
-.icon{width:48px;height:48px;border-radius:14px;background:var(--brand);display:flex;align-items:center;justify-content:center}
-.card h3{margin:0;font-size:22px}
+.icon{width:48px;height:48px;border-radius:14px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}
+.card h3{margin:0;font-size:21px}
 .card p,.step p{margin:0;font-size:16px;line-height:1.55;color:var(--muted)}
+
+/* as 6 peças */
+.pecas{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.tabs{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.tab{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;min-height:64px}
+.tab:hover{background:var(--soft)}
+.tab .num{width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--brand);font-family:'Space Grotesk',sans-serif;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.tab b{display:block;font-size:16px;font-weight:600}
+.tab span.d{display:block;font-size:14px;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.tab[aria-selected="true"] span.d{color:#CFE0D7}
+.tab[aria-selected="true"] .num{background:var(--lime);color:var(--brand)}
+.painel{flex:999 1 520px;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:20px;min-height:460px}
+.painel[hidden]{display:none}
+.painel h3{margin:0;font-size:26px}
+.painel p{margin:0;font-size:17px;line-height:1.6;color:var(--muted)}
+.vis{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.45}
+.vis.chatty{background:var(--chat)}
+.notif{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.notif .t{font-size:12px;color:var(--muted2);margin-left:auto;white-space:nowrap}
+.notif span{font-size:14px}
+.seta{align-self:center;color:var(--muted2)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:8px 16px;margin:0}
+.kv dt{font-weight:600}
+.kv dd{margin:0;color:var(--muted)}
+.agenda{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dia-col{display:flex;flex-direction:column;gap:6px}
+.dia-col h4{margin:0 0 4px;font-size:13px;font-weight:600;color:var(--muted2);letter-spacing:.04em}
+.ev{border-radius:8px;padding:8px 9px;font-size:12.5px;line-height:1.3;background:#DCE8F7;color:#173A63}
+.ev.p{background:var(--soft);color:var(--muted)}
+.ev.op{background:var(--lime);color:var(--brand);font-weight:600;outline:2px solid var(--brand);outline-offset:-2px}
+.ev small{display:block;font-weight:500;opacity:.85}
+.tabela{width:100%;border-collapse:collapse;font-size:13px}
+.tabela th,.tabela td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tabela th{font-size:12px;color:var(--muted2);font-weight:600;background:var(--soft)}
+.rolavel{overflow-x:auto}
+.selo{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:#D4F7B8;color:#0B3B2E}
+.selo.r{background:#FDE7C8;color:#6B3A00}
+
+/* recepção */
+.duas{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.duas>*{flex:1 1 380px;min-width:0}
+.lista{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.lista li{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.5;color:var(--muted)}
+.lista svg{flex:none;margin-top:3px}
+.email{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:15px;line-height:1.55}
+.email .top{padding:16px 20px;border-bottom:1px solid var(--line);background:var(--soft)}
+.email .top b{display:block;font-size:16px}
+.email .top small{color:var(--muted2)}
+.email .corpo{padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.email .corpo p{margin:0}
+
+/* simulador */
+.sim-wrap{display:flex;flex-wrap:wrap;gap:40px;align-items:center}
+.sim-wrap>.head{flex:1 1 340px}
+.sim{flex:1 1 400px;min-width:0;max-width:440px;margin:0 auto;background:var(--brand);border-radius:28px;padding:14px}
+.sim .chat-body{height:460px;overflow-y:auto;justify-content:flex-start}
+.sim .chat-body>:first-child{margin-top:auto}
+.opcoes{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px 14px;background:var(--chat);border-top:1px solid var(--line);min-height:70px;align-items:center}
+.opcao{font:inherit;font-size:14px;font-weight:600;color:var(--brand);background:var(--card);border:1.5px solid var(--brand);border-radius:999px;padding:10px 14px;min-height:44px;cursor:pointer}
+.opcao:hover{background:var(--lime)}
+.nota{align-self:center;display:flex;gap:6px;align-items:center;font-size:12.5px;font-weight:600;color:var(--brand);background:#D4F7B8;padding:6px 10px;border-radius:999px}
+.nota.r{background:#FDE7C8;color:#6B3A00}
+
+/* calculadora */
+.calc{display:flex;flex-wrap:wrap;gap:28px;background:var(--brand);color:#fff;border-radius:28px;padding:40px}
+.calc>*{flex:1 1 320px;min-width:0}
+.calc h2{color:#fff}
+.calc .sub{color:#CFE0D7}
+.campos{display:flex;flex-direction:column;gap:18px}
+.campo{display:flex;flex-direction:column;gap:8px}
+.campo label{font-size:15px;font-weight:600}
+.campo .linha{display:flex;align-items:center;gap:14px}
+.campo input[type=range]{flex:1;accent-color:#C6F36B;min-height:44px}
+.campo output{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;min-width:90px;text-align:right}
+.res{background:var(--brand2);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:10px}
+.res .valor{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,4.6vw,54px);font-weight:700;color:var(--lime);line-height:1}
+.res p{margin:0;color:#E3EEE8;font-size:16px;line-height:1.55}
+.res .btn{align-self:flex-start;margin-top:8px}
+
+/* passos */
 .step{border-top:3px solid var(--brand);padding-top:20px;display:flex;flex-direction:column;gap:10px}
 .step .n{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--accent)}
 .step h3{margin:0;font-size:20px;font-weight:600;font-family:Inter,system-ui,sans-serif}
+.testes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.testes li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:15px}
+
+/* planos */
 .dark{background:var(--brand);color:#fff}
 .dark .sub{color:#CFE0D7}
 .plan{background:var(--brand2);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px}
@@ -86,12 +207,23 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .plan.featured{background:var(--lime);color:var(--brand)}
 .plan.featured ul{color:var(--brand)}
 .tag{align-self:flex-start;background:var(--brand);color:var(--lime);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
+
+/* perguntas */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0 20px}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;font-weight:600;font-size:17px;padding:18px 0;min-height:44px}
+summary::-webkit-details-marker{display:none}
+summary .mais{flex:none;transition:transform .2s}
+details[open] summary .mais{transform:rotate(45deg)}
+details p{margin:0 0 18px;font-size:16px;line-height:1.6;color:var(--muted)}
+
+/* contato */
 .contact{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding-top:88px;padding-bottom:88px}
 .contact-text{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px}
-form{flex:1 1 380px;min-width:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
+form{flex:1 1 380px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}
 label{font-size:14px;font-weight:600}
-input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #B9C6BF;border-radius:10px}
+input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #B9C6BF;border-radius:10px;background:var(--card);color:var(--ink)}
 textarea{resize:vertical}
 .hint{margin:0;font-size:14px;color:var(--muted2)}
 #enviar{font:inherit;font-size:16px;font-weight:600;border:none;border-radius:999px;padding:16px 24px;background:var(--brand);color:#fff;cursor:pointer}
@@ -99,43 +231,43 @@ textarea{resize:vertical}
 footer{border-top:1px solid var(--line)}
 .foot{padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted2)}
 
-/* botão sol/lua */
-.tema{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
-.tema:hover{background:var(--line)}
-.tema .sol{display:none}
-:root[data-theme="dark"] .tema .sol{display:block}
-:root[data-theme="dark"] .tema .lua{display:none}
+/* aparecer ao rolar */
+.js-reveal .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.js-reveal .reveal.visivel{opacity:1;transform:none}
 
-/* modo escuro */
-:root{color-scheme:light}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --ink:#E8EFEB; --muted:#B4C2BC; --muted2:#9DAEA7; --bg:#0E1513; --card:#16201D;
-  --line:#2A3833; --accent:#8FD6A8;
-}
+/* modo escuro: ajustes */
 :root[data-theme="dark"] a{color:var(--ink)}
 :root[data-theme="dark"] a:hover{color:#C6F36B}
 :root[data-theme="dark"] .btn-dark,:root[data-theme="dark"] #enviar{background:#C6F36B;color:#0B3B2E}
 :root[data-theme="dark"] .btn-dark:hover{background:#D6FA8F;color:#0B3B2E}
-:root[data-theme="dark"] .btn-line{border-color:var(--ink)}
+:root[data-theme="dark"] .btn-line{border-color:var(--ink);color:var(--ink)}
 :root[data-theme="dark"] .band{background:#131C19}
 :root[data-theme="dark"] .card{background:#1B2622}
 :root[data-theme="dark"] .step{border-top-color:#2F6B4F}
-:root[data-theme="dark"] .phone{background:#1F2C28}
-:root[data-theme="dark"] .chat{background:#0B1411}
-:root[data-theme="dark"] .chat-head{background:#1B2622;border-bottom-color:#26332F}
-:root[data-theme="dark"] .in{background:#1F2C28;color:#E8EFEB}
-:root[data-theme="dark"] .out{background:#1D5A40;color:#F1F7F3}
-:root[data-theme="dark"] .dia{background:#1F2C28;color:#B4C2BC}
-:root[data-theme="dark"] .status,:root[data-theme="dark"] .hora{color:#A9B9B2}
-:root[data-theme="dark"] .out .hora{color:#C9DDD2}
+:root[data-theme="dark"] .phone,:root[data-theme="dark"] .sim{background:#1F2C28}
+:root[data-theme="dark"] .out{color:#F1F7F3}
+:root[data-theme="dark"] .out .hora,:root[data-theme="dark"] .out .dur{color:#C9DDD2}
+:root[data-theme="dark"] .out .transc{color:#DDEBE3;border-top-color:rgba(255,255,255,.15)}
+:root[data-theme="dark"] .play{background:#C6F36B}
+:root[data-theme="dark"] .play svg{fill:#0B3B2E}
+:root[data-theme="dark"] .mapa{background:linear-gradient(135deg,#25352F 25%,#2C3E37 25%,#2C3E37 50%,#25352F 50%,#25352F 75%,#2C3E37 75%);background-size:28px 28px}
+:root[data-theme="dark"] .tab[aria-selected="true"]{background:#C6F36B;border-color:#C6F36B;color:#0B3B2E}
+:root[data-theme="dark"] .tab[aria-selected="true"] span.d{color:#2F4A3F}
+:root[data-theme="dark"] .tab[aria-selected="true"] .num{background:#0B3B2E;color:#C6F36B}
+:root[data-theme="dark"] .tab .num{color:#C6F36B}
+:root[data-theme="dark"] .ev{background:#1E3550;color:#D5E6FA}
+:root[data-theme="dark"] .ev.p{background:#26332F;color:#B4C2BC}
+:root[data-theme="dark"] .ev.op{background:#C6F36B;color:#0B3B2E;outline-color:#C6F36B}
+:root[data-theme="dark"] .mapa svg{fill:#C6F36B}
+:root[data-theme="dark"] .opcao{color:#C6F36B;border-color:#C6F36B;background:transparent}
+:root[data-theme="dark"] .opcao:hover{background:#C6F36B;color:#0B3B2E}
+:root[data-theme="dark"] .calc,:root[data-theme="dark"] .dark{background:#0B2A21}
 :root[data-theme="dark"] .plan.featured .btn-dark{background:#0B3B2E;color:#fff}
 :root[data-theme="dark"] .plan .btn-lime{color:#0B3B2E}
 :root[data-theme="dark"] .plan.featured,:root[data-theme="dark"] .plan.featured ul{color:#0B3B2E}
-:root[data-theme="dark"] .dark{background:#0B2A21}
-:root[data-theme="dark"] form{background:var(--card)}
-:root[data-theme="dark"] input,:root[data-theme="dark"] textarea{background:#0E1513;color:var(--ink);border-color:#4A5C55}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea{background:#0E1513;border-color:#4A5C55}
 :root[data-theme="dark"] #enviar:disabled{background:#26332F;color:var(--muted2)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -147,9 +279,10 @@ footer{border-top:1px solid var(--line)}
 <span>Lembra Aí</span>
 </div>
 <nav aria-label="Principal">
-<a href="#servicos">Serviços</a>
 <a href="#como-funciona">Como funciona</a>
+<a href="#teste">Teste agora</a>
 <a href="#planos">Planos</a>
+<a href="#duvidas">Dúvidas</a>
 <button type="button" class="tema" id="tema" aria-label="Ativar modo escuro">
 <svg class="lua" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
 <svg class="sol" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.9 4.9l1.4 1.4"/><path d="M17.7 17.7l1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.9 19.1l1.4-1.4"/><path d="M17.7 6.3l1.4-1.4"/></svg>
@@ -164,85 +297,281 @@ footer{border-top:1px solid var(--line)}
 <div class="hero-text">
 <p class="eyebrow">Para clínicas de estética</p>
 <h1>Sua clínica agendando pelo WhatsApp, até de madrugada.</h1>
-<p class="lead">Uma recepcionista virtual que entende texto e áudio, oferece horários livres da sua agenda, confirma, manda a localização e lembra a cliente um dia antes. Quando o assunto pede uma pessoa, ela passa para a sua equipe.</p>
+<p class="lead">Uma recepcionista virtual que entende texto e áudio, oferece 2 horários livres do seu Google Agenda, confirma, anota na planilha, manda a localização e lembra a cliente um dia antes.</p>
+<ul class="pills" aria-label="Destaques">
+<li>Atende 24 horas</li>
+<li>Entende áudio</li>
+<li>Google Agenda</li>
+<li>WhatsApp oficial</li>
+</ul>
 <div class="ctas">
-<a href="#contato" class="btn btn-dark">Quero na minha clínica</a>
+<a href="#teste" class="btn btn-dark">Testar a assistente</a>
 <a href="#como-funciona" class="btn btn-line">Ver como funciona</a>
 </div>
 </div>
 <div class="phone-col">
-<div class="phone" role="img" aria-label="Exemplo de conversa de cobrança no WhatsApp">
+<div class="phone" role="img" aria-label="Exemplo: às 2h da manhã, uma cliente pede por áudio uma limpeza de pele e a assistente marca o horário">
 <div class="chat">
 <div class="chat-head">
 <div class="avatar">SC</div>
 <div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="chat-status">assistente virtual</span></div>
 </div>
 <div class="chat-body" id="chat" aria-hidden="true">
-<div class="out" data-hora="02:14">Oi, queria fazer uma limpeza de pele essa semana, de manhã se der</div>
+<div class="out" data-hora="02:14" data-tipo="audio" data-dur="0:12">Oi, queria fazer uma limpeza de pele essa semana, de manhã se der</div>
 <div class="in" data-hora="02:14">Oi, Ana! Para limpeza de pele (60 min) tenho quinta, 12/11, às 9h30, ou sexta, 13/11, às 10h. Qual fica melhor?</div>
 <div class="out" data-hora="02:15">Quinta às 9h30</div>
 <div class="in" data-hora="02:15">Confirmando: limpeza de pele na quinta, 12/11, às 9h30, no nome de Ana Ribeiro. Posso marcar?</div>
 <div class="out" data-hora="02:16">Pode sim</div>
-<div class="in" data-hora="02:16">Prontinho! Te mandei a localização da clínica. Um dia antes a gente te manda um lembrete.</div>
+<div class="in" data-hora="02:16" data-tipo="local">Sua Clínica de Estética|Rua Exemplo, 100</div>
+<div class="in" data-hora="02:16">Prontinho! A localização está aqui em cima. Um dia antes a gente te manda um lembrete.</div>
 </div>
 </div>
 </div>
 </div>
 </section>
 
-<section id="servicos" class="band">
+<section id="como-funciona" class="band">
 <div class="wrap section">
-<div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
-<h2>O que a recepcionista virtual faz</h2>
-<p class="sub">Ela cuida da parte repetitiva do atendimento. A sua equipe fica com o que precisa de gente.</p>
+<div class="head reveal">
+<h2>Por dentro: as 6 peças da assistente</h2>
+<p class="sub">Toque em cada peça para ver o que acontece, do "oi" da cliente até o lembrete da véspera.</p>
+</div>
+<div class="pecas reveal">
+<div class="tabs" role="tablist" aria-label="As 6 peças" id="tabs">
+<button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true"><span class="num">1</span><span><b>WhatsApp recebe</b><span class="d">Mensagem ou áudio, a qualquer hora</span></span></button>
+<button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="num">2</span><span><b>O áudio vira texto</b><span class="d">A cliente pode só falar</span></span></button>
+<button class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><span class="num">3</span><span><b>A IA entende</b><span class="d">Qual procedimento e para quando</span></span></button>
+<button class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false" tabindex="-1"><span class="num">4</span><span><b>A agenda responde</b><span class="d">2 horários livres da profissional</span></span></button>
+<button class="tab" role="tab" id="t5" aria-controls="p5" aria-selected="false" tabindex="-1"><span class="num">5</span><span><b>Confirma e registra</b><span class="d">Planilha preenchida e localização enviada</span></span></button>
+<button class="tab" role="tab" id="t6" aria-controls="p6" aria-selected="false" tabindex="-1"><span class="num">6</span><span><b>Lembrete na véspera</b><span class="d">Sai sozinho, um dia antes</span></span></button>
+</div>
+
+<div class="painel" role="tabpanel" id="p1" aria-labelledby="t1">
+<h3>O WhatsApp recebe, até de madrugada</h3>
+<p>A cliente chama quando quer: de noite, no fim de semana ou no feriado. A assistente responde na hora, no número oficial da clínica, por texto ou áudio.</p>
+<div class="vis">
+<div class="notif"><div class="avatar">AR</div><span><b>Ana</b> · Oi, queria fazer uma limpeza de pele…</span><span class="t">02:14</span></div>
+<div class="notif"><div class="avatar">JP</div><span><b>Júlia</b> · Mensagem de voz (0:08)</span><span class="t">23:40</span></div>
+<div class="notif"><div class="avatar">ML</div><span><b>Marta</b> · Tem horário no sábado de manhã?</span><span class="t">07:02</span></div>
+</div>
+</div>
+
+<div class="painel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+<h3>O áudio vira texto</h3>
+<p>Muita cliente prefere mandar áudio. A assistente transcreve o áudio antes de responder, então entende tudo, sem pedir para a cliente digitar.</p>
+<div class="vis chatty">
+<div class="out audio-box"><div class="audio"><div class="play"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="#C6F36B"><path d="M7 4l13 8-13 8z"/></svg></div><div class="onda" aria-hidden="true"><i style="height:30%"></i><i style="height:60%"></i><i style="height:85%"></i><i style="height:45%"></i><i style="height:70%"></i><i style="height:95%"></i><i style="height:50%"></i><i style="height:35%"></i><i style="height:75%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:50%"></i></div><span class="dur">0:12</span></div></div>
+<svg class="seta" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+<div class="in">"Oi, queria fazer uma limpeza de pele essa semana, de manhã se der"</div>
+</div>
+</div>
+
+<div class="painel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+<h3>A IA entende o pedido</h3>
+<p>Ela entende o jeito que a cliente fala e segue as regras da sua clínica: procedimentos, duração, valores e horário de funcionamento. Se faltar alguma informação, ela pergunta.</p>
+<div class="vis">
+<b>O que a assistente entendeu</b>
+<dl class="kv">
+<dt>Procedimento</dt><dd>Limpeza de pele (60 min)</dd>
+<dt>Quando</dt><dd>Esta semana</dd>
+<dt>Turno</dt><dd>Manhã</dd>
+<dt>Cliente</dt><dd>Ana (nome do perfil)</dd>
+<dt>Próximo passo</dt><dd>Buscar 2 horários livres na agenda</dd>
+</dl>
+</div>
+</div>
+
+<div class="painel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+<h3>O Google Agenda responde com 2 horários</h3>
+<p>Ela lê o Google Agenda da profissional, o mesmo que a recepção já usa, calcula os horários livres respeitando a duração do procedimento e oferece 2 opções, em dias ou turnos diferentes.</p>
+<div class="vis">
+<div class="agenda" aria-label="Agenda de exemplo: para 60 minutos de manhã, sobram quinta 9h30 e sexta 10h">
+<div class="dia-col"><h4>QUA 11</h4><div class="ev">9h–10h<small>Limpeza de pele | Júlia</small></div><div class="ev">10h–11h<small>Peeling | Beatriz</small></div><div class="ev p">12h–13h<small>Pausa</small></div></div>
+<div class="dia-col"><h4>QUI 12</h4><div class="ev">8h30–9h20<small>Drenagem | Marta</small></div><div class="ev op">9h30 livre<small>opção 1</small></div><div class="ev">11h–11h45<small>Peeling | Lia</small></div></div>
+<div class="dia-col"><h4>SEX 13</h4><div class="ev">9h–9h45<small>Peeling | Lia</small></div><div class="ev op">10h livre<small>opção 2</small></div><div class="ev">11h–12h<small>Limpeza | Rita</small></div></div>
+</div>
+</div>
+</div>
+
+<div class="painel" role="tabpanel" id="p5" aria-labelledby="t5" hidden>
+<h3>Confirma, registra e manda a localização</h3>
+<p>Antes de marcar, ela repete o resumo e espera o "sim". Depois cria o evento no Google Agenda, anota numa planilha e envia o pino da clínica no WhatsApp.</p>
+<div class="vis">
+<b>Planilha "Agendamentos"</b>
+<div class="rolavel">
+<table class="tabela">
+<thead><tr><th>Nome</th><th>Procedimento</th><th>Horário</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Ana Ribeiro</td><td>Limpeza de pele</td><td>12/11 09:30</td><td><span class="selo">Confirmado</span></td></tr>
+<tr><td>Júlia Prado</td><td>Peeling químico</td><td>13/11 15:00</td><td><span class="selo">Confirmado</span></td></tr>
+<tr><td>Beatriz Lima</td><td>Dúvida de saúde</td><td>–</td><td><span class="selo r">Recepção</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="painel" role="tabpanel" id="p6" aria-labelledby="t6" hidden>
+<h3>O lembrete sai sozinho na véspera</h3>
+<p>Todo dia às 10h, ela avisa quem tem horário no dia seguinte. Se a recepção mudar o horário no Google Agenda, o lembrete acompanha; se apagar, a cliente não recebe nada.</p>
+<div class="vis chatty">
+<div class="dia">QUARTA-FEIRA</div>
+<div class="in">Oi, Ana! Passando para lembrar do seu horário de limpeza de pele amanhã, às 09h30, na Sua Clínica de Estética. Se precisar remarcar, responda esta mensagem que a recepção te ajuda.<span class="hora">10:00</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="wrap section">
+<div class="duas">
+<div class="head reveal">
+<h2>Quando precisa de gente, a recepção assume</h2>
+<p class="sub">A assistente não inventa resposta. Nesses casos, ela avisa a cliente que a recepção vai chamar e manda um e-mail com tudo o que a equipe precisa.</p>
+<ul class="lista">
+<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Dúvidas de saúde: gravidez, alergia, remédio, pós-procedimento</li>
+<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Preço, pacote ou desconto fora da tabela</li>
+<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Remarcação ou cancelamento</li>
+<li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Reclamação ou pedido para falar com uma pessoa</li>
+</ul>
+</div>
+<div class="email reveal" role="img" aria-label="Exemplo de e-mail que a recepção recebe">
+<div class="top"><b>Recepção: dúvida sobre peeling na gravidez</b><small>Assistente da clínica → recepcao@suaclinica.com.br</small></div>
+<div class="corpo">
+<p><b>Nome:</b> Beatriz Lima</p>
+<p><b>Pedido:</b> quer saber se pode fazer peeling químico estando grávida de 4 meses. Prefere ser atendida de manhã.</p>
+<p><b>WhatsApp:</b> 5519 9xxxx-9012</p>
+<p style="color:var(--muted2)">Ela já foi avisada de que a recepção chama pelo WhatsApp no próximo horário de atendimento.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="band">
+<div class="wrap section">
+<div class="head reveal">
+<h2>Os detalhes que fazem diferença</h2>
 </div>
 <div class="grid grid-3">
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><h3>Entende texto e áudio</h3><p>A cliente escreve ou manda áudio, a qualquer hora. A assistente entende o procedimento que ela quer e para quando.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Marca na sua agenda</h3><p>Lê o Google Agenda da profissional, oferece 2 horários livres e confere de novo antes de marcar, para nunca encaixar duas clientes no mesmo horário.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Confirma e manda a localização</h3><p>Repete o resumo para a cliente aprovar, marca o horário, registra numa planilha e envia o pino da clínica no WhatsApp.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Lembrete na véspera</h3><p>Todo dia, sozinha, ela avisa quem tem horário no dia seguinte. Menos faltas e menos horário vazio na agenda.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h3>Sua equipe assume quando precisa</h3><p>Dúvida de saúde, remarcação, reclamação ou preço fora da tabela: ela não inventa resposta e avisa a recepção na hora, com o resumo do pedido.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e avisos</h3><p>Também dá para automatizar lembretes de pagamento, avisos de feriado e campanhas para as suas clientes, com o mesmo jeito humano de falar.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Nada de horário duplicado</h3><p>Ela confere a agenda de novo logo antes de marcar. Se outra cliente pegou o horário no meio da conversa, ela oferece outras 2 opções.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Intervalo entre clientes</h3><p>Precisa de 15 minutos para arrumar a sala? A gente soma esse tempo na duração de cada procedimento.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><h3>A recepção continua marcando</h3><p>O que a equipe marca à mão no Google Agenda também conta como ocupado. A assistente e a recepção usam a mesma agenda.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div><h3>Não dá orientação de saúde</h3><p>Diagnóstico, remédio, contraindicação ou resultado de procedimento ficam com a profissional. Ela também nunca pede CPF ou cartão.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>WhatsApp oficial da Meta</h3><p>Usamos a API oficial do WhatsApp, a mesma das grandes empresas, sem os riscos de bloqueio das ferramentas não oficiais.</p></div>
+<div class="card reveal"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>Tudo no nome da clínica</h3><p>Número, agenda, planilha e contas ficam no nome da clínica. Se um dia vocês pararem, nada que é seu vai embora com a gente.</p></div>
 </div>
 </div>
 </section>
 
-<section id="como-funciona" class="wrap section">
-<h2>Como funciona</h2>
+<section id="teste" class="wrap section">
+<div class="sim-wrap">
+<div class="head reveal">
+<p class="eyebrow">Simulação</p>
+<h2>Teste a assistente agora</h2>
+<p class="sub">Faça de conta que você é uma cliente. Escolha as respostas e veja a assistente marcar um horário, ou passar o caso para a recepção.</p>
+<p class="sub" style="font-size:15px;color:var(--muted2)">É uma demonstração com respostas prontas. A assistente de verdade conversa livremente, por texto ou áudio.</p>
+</div>
+<div class="sim reveal">
+<div class="chat">
+<div class="chat-head">
+<div class="avatar">SC</div>
+<div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="sim-status">online</span></div>
+</div>
+<div class="chat-body" id="sim-chat" aria-live="polite"></div>
+<div class="opcoes" id="sim-opcoes"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="wrap" style="padding-bottom:88px">
+<div class="calc reveal">
+<div class="head">
+<h2>Quanto custam os horários vazios?</h2>
+<p class="sub">Arraste e veja quanto a sua clínica deixa de faturar quando uma cliente esquece o horário ou ninguém responde a tempo.</p>
+</div>
+<div class="campos">
+<div class="campo">
+<label for="faltas">Clientes que faltam ou desistem por mês</label>
+<div class="linha"><input type="range" id="faltas" min="0" max="60" step="1" value="8"><output id="faltas-v" for="faltas">8</output></div>
+</div>
+<div class="campo">
+<label for="ticket">Valor médio de um procedimento</label>
+<div class="linha"><input type="range" id="ticket" min="50" max="1000" step="10" value="150"><output id="ticket-v" for="ticket">R$ 150</output></div>
+</div>
+<div class="res" aria-live="polite">
+<p>Por mês, isso dá</p>
+<div class="valor" id="perda-mes">R$ 1.200</div>
+<p>ou <b id="perda-ano">R$ 14.400</b> por ano em horários que poderiam estar ocupados.</p>
+<a href="#contato" class="btn btn-lime">Quero diminuir isso</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="band">
+<div class="wrap section">
+<h2 class="reveal">Como a gente coloca no ar</h2>
 <div class="grid">
-<div class="step"><span class="n">01</span><h3>Conhecemos a sua clínica</h3><p>Levantamos procedimentos, duração, valores, horários e as perguntas que mais chegam hoje no WhatsApp.</p></div>
-<div class="step"><span class="n">02</span><h3>Configuramos e testamos</h3><p>Ligamos a assistente ao WhatsApp oficial e à sua agenda, no tom da sua clínica, e testamos cada situação com você antes de ir ao ar.</p></div>
-<div class="step"><span class="n">03</span><h3>No ar, no seu nome</h3><p>A assistente começa a atender. O número, a agenda e a planilha ficam no nome da clínica, e a gente acompanha e ajusta junto com você.</p></div>
+<div class="step reveal"><span class="n">01</span><h3>Conhecemos a sua clínica</h3><p>Procedimentos com duração e valor, horário de atendimento, endereço, contato da recepção e as perguntas que mais chegam hoje.</p></div>
+<div class="step reveal"><span class="n">02</span><h3>Configuramos com você</h3><p>Ligamos a assistente ao WhatsApp oficial e ao seu Google Agenda, no tom da sua clínica, e você aprova tudo.</p></div>
+<div class="step reveal"><span class="n">03</span><h3>Testamos e entregamos</h3><p>Só vai ao ar depois de passar em todos os testes abaixo. Depois, a gente acompanha e ajusta junto com você.</p></div>
+</div>
+<div class="head reveal" style="margin-top:8px"><h3 style="margin:0;font-size:22px">Os 6 testes antes de ir ao ar</h3></div>
+<ul class="testes">
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pedido por áudio recebe 2 horários certos</li>
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Marcação completa: agenda, planilha e localização</li>
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Duas clientes no mesmo horário: sem duplicar</li>
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Dúvida de saúde vai para a recepção</li>
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pedido de remarcação vai para a recepção</li>
+<li class="reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Assunto fora da clínica: recusa com educação</li>
+</ul>
 </div>
 </section>
 
 <section id="planos" class="dark">
 <div class="wrap section">
-<div style="display:flex;flex-direction:column;gap:12px;max-width:640px">
+<div class="head reveal">
 <h2>Planos</h2>
-<p class="sub">Comece pequeno e cresça conforme sentir o resultado.</p>
+<p class="sub">Comece pelo essencial e cresça conforme sentir o resultado.</p>
 </div>
 <div class="grid">
-<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Agendamento por texto e áudio</li><li>Lembrete na véspera</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
-<div class="plan featured"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Planilha de agendamentos e aviso à recepção</li><li>Localização enviada automaticamente</li><li>Avisos de feriado e campanhas</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
-<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Cobrança automática de pacotes</li><li>Integração com o seu sistema</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan reveal"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Atendimento 24h por texto e áudio</li><li>2 horários do seu Google Agenda</li><li>Lembrete na véspera</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan featured reveal"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Planilha de agendamentos</li><li>Localização enviada automaticamente</li><li>Aviso à recepção por e-mail</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
+<div class="plan reveal"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Integração com o seu sistema de agenda</li><li>Regras de atendimento personalizadas</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
 </div>
 </div>
 </section>
 
-<section id="contato" class="wrap contact">
-<div class="contact-text">
-<h2>Quer ver a assistente na sua clínica?</h2>
-<p class="sub">Conta pra gente como funciona o seu atendimento hoje. A primeira conversa é sem compromisso.</p>
+<section id="duvidas" class="wrap section">
+<h2 class="reveal">Dúvidas frequentes</h2>
+<div class="faq">
+<details class="reveal"><summary>Funciona com a agenda que a clínica já usa?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Funciona com o Google Agenda. A assistente lê e marca na agenda da profissional, a mesma que a recepção usa. Se a clínica usa outro sistema, fale com a gente sobre o plano sob medida.</p></details>
+<details class="reveal"><summary>A recepção continua usando o WhatsApp de sempre?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Sim. A assistente fica num número só dela, ligado ao WhatsApp oficial, e a recepção continua no WhatsApp de sempre. Quando um caso precisa de uma pessoa, a recepção chama a cliente pelo número dela.</p></details>
+<details class="reveal"><summary>O número pode ser bloqueado?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Usamos a API oficial da Meta, feita para empresas, e seguimos as regras dela: as mensagens automáticas de lembrete são modelos aprovados pela própria Meta. Ferramentas não oficiais é que costumam levar a bloqueios.</p></details>
+<details class="reveal"><summary>A assistente responde dúvidas de saúde?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Não. Perguntas sobre gravidez, alergia, remédio, contraindicação ou cuidados depois do procedimento vão direto para a sua equipe. A assistente cuida só do agendamento e das informações da clínica.</p></details>
+<details class="reveal"><summary>E se duas clientes quiserem o mesmo horário?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Logo antes de marcar, a assistente confere a agenda de novo. Se o horário acabou de ser ocupado, ela pede desculpa e oferece as 2 próximas opções.</p></details>
+<details class="reveal"><summary>Ela remarca ou cancela horários?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Por segurança, não. Quando a cliente pede para remarcar ou cancelar, a assistente avisa a recepção, que resolve direto na agenda. Se a recepção mover o horário, o lembrete da véspera acompanha.</p></details>
+<details class="reveal"><summary>Quanto tempo leva para ficar pronto?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>A configuração em si é rápida. O que mais pesa é a aprovação da Meta: a verificação da empresa e do modelo de lembrete pode levar de alguns dias a algumas semanas. A gente acompanha tudo com você.</p></details>
+<details class="reveal"><summary>De quem são os dados das clientes?<svg class="mais" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></summary><p>Da clínica. A agenda, a planilha e o número ficam em contas no nome da clínica, e a assistente pede só o necessário para marcar: nome e procedimento.</p></details>
 </div>
-<form id="form" novalidate>
+</section>
+
+<section id="contato" class="band">
+<div class="wrap contact">
+<div class="contact-text reveal">
+<h2>Quer ver a assistente na sua clínica?</h2>
+<p class="sub">Conta pra gente como vocês agendam hoje. A primeira conversa é sem compromisso.</p>
+</div>
+<form id="form" novalidate class="reveal">
 <div class="field"><label for="nome">Seu nome</label><input id="nome" type="text" required autocomplete="name"></div>
 <div class="field"><label for="empresa">Clínica</label><input id="empresa" type="text" required autocomplete="organization"></div>
 <div class="field"><label for="whats">WhatsApp</label><input id="whats" type="tel" required autocomplete="tel"></div>
-<div class="field"><label for="msg">O que você quer automatizar?</label><textarea id="msg" rows="3" required></textarea></div>
+<div class="field"><label for="msg">Como vocês agendam hoje?</label><textarea id="msg" rows="3" required placeholder="Ex.: a recepção responde no WhatsApp e marca no Google Agenda"></textarea></div>
 <p class="hint" id="hint">Preencha todos os campos para liberar o botão.</p>
 <button type="submit" id="enviar" disabled>Quero uma conversa</button>
 </form>
+</div>
 </section>
 </main>
 
@@ -253,26 +582,17 @@ footer{border-top:1px solid var(--line)}
 </footer>
 
 <script>
+/* formulário -> WhatsApp */
 (function () {
-  // Número que recebe os contatos (com DDI 55 + DDD)
   var NUMERO_WHATSAPP = '5551981384687';
-
   var form = document.getElementById('form');
   var botao = document.getElementById('enviar');
   var hint = document.getElementById('hint');
   var campos = ['nome', 'empresa', 'whats', 'msg'].map(function (id) { return document.getElementById(id); });
-
-  function completo() {
-    return campos.every(function (c) { return c.value.trim().length > 0; });
-  }
-  function atualizar() {
-    var ok = completo();
-    botao.disabled = !ok;
-    hint.style.display = ok ? 'none' : 'block';
-  }
+  function completo() { return campos.every(function (c) { return c.value.trim().length > 0; }); }
+  function atualizar() { var ok = completo(); botao.disabled = !ok; hint.style.display = ok ? 'none' : 'block'; }
   campos.forEach(function (c) { c.addEventListener('input', atualizar); });
   atualizar();
-
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!completo()) return;
@@ -281,72 +601,13 @@ footer{border-top:1px solid var(--line)}
       'Nome: ' + campos[0].value.trim(),
       'Clínica: ' + campos[1].value.trim(),
       'WhatsApp: ' + campos[2].value.trim(),
-      'Quero automatizar: ' + campos[3].value.trim()
+      'Como agendam hoje: ' + campos[3].value.trim()
     ].join('\n');
     window.open('https://wa.me/' + NUMERO_WHATSAPP + '?text=' + encodeURIComponent(texto), '_blank');
   });
 })();
-</script>
-<script>
-(function () {
-  var chat = document.getElementById('chat');
-  var status = document.getElementById('chat-status');
-  if (!chat) return;
-  var msgs = [].map.call(chat.children, function (el) {
-    return { cls: el.className, txt: el.textContent.trim(), hora: el.getAttribute('data-hora') || '' };
-  });
-  function bolha(m) {
-    var d = document.createElement('div'); d.className = m.cls;
-    d.appendChild(document.createTextNode(m.txt));
-    var h = document.createElement('span'); h.className = 'hora'; h.textContent = m.hora;
-    d.appendChild(h);
-    return d;
-  }
-  function estourou() {
-    var h = 36 - 10;
-    for (var i = 0; i < chat.children.length; i++) h += chat.children[i].offsetHeight + 10;
-    return h > chat.clientHeight;
-  }
-  function selo() { var d = document.createElement('div'); d.className = 'dia'; d.textContent = 'HOJE'; return d; }
-  function montarParado() {
-    chat.innerHTML = ''; chat.appendChild(selo());
-    msgs.forEach(function (m) { chat.appendChild(bolha(m)); });
-    while (estourou() && chat.children.length > 1) chat.removeChild(chat.firstChild);
-  }
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { montarParado(); return; }
-  function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-  function add(el) {
-    chat.appendChild(el);
-    while (estourou() && chat.children.length > 1) chat.removeChild(chat.firstChild);
-    return el;
-  }
-  async function rodar() {
-    while (true) {
-      chat.innerHTML = ''; chat.classList.remove('saindo'); chat.classList.add('anim');
-      add(selo());
-      await espera(700);
-      for (var i = 0; i < msgs.length; i++) {
-        var m = msgs[i];
-        var dig = document.createElement('div'); dig.className = m.cls + ' typing';
-        dig.innerHTML = '<span></span><span></span><span></span>';
-        add(dig);
-        if (m.cls === 'in') status.textContent = 'digitando...';
-        await espera(m.cls === 'in' ? 1300 : 900);
-        dig.remove();
-        status.textContent = 'online';
-        add(bolha(m));
-        await espera(1100);
-      }
-      status.textContent = 'assistente virtual';
-      await espera(3500);
-      chat.classList.add('saindo');
-      await espera(600);
-    }
-  }
-  rodar();
-})();
-</script>
-<script>
+
+/* sol e lua */
 (function () {
   var b = document.getElementById('tema'), root = document.documentElement;
   function rotulo() {
@@ -361,6 +622,267 @@ footer{border-top:1px solid var(--line)}
     try { localStorage.setItem('tema', novo); } catch (e) {}
     rotulo();
   });
+})();
+
+/* peças de mensagem compartilhadas */
+var Bolhas = (function () {
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function onda() {
+    var w = el('div', 'onda'); w.setAttribute('aria-hidden', 'true');
+    [30, 60, 85, 45, 70, 95, 50, 35, 75, 55, 40, 65, 30, 50].forEach(function (h) { var i = el('i'); i.style.height = h + '%'; w.appendChild(i); });
+    return w;
+  }
+  function audio(dur, transcricao) {
+    var box = el('div');
+    var a = el('div', 'audio');
+    var p = el('div', 'play');
+    p.innerHTML = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="#C6F36B"><path d="M7 4l13 8-13 8z"/></svg>';
+    a.appendChild(p); a.appendChild(onda()); a.appendChild(el('span', 'dur', dur));
+    box.appendChild(a);
+    if (transcricao) box.appendChild(el('span', 'transc', 'Transcrito: "' + transcricao + '"'));
+    return box;
+  }
+  function local(nome, end) {
+    var box = el('div');
+    var m = el('div', 'mapa');
+    m.innerHTML = '<svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="#0B3B2E"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
+    box.appendChild(m); box.appendChild(el('strong', null, nome)); box.appendChild(el('small', null, end));
+    return box;
+  }
+  function bolha(m) {
+    var d = el('div', m.cls);
+    if (m.tipo === 'audio') { d.appendChild(audio(m.dur, m.txt)); }
+    else if (m.tipo === 'local') { d.classList.add('local'); var p = m.txt.split('|'); d.appendChild(local(p[0], p[1] || '')); }
+    else { d.appendChild(document.createTextNode(m.txt)); }
+    if (m.hora) d.appendChild(el('span', 'hora', m.hora));
+    return d;
+  }
+  function digitando(cls) { var d = el('div', cls + ' typing'); d.innerHTML = '<span></span><span></span><span></span>'; return d; }
+  return { el: el, bolha: bolha, digitando: digitando };
+})();
+var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+/* conversa do topo, em loop */
+(function () {
+  var chat = document.getElementById('chat');
+  var status = document.getElementById('chat-status');
+  if (!chat) return;
+  var msgs = [].map.call(chat.children, function (e) {
+    return { cls: e.className, txt: e.textContent.trim(), hora: e.getAttribute('data-hora') || '',
+             tipo: e.getAttribute('data-tipo') || '', dur: e.getAttribute('data-dur') || '' };
+  });
+  function estourou() {
+    var h = 36 - 10;
+    for (var i = 0; i < chat.children.length; i++) h += chat.children[i].offsetHeight + 10;
+    return h > chat.clientHeight;
+  }
+  function add(e) {
+    chat.appendChild(e);
+    while (estourou() && chat.children.length > 1) chat.removeChild(chat.firstChild);
+    return e;
+  }
+  function selo() { return Bolhas.el('div', 'dia', 'HOJE'); }
+  if (calmo) {
+    chat.innerHTML = ''; add(selo());
+    msgs.forEach(function (m) { add(Bolhas.bolha(m)); });
+    return;
+  }
+  (async function rodar() {
+    while (true) {
+      chat.innerHTML = ''; chat.classList.remove('saindo'); chat.classList.add('anim');
+      add(selo());
+      await espera(700);
+      for (var i = 0; i < msgs.length; i++) {
+        var m = msgs[i];
+        var dig = add(Bolhas.digitando(m.cls));
+        if (m.cls === 'in') status.textContent = 'digitando...';
+        else if (m.tipo === 'audio') status.textContent = 'online';
+        await espera(m.cls === 'in' ? 1300 : (m.tipo === 'audio' ? 1500 : 900));
+        dig.remove();
+        status.textContent = 'online';
+        add(Bolhas.bolha(m));
+        await espera(m.tipo === 'local' ? 600 : 1100);
+      }
+      status.textContent = 'assistente virtual';
+      await espera(3500);
+      chat.classList.add('saindo');
+      await espera(600);
+    }
+  })();
+})();
+
+/* as 6 peças: abas */
+(function () {
+  var tabs = [].slice.call(document.querySelectorAll('#tabs .tab'));
+  function abrir(t, foco) {
+    tabs.forEach(function (x) {
+      var sel = x === t;
+      x.setAttribute('aria-selected', sel ? 'true' : 'false');
+      x.tabIndex = sel ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !sel;
+    });
+    if (foco) t.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { abrir(t); });
+    t.addEventListener('keydown', function (e) {
+      var k = e.key, n = null;
+      if (k === 'ArrowDown' || k === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      if (k === 'ArrowUp' || k === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (k === 'Home') n = tabs[0];
+      if (k === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); abrir(n, true); }
+    });
+  });
+})();
+
+/* simulador */
+(function () {
+  var chat = document.getElementById('sim-chat');
+  var opc = document.getElementById('sim-opcoes');
+  var status = document.getElementById('sim-status');
+  if (!chat) return;
+  var DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  var PROC = {
+    'Limpeza de pele': 60, 'Peeling químico': 45, 'Drenagem linfática': 50
+  };
+  var estado = {};
+  function agora() { var d = new Date(); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  function rolar() { chat.scrollTop = chat.scrollHeight; }
+  function add(e) { chat.appendChild(e); rolar(); return e; }
+  function eu(txt) { add(Bolhas.bolha({ cls: 'out', txt: txt, hora: agora() })); }
+  async function ela(txt, extra) {
+    status.textContent = 'digitando...';
+    var d = add(Bolhas.digitando('in'));
+    await espera(calmo ? 150 : 900);
+    d.remove();
+    status.textContent = 'online';
+    add(Bolhas.bolha(extra || { cls: 'in', txt: txt, hora: agora() }));
+  }
+  function nota(txt, recep) {
+    var n = Bolhas.el('div', 'nota' + (recep ? ' r' : ''));
+    n.innerHTML = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    n.appendChild(document.createTextNode(txt));
+    add(n);
+  }
+  function opcoes(lista) {
+    opc.innerHTML = '';
+    lista.forEach(function (o) {
+      var b = Bolhas.el('button', 'opcao', o.txt);
+      b.type = 'button';
+      b.addEventListener('click', function () { opc.innerHTML = ''; o.fn(); });
+      opc.appendChild(b);
+    });
+    var primeiro = opc.querySelector('button');
+    if (primeiro && document.activeElement && opc.contains(document.activeElement) === false && chat.dataset.interagiu) primeiro.focus();
+  }
+  function proximosDias(qtd) {
+    var r = [], d = new Date(); d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 1); // a partir de depois de amanhã, para o lembrete da véspera ainda estar no futuro
+    while (r.length < qtd) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) r.push(new Date(d));
+    }
+    return r;
+  }
+  function rotuloDia(d) { return DIAS[d.getDay()] + ', ' + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2); }
+  async function inicio() {
+    chat.innerHTML = ''; estado = {};
+    add(Bolhas.el('div', 'dia', 'HOJE'));
+    await ela('Oi! Eu sou a assistente da Sua Clínica de Estética. Qual procedimento você quer marcar?');
+    opcoes(Object.keys(PROC).map(function (p) {
+      return { txt: p, fn: function () { chat.dataset.interagiu = '1'; escolherProc(p); } };
+    }).concat([{ txt: 'Tenho uma dúvida de saúde', fn: function () { chat.dataset.interagiu = '1'; saude(); } }]));
+  }
+  async function escolherProc(p) {
+    estado.proc = p;
+    eu(p);
+    await ela('Ótimo! ' + p + ' dura ' + PROC[p] + ' minutos. Você prefere de manhã ou à tarde?');
+    opcoes([
+      { txt: 'De manhã', fn: function () { turno('manhã'); } },
+      { txt: 'À tarde', fn: function () { turno('tarde'); } }
+    ]);
+  }
+  async function turno(t) {
+    eu(t === 'manhã' ? 'De manhã' : 'À tarde');
+    var dias = proximosDias(2);
+    var horas = t === 'manhã' ? ['9h30', '10h'] : ['14h', '16h30'];
+    estado.opcoes = [rotuloDia(dias[0]) + ', às ' + horas[0], rotuloDia(dias[1]) + ', às ' + horas[1]];
+    estado.vesperas = dias.map(function (d) { var v = new Date(d); v.setDate(v.getDate() - 1); return rotuloDia(v); });
+    await ela('Olhei a agenda. Tenho ' + estado.opcoes[0] + ', ou ' + estado.opcoes[1] + '. Qual fica melhor?');
+    opcoes(estado.opcoes.map(function (o, i) {
+      return { txt: o.replace(', às ', ' · '), fn: function () { escolherHorario(i); } };
+    }));
+  }
+  async function escolherHorario(i) {
+    estado.escolha = estado.opcoes[i];
+    estado.vesperaFinal = estado.vesperas[i];
+    eu(estado.escolha.split(',')[0].replace(/^./, function (c) { return c.toUpperCase(); }));
+    await ela('Confirmando: ' + estado.proc.toLowerCase() + ' na ' + estado.escolha + ', no nome de Ana Ribeiro. Posso marcar?');
+    opcoes([
+      { txt: 'Pode sim', fn: confirmar },
+      { txt: 'Quero outro horário', fn: function () { eu('Quero outro horário'); turno('tarde'); } }
+    ]);
+  }
+  async function confirmar() {
+    eu('Pode sim');
+    status.textContent = 'digitando...';
+    await espera(calmo ? 100 : 500);
+    nota('Conferiu de novo: horário livre');
+    await espera(calmo ? 100 : 500);
+    nota('Evento criado no Google Agenda');
+    await ela(null, { cls: 'in', tipo: 'local', txt: 'Sua Clínica de Estética|Rua Exemplo, 100', hora: agora() });
+    await ela('Prontinho! Está marcado. A localização está aqui em cima, e um dia antes eu te mando um lembrete.');
+    nota('Linha "Confirmado" na planilha');
+    nota('Lembrete agendado para ' + estado.vesperaFinal + ', às 10h');
+    fim();
+  }
+  async function saude() {
+    eu('Tenho uma dúvida de saúde');
+    await ela('Claro, pode me contar.');
+    opcoes([{ txt: 'Posso fazer peeling grávida?', fn: async function () {
+      eu('Posso fazer peeling grávida?');
+      await ela('Essa pergunta precisa da nossa profissional, pra te orientar com segurança. Já passei para a recepção: ela te chama pelo WhatsApp no próximo horário de atendimento.');
+      nota('E-mail enviado para a recepção', true);
+      nota('Linha "Recepção" na planilha', true);
+      fim();
+    } }]);
+  }
+  function fim() { opcoes([{ txt: 'Recomeçar a simulação', fn: inicio }]); }
+  var iniciou = false;
+  function comecar() { if (!iniciou) { iniciou = true; inicio(); } }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { comecar(); io.disconnect(); } }, { threshold: .3 });
+    io.observe(chat);
+  } else { comecar(); }
+})();
+
+/* calculadora */
+(function () {
+  var f = document.getElementById('faltas'), t = document.getElementById('ticket');
+  var fv = document.getElementById('faltas-v'), tv = document.getElementById('ticket-v');
+  var mes = document.getElementById('perda-mes'), ano = document.getElementById('perda-ano');
+  var brl = function (v) {
+    try { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(v); }
+    catch (e) { return 'R$ ' + Math.round(v); }
+  };
+  function calc() {
+    var faltas = +f.value, ticket = +t.value;
+    fv.textContent = faltas; tv.textContent = brl(ticket);
+    mes.textContent = brl(faltas * ticket); ano.textContent = brl(faltas * ticket * 12);
+  }
+  f.addEventListener('input', calc); t.addEventListener('input', calc); calc();
+})();
+
+/* aparecer ao rolar */
+(function () {
+  if (!document.documentElement.classList.contains('js-reveal')) return;
+  var itens = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visivel'); io.unobserve(e.target); } });
+  }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+  itens.forEach(function (e, i) { e.style.transitionDelay = (i % 3) * 80 + 'ms'; io.observe(e); });
 })();
 </script>
 </body>
