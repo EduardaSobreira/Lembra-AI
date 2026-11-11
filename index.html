@@ -281,6 +281,28 @@ footer{border-top:1px solid var(--line)}
 :root[data-theme="dark"] .jcard.fim{background:#0B2A21;border-color:#2F6B4F}
 :root[data-theme="dark"] .jcard:hover,:root[data-theme="dark"] .card:hover{box-shadow:0 14px 30px rgba(0,0,0,.4)}
 
+/* passos em cards */
+.passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:0;padding:0;list-style:none}
+.passo{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px;transition:transform .25s ease,box-shadow .25s ease}
+.passo:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(11,59,46,.10)}
+.passo .topo{display:flex;align-items:center;justify-content:space-between}
+.passo .n{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;line-height:1;color:var(--line)}
+.passo h3{margin:0;font-size:21px;line-height:1.25}
+.passo p{margin:0;font-size:16px;line-height:1.55;color:var(--muted)}
+.passo .ese{margin-top:auto;display:flex;gap:10px;align-items:flex-start;background:#FFF4E5;color:#6B3A00;border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.45}
+.passo .ese b{font-weight:600}
+.passo .ese svg{flex:none;margin-top:2px}
+.passo.fim{background:var(--brand);border-color:var(--brand);color:#fff}
+.passo.fim p{color:#CFE0D7}
+.passo.fim .n{color:rgba(255,255,255,.18)}
+.passo.fim .icon{background:var(--lime)}
+.passo.fim .icon svg{stroke:var(--brand)}
+:root[data-theme="dark"] .passo{background:#1B2622}
+:root[data-theme="dark"] .passo .ese{background:#3A2A14;color:#F8D9AE}
+:root[data-theme="dark"] .passo.fim{background:#0B2A21;border-color:#2F6B4F}
+:root[data-theme="dark"] .passo:hover{box-shadow:0 16px 34px rgba(0,0,0,.4)}
+.js-reveal .passo.reveal.visivel:hover{transform:translateY(-4px)}
+
 /* fluxo */
 .fluxo{display:flex;flex-direction:column;max-width:940px;width:100%;margin:0 auto}
 .frow{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,.9fr);align-items:center}
@@ -442,20 +464,14 @@ footer{border-top:1px solid var(--line)}
 <h2>Como funciona</h2>
 <p class="sub">Do "oi" da cliente até ela sentar na cadeira, sem ninguém da sua equipe precisar responder.</p>
 </div>
-<div class="fluxo" id="fluxo-passos" role="list" aria-label="Fluxo do atendimento">
-<div class="frow" role="listitem"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><b>A cliente manda mensagem</b><small>Escrita ou áudio, a qualquer hora, até de madrugada</small></div></div><div></div><div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow" role="listitem"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div><b>A assistente responde na hora</b><small>Entende o que ela quer, como uma recepcionista</small></div></div><div class="flado"><em>e se…</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><b>Chama a sua equipe</b><small>Se for dúvida de saúde, remarcação ou reclamação</small></div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow" role="listitem"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><div><b>Oferece 2 horários livres</b><small>Olhando a agenda da clínica</small></div></div><div></div><div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow" role="listitem"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div><b>A cliente escolhe e pronto</b><small>O horário já aparece na sua agenda, com o nome dela</small></div></div><div class="flado"><em>e se…</em></div><div class="fno alt"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div><div><b>Oferece outro horário</b><small>Se alguém pegou aquele horário um segundo antes</small></div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow" role="listitem"><div class="fno"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div><b>Na véspera, ela recebe um lembrete</b><small>Menos faltas, sem ninguém precisar lembrar</small></div></div><div></div><div></div></div>
-<div class="fdown" aria-hidden="true"><span></span><div></div><div></div></div>
-<div class="frow" role="listitem"><div class="fno ok"><div class="fi"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><b>A cliente chega no horário</b><small>Com a localização da clínica no celular</small></div></div><div></div><div></div></div>
-</div>
-<div class="fluxo-acoes"><button type="button" class="btn btn-line" id="fluxo-replay">Ver de novo</button></div>
+<ol class="passos" aria-label="Como funciona, passo a passo">
+<li class="passo reveal"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><span class="n" aria-hidden="true">01</span></div><h3>A cliente manda mensagem</h3><p>Escrita ou por áudio, a qualquer hora, até de madrugada.</p></li>
+<li class="passo reveal"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><span class="n" aria-hidden="true">02</span></div><h3>A assistente responde na hora</h3><p>Entende o que ela quer, com a simpatia de uma recepcionista.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b>E se for dúvida de saúde?</b> Ela não responde: avisa a sua equipe na hora.</span></div></li>
+<li class="passo reveal"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></div><span class="n" aria-hidden="true">03</span></div><h3>Oferece 2 horários livres</h3><p>Ela olha a agenda da clínica e sugere os melhores horários.</p></li>
+<li class="passo reveal"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><span class="n" aria-hidden="true">04</span></div><h3>A cliente escolhe e pronto</h3><p>O horário já aparece na sua agenda, com o nome dela, e ela recebe a localização.</p><div class="ese"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span><b>E se o horário acabou de ser ocupado?</b> Ela oferece outro, sem marcar duas clientes juntas.</span></div></li>
+<li class="passo reveal"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><span class="n" aria-hidden="true">05</span></div><h3>Lembrete na véspera</h3><p>Um dia antes, ela recebe uma mensagem lembrando do horário.</p></li>
+<li class="passo reveal fim"><div class="topo"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><span class="n" aria-hidden="true">06</span></div><h3>A cliente chega no horário</h3><p>E a sua equipe nem precisou pegar no celular.</p></li>
+</ol>
 </div>
 </section>
 
