@@ -11,19 +11,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#10201B; --muted:#3C4E47; --muted2:#4A5C55; --bg:#F6F8F5; --card:#FFFFFF;
-  --line:#DDE4DF; --brand:#0B3B2E; --brand2:#12493A; --lime:#C6F36B; --accent:#2F6B4F;
+  --ink:#2B1E18; --muted:#5C4A40; --muted2:#6A5649; --bg:#FAF6F1; --card:#FFFFFF;
+  --line:#EADFD4; --brand:#3E2A22; --brand2:#4E372D; --peach:#F2C9B0; --accent:#A9532F;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:var(--brand)}a:hover{color:#06261D}
+a{color:var(--brand)}a:hover{color:#2A1C16}
 h1,h2,h3{font-family:'Space Grotesk',sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
 .btn{display:inline-block;text-decoration:none;border-radius:999px;font-weight:600;font-size:16px;padding:16px 26px}
-.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#06261D}
+.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{color:#fff;background:#2A1C16}
 .btn-line{border:1.5px solid var(--brand);padding:14.5px 24px}
-.btn-lime{background:var(--lime);color:var(--brand)}
+.btn-peach{background:var(--peach);color:var(--brand)}
 header{border-bottom:1px solid var(--line)}
 .nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;padding-bottom:18px}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px}
@@ -39,20 +39,22 @@ h1{margin:0;font-weight:700;font-size:clamp(40px,5.2vw,64px);line-height:1.04;le
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .phone-col{flex:1 1 360px;min-width:0;display:flex;justify-content:center}
 .phone{width:100%;max-width:380px;background:var(--brand);border-radius:28px;padding:14px}
-.chat{background:#ECE8E0;border-radius:18px;overflow:hidden}
-.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E2DED6}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
-.chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:380px;overflow:hidden}
+.chat{background:#F1E6DC;border-radius:18px;overflow:hidden}
+.chat-head{background:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E6D8CC}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--peach);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--brand)}
+.chat-body{padding:18px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;font-size:14.5px;line-height:1.45;height:420px;overflow:hidden}
 .chat-body.anim>div{animation:entra .35s ease-out both}
 @keyframes entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .typing{display:flex;gap:4px;align-items:center;padding:13px 14px!important}
-.typing span{width:7px;height:7px;border-radius:50%;background:#8A9A93;animation:pula 1s infinite ease-in-out}
+.typing span{width:7px;height:7px;border-radius:50%;background:#A08C80;animation:pula 1s infinite ease-in-out}
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @keyframes pula{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
 .chat-body.saindo{transition:opacity .5s;opacity:0}
-.status{font-size:12px;color:#5A6A63}
+.status{font-size:12px;color:#6A5649}
+.hora{display:block;text-align:right;font-size:11px;color:#7A6458;margin-top:3px}
+.dia{align-self:center;background:#FFFFFF;color:#6A5649;font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 10px;border-radius:8px}
 .in{align-self:flex-start;max-width:86%;background:#fff;padding:10px 12px;border-radius:4px 14px 14px 14px}
-.out{align-self:flex-end;max-width:70%;background:#D4F7B8;padding:10px 12px;border-radius:14px 4px 14px 14px}
+.out{align-self:flex-end;max-width:70%;background:#F6D9C6;padding:10px 12px;border-radius:14px 4px 14px 14px}
 .band{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .section{padding-top:88px;padding-bottom:88px;display:flex;flex-direction:column;gap:40px}
 h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01em}
@@ -67,25 +69,25 @@ h2{margin:0;font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.01
 .step .n{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--accent)}
 .step h3{margin:0;font-size:20px;font-weight:600;font-family:Inter,system-ui,sans-serif}
 .dark{background:var(--brand);color:#fff}
-.dark .sub{color:#CFE0D7}
+.dark .sub{color:#E8D9CE}
 .plan{background:var(--brand2);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px}
 .plan h3{margin:0;font-size:24px}
 .plan .price{margin:0;font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700}
-.plan ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:#E3EEE8}
+.plan ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.5;color:#F3E8E0}
 .plan .btn{margin-top:auto;align-self:flex-start;padding:14px 22px}
-.plan.featured{background:var(--lime);color:var(--brand)}
+.plan.featured{background:var(--peach);color:var(--brand)}
 .plan.featured ul{color:var(--brand)}
-.tag{align-self:flex-start;background:var(--brand);color:var(--lime);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
+.tag{align-self:flex-start;background:var(--brand);color:var(--peach);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
 .contact{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding-top:88px;padding-bottom:88px}
 .contact-text{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px}
 form{flex:1 1 380px;min-width:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}
 label{font-size:14px;font-weight:600}
-input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #B9C6BF;border-radius:10px}
+input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #9C8273;border-radius:10px}
 textarea{resize:vertical}
 .hint{margin:0;font-size:14px;color:var(--muted2)}
 #enviar{font:inherit;font-size:16px;font-weight:600;border:none;border-radius:999px;padding:16px 24px;background:var(--brand);color:#fff;cursor:pointer}
-#enviar:disabled{background:#C9D3CE;color:var(--muted);cursor:not-allowed}
+#enviar:disabled{background:#E2D5CB;color:var(--muted);cursor:not-allowed}
 footer{border-top:1px solid var(--line)}
 .foot{padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted2)}
 </style>
@@ -95,7 +97,7 @@ footer{border-top:1px solid var(--line)}
 <header>
 <div class="wrap nav">
 <div class="logo">
-<div class="logo-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6"/><path d="M9 14h4"/></svg></div>
+<div class="logo-mark"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6"/><path d="M9 14h4"/></svg></div>
 <span>Lembra Aí</span>
 </div>
 <nav aria-label="Principal">
@@ -126,12 +128,12 @@ footer{border-top:1px solid var(--line)}
 <div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">Sua Clínica de Estética</span><span class="status" id="chat-status">assistente virtual</span></div>
 </div>
 <div class="chat-body" id="chat" aria-hidden="true">
-<div class="out">Oi, queria fazer uma limpeza de pele essa semana, de manhã se der</div>
-<div class="in">Oi, Ana! Para limpeza de pele (60 min) tenho quinta, 12/11, às 9h30, ou sexta, 13/11, às 10h. Qual fica melhor?</div>
-<div class="out">Quinta às 9h30</div>
-<div class="in">Confirmando: limpeza de pele na quinta, 12/11, às 9h30, no nome de Ana Ribeiro. Posso marcar?</div>
-<div class="out">Pode sim</div>
-<div class="in">Prontinho! Te mandei a localização da clínica. Um dia antes a gente te manda um lembrete.</div>
+<div class="out" data-hora="02:14">Oi, queria fazer uma limpeza de pele essa semana, de manhã se der</div>
+<div class="in" data-hora="02:14">Oi, Ana! Para limpeza de pele (60 min) tenho quinta, 12/11, às 9h30, ou sexta, 13/11, às 10h. Qual fica melhor?</div>
+<div class="out" data-hora="02:15">Quinta às 9h30</div>
+<div class="in" data-hora="02:15">Confirmando: limpeza de pele na quinta, 12/11, às 9h30, no nome de Ana Ribeiro. Posso marcar?</div>
+<div class="out" data-hora="02:16">Pode sim</div>
+<div class="in" data-hora="02:16">Prontinho! Te mandei a localização da clínica. Um dia antes a gente te manda um lembrete.</div>
 </div>
 </div>
 </div>
@@ -145,12 +147,12 @@ footer{border-top:1px solid var(--line)}
 <p class="sub">Ela cuida da parte repetitiva do atendimento. A sua equipe fica com o que precisa de gente.</p>
 </div>
 <div class="grid grid-3">
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><h3>Entende texto e áudio</h3><p>A cliente escreve ou manda áudio, a qualquer hora. A assistente entende o procedimento que ela quer e para quando.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Marca na sua agenda</h3><p>Lê o Google Agenda da profissional, oferece 2 horários livres e confere de novo antes de marcar, para nunca encaixar duas clientes no mesmo horário.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Confirma e manda a localização</h3><p>Repete o resumo para a cliente aprovar, marca o horário, registra numa planilha e envia o pino da clínica no WhatsApp.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Lembrete na véspera</h3><p>Todo dia, sozinha, ela avisa quem tem horário no dia seguinte. Menos faltas e menos horário vazio na agenda.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h3>Sua equipe assume quando precisa</h3><p>Dúvida de saúde, remarcação, reclamação ou preço fora da tabela: ela não inventa resposta e avisa a recepção na hora, com o resumo do pedido.</p></div>
-<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6F36B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e avisos</h3><p>Também dá para automatizar lembretes de pagamento, avisos de feriado e campanhas para as suas clientes, com o mesmo jeito humano de falar.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></div><h3>Entende texto e áudio</h3><p>A cliente escreve ou manda áudio, a qualquer hora. A assistente entende o procedimento que ela quer e para quando.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div><h3>Marca na sua agenda</h3><p>Lê o Google Agenda da profissional, oferece 2 horários livres e confere de novo antes de marcar, para nunca encaixar duas clientes no mesmo horário.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Confirma e manda a localização</h3><p>Repete o resumo para a cliente aprovar, marca o horário, registra numa planilha e envia o pino da clínica no WhatsApp.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Lembrete na véspera</h3><p>Todo dia, sozinha, ela avisa quem tem horário no dia seguinte. Menos faltas e menos horário vazio na agenda.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><h3>Sua equipe assume quando precisa</h3><p>Dúvida de saúde, remarcação, reclamação ou preço fora da tabela: ela não inventa resposta e avisa a recepção na hora, com o resumo do pedido.</p></div>
+<div class="card"><div class="icon"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8A27F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg></div><h3>Cobrança e avisos</h3><p>Também dá para automatizar lembretes de pagamento, avisos de feriado e campanhas para as suas clientes, com o mesmo jeito humano de falar.</p></div>
 </div>
 </div>
 </section>
@@ -171,9 +173,9 @@ footer{border-top:1px solid var(--line)}
 <p class="sub">Comece pequeno e cresça conforme sentir o resultado.</p>
 </div>
 <div class="grid">
-<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Agendamento por texto e áudio</li><li>Lembrete na véspera</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan"><h3>Essencial</h3><p class="price">Sob consulta</p><ul><li>Agendamento por texto e áudio</li><li>Lembrete na véspera</li><li>Suporte por WhatsApp</li></ul><a href="#contato" class="btn btn-peach">Consultar valor</a></div>
 <div class="plan featured"><span class="tag">Mais escolhido</span><h3>Completo</h3><p class="price">Sob consulta</p><ul><li>Tudo do Essencial</li><li>Planilha de agendamentos e aviso à recepção</li><li>Localização enviada automaticamente</li><li>Avisos de feriado e campanhas</li></ul><a href="#contato" class="btn btn-dark">Consultar valor</a></div>
-<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Cobrança automática de pacotes</li><li>Integração com o seu sistema</li></ul><a href="#contato" class="btn btn-lime">Consultar valor</a></div>
+<div class="plan"><h3>Sob medida</h3><p class="price">Sob consulta</p><ul><li>Mais de uma profissional ou unidade</li><li>Cobrança automática de pacotes</li><li>Integração com o seu sistema</li></ul><a href="#contato" class="btn btn-peach">Consultar valor</a></div>
 </div>
 </div>
 </section>
@@ -240,27 +242,49 @@ footer{border-top:1px solid var(--line)}
   var chat = document.getElementById('chat');
   var status = document.getElementById('chat-status');
   if (!chat) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var msgs = [].map.call(chat.children, function (el) { return { cls: el.className, txt: el.textContent }; });
-  function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-  function add(cls, html) {
-    var d = document.createElement('div'); d.className = cls; d.innerHTML = html;
-    chat.appendChild(d);
-    while (chat.scrollHeight > chat.clientHeight + 2 && chat.children.length > 1) chat.removeChild(chat.firstChild);
+  var msgs = [].map.call(chat.children, function (el) {
+    return { cls: el.className, txt: el.textContent.trim(), hora: el.getAttribute('data-hora') || '' };
+  });
+  function bolha(m) {
+    var d = document.createElement('div'); d.className = m.cls;
+    d.appendChild(document.createTextNode(m.txt));
+    var h = document.createElement('span'); h.className = 'hora'; h.textContent = m.hora;
+    d.appendChild(h);
     return d;
+  }
+  function estourou() {
+    var h = 36 - 10;
+    for (var i = 0; i < chat.children.length; i++) h += chat.children[i].offsetHeight + 10;
+    return h > chat.clientHeight;
+  }
+  function selo() { var d = document.createElement('div'); d.className = 'dia'; d.textContent = 'HOJE'; return d; }
+  function montarParado() {
+    chat.innerHTML = ''; chat.appendChild(selo());
+    msgs.forEach(function (m) { chat.appendChild(bolha(m)); });
+    while (estourou() && chat.children.length > 1) chat.removeChild(chat.firstChild);
+  }
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { montarParado(); return; }
+  function espera(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function add(el) {
+    chat.appendChild(el);
+    while (estourou() && chat.children.length > 1) chat.removeChild(chat.firstChild);
+    return el;
   }
   async function rodar() {
     while (true) {
       chat.innerHTML = ''; chat.classList.remove('saindo'); chat.classList.add('anim');
+      add(selo());
       await espera(700);
       for (var i = 0; i < msgs.length; i++) {
         var m = msgs[i];
-        var dig = add(m.cls + ' typing', '<span></span><span></span><span></span>');
+        var dig = document.createElement('div'); dig.className = m.cls + ' typing';
+        dig.innerHTML = '<span></span><span></span><span></span>';
+        add(dig);
         if (m.cls === 'in') status.textContent = 'digitando...';
         await espera(m.cls === 'in' ? 1300 : 900);
         dig.remove();
         status.textContent = 'online';
-        add(m.cls, '').textContent = m.txt;
+        add(bolha(m));
         await espera(1100);
       }
       status.textContent = 'assistente virtual';
