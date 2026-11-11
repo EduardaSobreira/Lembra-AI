@@ -951,8 +951,8 @@ var Ramo = (function () {
     try { sessionStorage.setItem('boas', '1'); } catch (e) {}
     if (r) Ramo.escolher(r);
     d.close();
-    if (!porBotao) window.scrollTo(0, 0);
-    else window.scrollTo({ top: 0, behavior: calmo ? 'auto' : 'smooth' });
+    window.scrollTo(0, 0);
+    requestAnimationFrame(function () { window.scrollTo(0, 0); });
   }
   document.getElementById('boas-pular').addEventListener('click', function () { fechar(ultimo || 'estetica'); });
   d.addEventListener('cancel', function () { try { sessionStorage.setItem('boas', '1'); } catch (e) {} });
@@ -1130,7 +1130,7 @@ var Agenda = (function () {
       opc.appendChild(b);
     });
     var primeiro = opc.querySelector('button');
-    if (primeiro && document.activeElement && opc.contains(document.activeElement) === false && chat.dataset.interagiu) primeiro.focus();
+    if (primeiro && document.activeElement && opc.contains(document.activeElement) === false && chat.dataset.interagiu) primeiro.focus({ preventScroll: true });
   }
   function proximosDias(qtd) {
     var r = [], d = new Date(); d.setHours(0, 0, 0, 0);
